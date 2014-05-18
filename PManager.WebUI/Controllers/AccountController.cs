@@ -1,5 +1,5 @@
-﻿using PManager.WebUI.Infrastructure.Abstract;
-using PManager.WebUI.Models;
+﻿using PManager.Domain.Entities;
+using PManager.WebUI.Infrastructure.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +17,8 @@ namespace PManager.WebUI.Controllers
             authProvider = auth;
         }
 
-        public ViewResult Login()
+        [HttpGet]
+        public ActionResult Login()
         {
             return View();
         }
