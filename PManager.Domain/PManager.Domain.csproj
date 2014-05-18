@@ -74,7 +74,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Concrete\EFDbContext.cs" />
+    <Compile Include="Concrete\GenericRepository.cs" />
+    <Compile Include="Concrete\UnitOfWork.cs" />
+    <Compile Include="Entities\Actual.cs" />
+    <Compile Include="Entities\Estimated.cs" />
     <Compile Include="Entities\LoginViewModel.cs" />
+    <Compile Include="Entities\Project.cs" />
+    <Compile Include="Entities\ProjectTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -83,7 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Abstract\" />
-    <Folder Include="Concrete\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

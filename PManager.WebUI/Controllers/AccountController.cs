@@ -24,18 +24,19 @@ namespace PManager.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(LoginViewModel model, string returnUrl)
+        public ActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
                 if (authProvider.Authenticate(model.UserName, model.Password))
                 {
-                    return Redirect(returnUrl ?? Url.Action("Index", "Admin"));
+                    //WebSecurity - check user state and redirect to the necessary role
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
                     ModelState.AddModelError("", "Incorrect username and/or password");
-                    return View();
+                    return View(model);
                 }
             }
             else
