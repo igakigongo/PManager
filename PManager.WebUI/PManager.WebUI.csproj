@@ -623,6 +623,10 @@
     <Compile Include="Migrations\201405181934557_InitialMigration.Designer.cs">
       <DependentUpon>201405181934557_InitialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405181950130_InitializedUsersTable.cs" />
+    <Compile Include="Migrations\201405181950130_InitializedUsersTable.Designer.cs">
+      <DependentUpon>201405181950130_InitializedUsersTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -655,6 +659,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201405181934557_InitialMigration.resx">
       <DependentUpon>201405181934557_InitialMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405181950130_InitializedUsersTable.resx">
+      <DependentUpon>201405181950130_InitializedUsersTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -82,6 +82,8 @@
     <Compile Include="Entities\LoginViewModel.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\ProjectTask.cs" />
+    <Compile Include="Entities\User.cs" />
+    <Compile Include="Entities\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
