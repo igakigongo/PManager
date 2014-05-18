@@ -17,5 +17,7 @@ namespace PManager.Domain.Concrete
         }
 
         public DbSet<Project> Projects { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

@@ -22,7 +22,7 @@ namespace PManager.Domain.Concrete
         private GenericRepository<Project> _projectRepository;
         //private GenericRepository<ProjectRole> _projectRoleRepository;
         private GenericRepository<ProjectTask> _projectTaskRepository;
-        //private GenericRepository<User> _userRepository;
+        private GenericRepository<User> _userRepository;
 
 
         public GenericRepository<Project> ProjectRepository
@@ -58,18 +58,18 @@ namespace PManager.Domain.Concrete
                 return _projectTaskRepository;
             }
         }
-        //public GenericRepository<User> UserRepository
-        //{
-        //    get
-        //    {
-        //        if (_userRepository == null)
-        //        {
-        //            _userRepository = new GenericRepository<User>(_context);
-
-        //        }
-        //        return _userRepository;
-        //    }
-        //}
+        
+        public GenericRepository<User> UserRepository
+        {
+            get
+            {
+                if (_userRepository == null)
+                {
+                    _userRepository = new GenericRepository<User>(_context);
+                }
+                return _userRepository;
+            }
+        }
 
         public void Save()
         {
