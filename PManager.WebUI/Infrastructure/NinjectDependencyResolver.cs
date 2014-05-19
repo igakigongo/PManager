@@ -30,7 +30,7 @@ namespace PManager.WebUI.Infrastructure
 
         private void AddBindings()
         {
-            kernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
+            //kernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
         }
     }
 }

@@ -11,7 +11,9 @@
     <link href="~/Content/bootstrap.min.css" rel="stylesheet">
     <link href="~/Content/sb-admin-v2/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
-    <!-- Page-Level Plugin CSS - Blank -->
+    <!-- Page-Level Plugin CSS - Dashboard -->
+    <link href="~/Content/sb-admin-v2/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
+    <link href="~/Content/sb-admin-v2/css/plugins/timeline/timeline.css" rel="stylesheet" />
 
     <!-- SB Admin CSS - Include with every page -->
     <link href="~/Content/sb-admin-v2/css/sb-admin.css" rel="stylesheet">
@@ -345,17 +347,7 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
-
-        <div id="page-wrapper">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Blank</h1>
-                    @RenderBody()
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-        </div>
+        @RenderBody()
         <!-- /#page-wrapper -->
 
     </div>
@@ -366,9 +358,14 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Content/sb-admin-v2/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 
-    <!-- Page-Level Plugin Scripts - Blank -->
+    <!-- Page-Level Plugin Scripts - Dashboard -->
+    <script src="~/Content/sb-admin-v2/js/plugins/morris/raphael-2.1.0.min.js"></script>
+    <script src="~/Content/sb-admin-v2/js/plugins/morris/morris.js"></script>
 
     <!-- SB Admin Scripts - Include with every page -->
     <script src="~/Content/sb-admin-v2/js/sb-admin.js"></script>
+
+    <!-- Page-Level Demo Scripts - Dashboard - Use for reference -->
+    <script src="~/Content/sb-admin-v2/js/demo/dashboard-demo.js"></script>
 </body>
 </html>

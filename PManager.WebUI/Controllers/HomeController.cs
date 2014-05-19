@@ -10,6 +10,7 @@ namespace PManager.WebUI.Controllers
     {
         //
         // GET: /Home/
+        [Authorize(Roles="Manager")]
         public ActionResult Index()
         {
             return View();
