@@ -14,5 +14,7 @@ namespace PManager.Domain.Entities
 
         [Required(ErrorMessage = "* Password is required")]
         public string Password { get; set; }
+
+        public bool RememberMe { get; set; }
     }
 }
