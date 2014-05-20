@@ -7,6 +7,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using System.Web.UI;
 using WebMatrix.WebData;
 
 namespace PManager.WebUI.Controllers
@@ -20,6 +21,7 @@ namespace PManager.WebUI.Controllers
 
         [HttpGet]
         [AllowAnonymous]
+        [OutputCache(Duration=Int32.MaxValue, Location=OutputCacheLocation.ServerAndClient)]
         public ActionResult Login()
         {
             return View();

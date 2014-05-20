@@ -12,9 +12,6 @@
     <link href="~/Content/sb-admin-v2/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Page-Level Plugin CSS - Dashboard -->
-    <link href="~/Content/sb-admin-v2/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
-    <link href="~/Content/sb-admin-v2/css/plugins/timeline/timeline.css" rel="stylesheet" />
-
     <!-- SB Admin CSS - Include with every page -->
     <link href="~/Content/sb-admin-v2/css/sb-admin.css" rel="stylesheet">
 </head>
@@ -233,7 +230,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href='@Url.Action("Logout", "Account")'><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -257,16 +254,19 @@
                             <!-- /input-group -->
                         </li>
                         <li>
-                            <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href='@Url.Action("Index", "Home")'><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Projects<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a href="flot.html">Flot Charts</a>
+                                    <a href='@Url.Action("Index", "Project")'>All</a>
                                 </li>
                                 <li>
-                                    <a href="morris.html">Morris.js Charts</a>
+                                    <a href='@Url.Action("Index", "Project", new { filter = "current"})'>Current</a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Create", "Project")'>New</a>
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
@@ -358,13 +358,11 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Content/sb-admin-v2/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 
-    <!-- Page-Level Plugin Scripts - Dashboard -->
-    <script src="~/Content/sb-admin-v2/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="~/Content/sb-admin-v2/js/plugins/morris/morris.js"></script>
-
     <!-- SB Admin Scripts - Include with every page -->
     <script src="~/Content/sb-admin-v2/js/sb-admin.js"></script>
-
+    
+    @RenderSection("scripts", required: false)
+    
     <!-- Page-Level Demo Scripts - Dashboard - Use for reference -->
     <script src="~/Content/sb-admin-v2/js/demo/dashboard-demo.js"></script>
 </body>

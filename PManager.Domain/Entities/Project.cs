@@ -35,6 +35,9 @@ namespace PManager.Domain.Entities
         [Required(ErrorMessage = "* required")]
         public string Name { get; set; }
 
+
+        public bool IsClosed { get; set; }
+
         //
         // Actual values of project properties:::time(schedule) and costs
 
