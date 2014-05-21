@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_LayoutManager.cshtml";
 }
 
+<link href="~/Content/jquery.steps.css" rel="stylesheet" />
+<link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
+
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
@@ -16,168 +19,62 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    Step 1: Initiate Project
-                </div>
-                @using(Html.BeginForm()){
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-6">
-                                @Html.AntiForgeryToken()
-                                @Html.ValidationSummary(true)
-                                <h1>Project Meta Data</h1>
-                                <form role="form">
-                                    <div class="form-group">
-                                        <label>Code</label>
-                                        <input class="form-control" name="ProjectCode" />
-                                        @Html.ValidationMessageFor(model => model.ProjectCode, String.Empty, new { @class="text-danger"})
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Name</label>
-                                        <input class="form-control" name="Name" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Description</label>
-                                        <textarea class="form-control" rows="3" name="Description"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Inline Checkboxes</label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox">1
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox">2
-                                        </label>
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox">3
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Radio Buttons</label>
-                                        <div class="radio">
-                                            <label>
-                                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>Radio 1
-                                            </label>
-                                        </div>
-                                        <div class="radio">
-                                            <label>
-                                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">Radio 2
-                                            </label>
-                                        </div>
-                                        <div class="radio">
-                                            <label>
-                                                <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">Radio 3
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Inline Radio Buttons</label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline1" value="option1" checked>1
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline2" value="option2">2
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="optionsRadiosInline" id="optionsRadiosInline3" value="option3">3
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Selects</label>
-                                        <select class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Multiple Selects</label>
-                                        <select multiple class="form-control">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
-                                        </select>
-                                    </div>
-                                    <button type="submit" class="btn btn-default">Submit Button</button>
-                                    <button type="reset" class="btn btn-default">Reset Button</button>
-                                </form>
-                            </div>
-                            <!-- /.col-lg-6 (nested) -->
-                            <div class="col-lg-6">
-                                <h1>Disabled Form States</h1>
-                                <form role="form">
-                                    <fieldset disabled>
+                <div id="wizard">
+                    <h1>Step 1</h1>
+                    <div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <h4>Initialize Project Meta Data</h4>
+                                    <form role="form">
                                         <div class="form-group">
-                                            <label for="disabledSelect">Disabled input</label>
-                                            <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input" disabled>
+                                            <label>Code</label>
+                                            <input class="form-control" name="ProjectCode" />
+                                            @Html.ValidationMessageFor(model => model.ProjectCode, String.Empty, new { @class="text-danger"})
                                         </div>
                                         <div class="form-group">
-                                            <label for="disabledSelect">Disabled select menu</label>
-                                            <select id="disabledSelect" class="form-control">
-                                                <option>Disabled select</option>
-                                            </select>
+                                            <label>Name</label>
+                                            <input class="form-control" name="Name" />
+                                            @Html.ValidationMessageFor(model => model.Name, String.Empty, new { @class="text-danger"})
                                         </div>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox">Disabled Checkbox
-                                            </label>
+                                        <div class="form-group">
+                                            <label>Description</label>
+                                            <textarea class="form-control" rows="4" name="Description"></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Disabled Button</button>
-                                    </fieldset>
-                                </form>
-                                <h1>Form Validation States</h1>
-                                <form role="form">
-                                    <div class="form-group has-success">
-                                        <label class="control-label" for="inputSuccess">Input with success</label>
-                                        <input type="text" class="form-control" id="inputSuccess">
-                                    </div>
-                                    <div class="form-group has-warning">
-                                        <label class="control-label" for="inputWarning">Input with warning</label>
-                                        <input type="text" class="form-control" id="inputWarning">
-                                    </div>
-                                    <div class="form-group has-error">
-                                        <label class="control-label" for="inputError">Input with error</label>
-                                        <input type="text" class="form-control" id="inputError">
-                                    </div>
-                                </form>
-                                <h1>Input Groups</h1>
-                                <form role="form">
-                                    <div class="form-group input-group">
-                                        <span class="input-group-addon">@@</span>
-                                        <input type="text" class="form-control" placeholder="Username">
-                                    </div>
-                                    <div class="form-group input-group">
-                                        <input type="text" class="form-control">
-                                        <span class="input-group-addon">.00</span>
-                                    </div>
-                                    <div class="form-group input-group">
-                                        <span class="input-group-addon"><i class="fa fa-eur"></i>
-                                        </span>
-                                        <input type="text" class="form-control" placeholder="Font Awesome Icon">
-                                    </div>
-                                    <div class="form-group input-group">
-                                        <span class="input-group-addon">$</span>
-                                        <input type="text" class="form-control">
-                                        <span class="input-group-addon">.00</span>
-                                    </div>
-                                    <div class="form-group input-group">
-                                        <input type="text" class="form-control">
-                                        <span class="input-group-btn">
-                                            <button class="btn btn-default" type="button"><i class="fa fa-search"></i>
-                                            </button>
-                                        </span>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
+                                <div class="col-lg-6">
+                                    <h4>Scope & Costs</h4>
+                                    <form role="form">
+                                        <label>Estimated Budget</label>
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">$</span>
+                                            <input type="number" class="form-control" />
+                                            <span class="input-group-addon">.00</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Estimated Start Date</label>
+                                            <input id="datetimepicker" class="form-control" type="text" readonly="readonly" />
+                                        </div> 
+                                        <div class="form-group">
+                                            <label>Estimated End Date</label>
+                                            <input id="datetimepicker2" class="form-control" type="text" readonly="readonly" />
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- /.col-lg-6 (nested) -->
                             </div>
-                            <!-- /.col-lg-6 (nested) -->
+                            <!-- /.row (nested) -->
                         </div>
-                        <!-- /.row (nested) -->
                     </div>
-                }
+
+                    <h1>Step 2</h1>
+                    <div>step 2 Content</div>
+
+                    <h1>Step 3</h1>
+                    <div>Final Step Content</div>
+                </div>
                 <!-- /.panel-body -->
             </div>
             <!-- /.panel -->
@@ -186,3 +83,14 @@
     </div>
     <!-- /.row -->
 </div>
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.steps.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script>
+        $('#wizard').steps();
+        $('#datetimepicker').datepicker();
+        $('#datetimepicker2').datepicker();
+    </script>
+}
