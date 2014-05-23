@@ -647,6 +647,10 @@
     <Compile Include="Migrations\201405202031519_ProjectModelEdited.Designer.cs">
       <DependentUpon>201405202031519_ProjectModelEdited.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405230532534_TaskDescriptionAdded.cs" />
+    <Compile Include="Migrations\201405230532534_TaskDescriptionAdded.Designer.cs">
+      <DependentUpon>201405230532534_TaskDescriptionAdded.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -694,6 +698,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405202031519_ProjectModelEdited.resx">
       <DependentUpon>201405202031519_ProjectModelEdited.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405230532534_TaskDescriptionAdded.resx">
+      <DependentUpon>201405230532534_TaskDescriptionAdded.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

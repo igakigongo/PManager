@@ -30,6 +30,8 @@ namespace PManager.Domain.Entities
         [Required(ErrorMessage = "* required")]
         public string TaskName { get; set; }
 
+        public string TaskDescription { get; set; }
+
         public Actual Actual { get; set; }
 
         public Estimated Estimated { get; set; }

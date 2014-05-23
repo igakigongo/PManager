@@ -50,6 +50,8 @@ namespace PManager.WebUI.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            SelectList _userList = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "FullName");
+            ViewBag.UserList = _userList;
             return View();
         }
 

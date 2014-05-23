@@ -137,7 +137,14 @@
     color: #fff;
 }
 
-.wizard > .content
+.wizard > .content {
+    display:block;
+    min-height:35em;
+    overflow-y: auto;
+    position:relative
+}
+
+/*.wizard > .content
 {
     background: #eee;
     display: block;
@@ -150,7 +157,7 @@
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-}
+}*/
 
 .wizard.vertical > .content
 {
@@ -165,7 +172,7 @@
     float: left;
     position: absolute;
     width: 95%;
-    height: 50%; /* edited */
+    height: 95%;
     padding: 2.5%;
 }
 
