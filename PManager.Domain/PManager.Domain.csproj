@@ -79,6 +79,7 @@
     <Compile Include="Concrete\UnitOfWork.cs" />
     <Compile Include="Entities\Actual.cs" />
     <Compile Include="Entities\Estimated.cs" />
+    <Compile Include="Entities\JsonDTO.cs" />
     <Compile Include="Entities\LoginViewModel.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\ProjectTask.cs" />

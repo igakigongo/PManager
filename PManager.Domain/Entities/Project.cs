@@ -17,6 +17,7 @@ namespace PManager.Domain.Entities
         {
             Actual = new Actual();
             Estimated = new Estimated();
+            ProjectTasks = new List<ProjectTask>();
         }
 
         [Key]

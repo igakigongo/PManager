@@ -1,6 +1,4 @@
-﻿@model PManager.Domain.Entities.Project
-
-@{
+﻿@{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_LayoutManager.cshtml";
 }
@@ -8,6 +6,10 @@
 <link href="~/Content/jquery.steps.css" rel="stylesheet" />
 <link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
 <style type="text/css">
+    /* just a dummy class */
+    label {
+        font-size: smaller;
+    }
     .visible {
         visibility: visible;
     }
@@ -18,12 +20,6 @@
 </style>
 
 <div id="page-wrapper">
-    <div class="row">
-        <div class="col-lg-12">
-            <h3 class="page-header">New Project</h3>
-        </div>
-    </div>
-    <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
@@ -55,10 +51,10 @@
                                     </div>
                                     <label class="invisible" id="EstimatedBudgetLabel" style="color:#f00">* Required</label><br />
                                     <label>Estimated Start Date</label>
-                                    <input id="EstimatedStartDate" class="form-control" type="text" readonly="readonly" name="EstimatedStartDate" />
+                                    <input id="EstimatedStartDate" class="form-control" type="text" placeholder="mm/dd/yyyy" name="EstimatedStartDate" />
                                     <label class="invisible" id="EstimatedStartDateLabel" style="color:#f00">* Required</label><br />
                                     <label>Estimated End Date</label>
-                                    <input id="EstimatedEndDate" class="form-control" type="text" readonly="readonly" name="EstimatedEndDate" />
+                                    <input id="EstimatedEndDate" class="form-control" type="text" placeholder="mm/dd/yyyy" name="EstimatedEndDate" />
                                     <label class="invisible" id="EstimatedEndDateLabel" style="color:#f00">* Required</label>
                                 </form>
                             </div>
@@ -68,35 +64,83 @@
                     <h1>Step 2</h1>
                     <div class="panel-body">
                         <div class="row">
-                            <div class="col-lg-6">
-                                <h4>Create Tasks</h4>
-                                <form role="form">
-                                    <label>Task Name</label>
-                                    <input class="form-control" name="TaskName" id="TaskName" />
-                                    <label class="invisible" id="TaskNameLabel" style="color:#f00">* Required</label><br />
-                                    <label>Assigned To</label>
-                                    @Html.DropDownList("UserId", ViewBag.UserList as SelectList, new { @class = "form-control" })<br />
-                                    <label>Estimated Cost</label>
-                                    <div class="form-group input-group">
-                                        <span class="input-group-addon">Ug Shs</span>
-                                        <input type="number" class="form-control" name="TaskEB" id="TaskEB" />
-                                        <span class="input-group-addon">.00</span>
-                                    </div>
-                                    <label class="invisible" id="TaskEstimatedBudgetLabel" style="color:#f00">* Required</label><br />
-                                    <label>Estimated Start Date</label>
-                                    <input class="form-control" name="TaskESD" id="TaskESD" readonly="readonly" />
-                                    <label class="invisible" id="TaskESDLabel" style="color:#f00">* Required</label><br />
-                                    <label>Estimated End Date</label>
-                                    <input class="form-control" name="TaskEED" id="TaskEED" readonly="readonly" />
-                                    <label class="invisible" id="TaskEEDLabel" style="color:#f00">* Required</label><br />
-                                    <label>Task Description</label>
-                                    <input class="form-control" name="TaskDescription" id="TaskDescription" />
-                                </form>
-                            </div>
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
+                                
                                 <h4>Tasks</h4>
                                 <form role="form">
+                                    <div class="table-responsive">
+                                        <!-- Button trigger modal -->
+                                        <button class="btn btn-primary btn-xs" id="showModal">
+                                            New Task
+                                        </button>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                                        <h4 class="modal-title" id="myModalLabel">Add Task</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="col-lg-12">
+                                                            <label>Task Name</label>
+                                                            <input class="form-control" name="TaskName" id="TaskName" />
+                                                            <label class="invisible" id="TaskNameLabel" style="color:#f00">* Required</label>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label>Assigned To</label>
+                                                            @Html.DropDownList("UserId", ViewBag.UserList as SelectList, new { @class = "form-control" })<br />
+                                                            <label>Estimated Start Date</label>
+                                                            <input class="form-control" name="TaskESD" id="TaskESD" placeholder="mm/dd/yyyy" />
+                                                            <label class="invisible" id="TaskESDLabel" style="color:#f00">* Required</label>
+                                                        </div>
+                                                        <div class="col-lg-6">
+                                                            <label>Estimated Cost</label>
+                                                            <div class="form-group input-group">
+                                                                <span class="input-group-addon">$</span>
+                                                                <input type="number" class="form-control" name="TaskEB" id="TaskEB" />
+                                                                <span class="input-group-addon">.00</span>
+                                                            </div>
+                                                            <label class="invisible" id="TaskEBLabel" style="color:#f00">* Required</label><br />
+                                                            <label>Estimated End Date</label>
+                                                            <input class="form-control" name="TaskEED" id="TaskEED" placeholder="mm/dd/yyyy" />
+                                                            <label class="invisible" id="TaskEEDLabel" style="color:#f00">* Required</label>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <label>Task Description</label>
+                                                            <textarea class="form-control" name="TaskDescription" id="TaskDescription" rows="4" ></textarea>
+                                                            <br />
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary" id="addtask">Save changes</button>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <!-- /.modal -->
+                                        <button class="btn btn-danger btn-xs" id="deletebtn">Delete Task(s)</button>                                        
 
+                                        <table class="table" id="tasklist" style="font-size: smaller">
+                                            <thead>
+                                                <tr>
+                                                    <th>User Id</th>
+                                                    <th>Names</th>
+                                                    <th>Task</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
+                                                    <th>Estimated Cost($</th>
+                                                    <th>Check to remove</th>
+                                                    <th style="visibility:hidden"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -106,7 +150,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-12">
-                                <h4>Are you cure you want to submit?</h4>
+                                <h4>Are you sure you want to submit?</h4>
                                 <form role="form">
                                 </form>
                             </div>
@@ -123,90 +167,242 @@
     <script src="~/Scripts/jquery.steps.js"></script>
     <script src="~/Scripts/bootstrap-datepicker.js"></script>
     <script>
-        $('#wizard').steps({
-            onStepChanging: function (event, currentIndex, newIndex)
-            {
+        $(document).ready(function (event) {
+            //Ajax Global Setup
+            $.ajaxSetup({
+                dataType: 'json',
+                contentType: 'application/json, charset=utf-8'
+            });
 
-                // allow going back even if the current step contains errors
-                if (currentIndex > newIndex)
-                {
+            // Global Variables
+            var projectcode;
+            var projectname;
+            var estimatedbudget;
+            var estimatedstartdate;
+            var estimatedenddate;
+            var projectdesc;
+
+            // The Magic
+            $('#wizard').steps({
+                onStepChanging: function (event, currentIndex, newIndex) {
+
+                    // allow going back even if the current step contains errors
+                    if (currentIndex > newIndex) {
+                        return true;
+                    }
+
+                    // set the validation rules for the first form -> currentIndex = 0
+                    if (currentIndex === 0) {
+                        var isvalid = true;
+                        projectcode = $('#ProjectCode').val();
+                        projectname = $('#Name').val();
+                        estimatedbudget = $('#EstimatedBudget').val();
+                        estimatedstartdate = $('#EstimatedStartDate').val();
+                        estimatedenddate = $('#EstimatedEndDate').val();
+                        projectdesc = $('#Description').val();
+
+                        //project code field
+                        if (!projectcode) {
+                            $('#ProjectCodeLabel').removeClass('invisible').addClass('visible');
+                            isvalid = false;
+                        } else {
+                            $('#ProjectCodeLabel').removeClass('visible').addClass('invisible');
+                        }
+
+                        // name field validation
+                        if (!projectname) {
+                            $('#NameLabel').removeClass('invisible').addClass('visible');
+                            isvalid = false;
+                        } else {
+                            $('#NameLabel').removeClass('visible').addClass('invisible');
+                        }
+
+                        // estimated budget field validation
+                        if (!estimatedbudget) {
+                            $('#EstimatedBudgetLabel').removeClass('invisible').addClass('visible');
+                            isvalid = false;
+                        } else {
+                            $('#EstimatedBudgetLabel').removeClass('visible').addClass('invisible');
+                        }
+
+                        // estimated start date field validation
+                        if (!estimatedstartdate) {
+                            $('#EstimatedStartDateLabel').removeClass('invisible').addClass('visible');
+                            isvalid = false;
+                        } else {
+                            $('#EstimatedStartDateLabel').removeClass('visible').addClass('invisible');
+                        }
+
+                        // estimated end date field validation
+                        if (!estimatedenddate) {
+                            $('#EstimatedEndDateLabel').removeClass('invisible').addClass('visible');
+                            isvalid = false;
+                        } else {
+                            $('#EstimatedEndDateLabel').removeClass('visible').addClass('invisible');
+                        }
+                        return isvalid;
+                    }
+
+                    // when the person is creating tasks
+                    if (currentIndex === 1) {
+                        var isvalid;
+                        var rowcount = $('#tasklist').find('tbody').children('tr').length;
+                        isvalid = rowcount > 0 ? true : false;
+                        if (!isvalid) {
+                            alert('Please add at least one task to continue');
+                        }
+                        return isvalid;
+                    }
+                },
+                onStepChanged: function (event, currentIndex, priorIndex) {
+                },
+                onFinishing: function (event, currentIndex) {
+                    // create an array of task and push it into the project object
+                    var tasks = Array();
+                    $('#tasklist tbody').children('tr').each(function (event) {
+                        var task = {
+                            UserId: $(this).find('td:nth-child(1)').text(),
+                            TaskName: $(this).find('td:nth-child(3)').text(),
+                            TaskDescription: $(this).find('td:nth-child(8)').text(),
+                            Estimated: {
+                                StartDate: $(this).find('td:nth-child(4)').text(),
+                                EndDate: $(this).find('td:nth-child(5)').text(),
+                                Budget: $(this).find('td:nth-child(6)').text()
+                            }
+                        };
+                        tasks.push(task);
+                    });
+
+                    var project = {
+                        ProjectCode: projectcode,
+                        Name: projectname,
+                        IsClosed: false,
+                        Estimated: {
+                            StartDate: estimatedstartdate,
+                            EndDate: estimatedenddate,
+                            Budget: estimatedbudget 
+                        },
+                        Description: projectdesc,
+                        ProjectTasks: tasks
+                    };
+                    $.post('@Url.Action("Create", "Project")', JSON.stringify(project), function (result) {
+                        if (result.message == 'success') {
+                            window.location = "/Project/Details/" + result.id;
+
+                        } else {
+                            alert('Error recording entry, please try again later');
+                        }
+                    });
+                    return true;
+                },
+                onFinished: function (event, currentIndex) {
                     return true;
                 }
+            });
+            /*
+            * Global Initialization For   DatePickers
+            */
+            $('#EstimatedStartDate').datepicker();
+            $('#EstimatedEndDate').datepicker();
 
-                // set the validation rules for the first form -> currentIndex = 0
-                if (currentIndex === 0)
-                {
-                    var isvalid = true;
-                    var projectcode = $('#ProjectCode').val();
-                    var projectname = $('#Name').val();
-                    var estimatedbudget = $('#EstimatedBudget').val();
-                    var estimatedstartdate = $('#EstimatedStartDate').val();
-                    var estimatedenddate = $('#EstimatedEndDate').val();
+            /*
+            * The function to add a task onto the list
+            */
+            $('#addtask').click(function () {
+                var isvalid = true;
+                var taskname = $('#TaskName').val();
+                var userid = $('#UserId').val();
+                var username = $('UserId').text();
+                var taskeb = $('#TaskEB').val();
+                var taskesd = $('#TaskESD').val();
+                var taskeed = $('#TaskEED').val();
+                var taskdes = $('#TaskDescription').val();
 
-                    //project code field
-                    if (!projectcode) {
-                        $('#ProjectCodeLabel').removeClass('invisible').addClass('visible');
-                        isvalid = false;
-                    } else {
-                        $('#ProjectCodeLabel').removeClass('visible').addClass('invisible');
-                        console.log("Project Code: " + projectcode)
-                    }
-
-                    // name field validation
-                    if (!projectname) {
-                        $('#NameLabel').removeClass('invisible').addClass('visible');
-                        isvalid = false;
-                    } else {
-                        $('#NameLabel').removeClass('visible').addClass('invisible');
-                        console.log("Project Name: " + projectname)
-                    }
-
-                    // estimated budget field validation
-                    if (!estimatedbudget) {
-                        $('#EstimatedBudgetLabel').removeClass('invisible').addClass('visible');
-                        isvalid = false;
-                    } else {
-                        $('#EstimatedBudgetLabel').removeClass('visible').addClass('invisible');
-                        console.log("Estimated Budget: " + estimatedbudget)
-
-                    }
-
-                    // estimated start date field validation
-                    if (!estimatedstartdate) {
-                        $('#EstimatedStartDateLabel').removeClass('invisible').addClass('visible');
-                        isvalid = false;
-                    } else {
-                        $('#EstimatedStartDateLabel').removeClass('visible').addClass('invisible');
-                        console.log("Estimated Start Date: " + estimatedstartdate);
-                    }
-
-                    // estimated end date field validation
-                    if (!estimatedenddate) {
-                        $('#EstimatedEndDateLabel').removeClass('invisible').addClass('visible');
-                        isvalid = false;
-                    } else {
-                        $('#EstimatedEndDateLabel').removeClass('visible').addClass('invisible');
-                        console.log("Estimated End Date: " + estimatedenddate);
-                    }
-
-                    return isvalid;
+                // checking the task-name
+                if (!taskname) {
+                    $('#TaskNameLabel').removeClass('invisible').addClass('visible');
+                    isvalid = false;
                 }
-                
-                // when the person is creating tasks
-                if (currentIndex === 1) {
-                    return true;
+                else {
+                    $('#TaskNameLabel').removeClass('visible').addClass('invisible');
                 }
-            },
-            onStepChanged: function (event, currentIndex, priorIndex) {
-                console.log("New Step Index is: " + priorIndex);
-            },
-            onFinishing: function (event, currentIndex) {
-            },
-            onFinished: function (event, currentIndex) {
-                console.log("Wizard has completed....");
-            }
+
+                // checking the estimated cost
+                if (!taskeb) {
+                    $('#TaskEBLabel').removeClass('invisible').addClass('visible');
+                    isvalid = false;
+                } else {
+                    $('#TaskEBLabel').removeClass('visible').addClass('invisible');
+                }
+
+                // checking the estimated start date
+                if (!taskesd) {
+                    $('#TaskESDLabel').removeClass('invisible').addClass('visible');
+                    isvalid = false;
+                } else {
+                    $('#TaskESDLabel').removeClass('visible').addClass('invisible');
+                }
+
+                // checking the estimated end date
+                if (!taskeed) {
+                    $('#TaskEEDLabel').removeClass('invisible').addClass('visible');
+                    isvalid = false;
+                } else {
+                    $('#TaskEEDLabel').removeClass('visible').addClass('invisible');
+                }
+
+                if (isvalid) {
+                    var Task = {
+                        TaskName: taskname,
+                        UserId: userid,
+                        Estimated: {
+                            Budget: taskeb,
+                            StartDate: taskesd,
+                            EndDate: taskeed
+                        },
+                        TaskDescription: taskdes
+                    };
+
+                    $('#tasklist tbody').append(
+                        '<tr>' +
+                        '<td>' + Task.UserId + '</td>' +
+                        '<td>' + username + '</td>' +
+                        '<td>' + Task.TaskName + '</td>' +
+                        '<td>' + Task.Estimated.StartDate + '</td>' +
+                        '<td>' + Task.Estimated.EndDate + '</td>' +
+                        '<td>' + Task.Estimated.Budget + '</td>' +
+                        '<td>' + '<input type="checkbox">' + '</td>' +
+                        '<td style="visibility:hidden">' + Task.TaskDescription + '</td>' +
+                        '</tr>'
+                    );
+
+                    // clear the fields after adding everything to the table
+                    var taskname = $('#TaskName').val('');
+                    var userid = $('#UserId').val();
+                    var taskeb = $('#TaskEB').val('');
+                    var taskesd = $('#TaskESD').val('');
+                    var taskeed = $('#TaskEED').val('');
+                    var taskdes = $('#TaskDescription').val('');
+
+                    alert('successfully added one task to the task list.');
+                }
+                // control whatever anomalies may happen - return gracefully 
+                return false;
+            });
+
+            /*
+            * The function to delete multiple tasks from the task list
+            */
+            $('button#deletebtn').click(function (event) {
+                event.preventDefault();
+                alert("An attempt was made to delete task(s)...");
+                return false;
+            });
+
+            $('#showModal').click(function (event) {
+                event.preventDefault();
+                $('#myModal').modal('show');
+            });
         });
-        $('#EstimatedStartDate').datepicker();
-        $('#EstimatedEndDate').datepicker();
     </script>
 }

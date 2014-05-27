@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using PManager.Domain.Entities;
 using PManager.Domain.Concrete;
+using System.Data.Entity.Infrastructure;
 
 namespace PManager.WebUI.Controllers
 {
@@ -59,17 +60,26 @@ namespace PManager.WebUI.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,ProjectCode,Name,Description")] Project project)
+        public JsonResult Create(Project project)
         {
+            // load the Json Data Transfer Object
+            JsonDTO dto = new JsonDTO();
             if (ModelState.IsValid)
             {
-                _unitOfWork.ProjectRepository.Add(project);
-                _unitOfWork.Save();
-                return RedirectToAction("Index");
+                try
+                {
+                    _unitOfWork.ProjectRepository.Add(project);
+                    _unitOfWork.Save();;
+                    dto.message = "success";
+                    dto.id = _unitOfWork.ProjectRepository.Get().LastOrDefault().Id;
+                }
+                catch (DbUpdateException ex)
+                {
+                    dto.message = "Error: " + ex.Message;
+                }
             }
 
-            return View(project);
+            return Json(dto, JsonRequestBehavior.AllowGet);
         }
 
         // GET: /Project/Edit/5
