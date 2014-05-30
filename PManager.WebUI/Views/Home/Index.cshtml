@@ -4,8 +4,6 @@
     Layout = "~/Views/Shared/_LayoutManager.cshtml";
 }
 
-
-<link href="~/Content/sb-admin-v2/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
 <link href="~/Content/sb-admin-v2/css/plugins/timeline/timeline.css" rel="stylesheet" />
 
 <div id="page-wrapper">
@@ -17,38 +15,18 @@
     </div>
     <!-- /.row -->
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
-                    <div class="pull-right">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                Actions
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu pull-right" role="menu">
-                                <li><a href="#">Action</a>
-                                </li>
-                                <li><a href="#">Another action</a>
-                                </li>
-                                <li><a href="#">Something else here</a>
-                                </li>
-                                <li class="divider"></li>
-                                <li><a href="#">Separated link</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Recent Projects Costing
                 </div>
                 <!-- /.panel-heading -->
-                <div class="panel-body">
-                    <div id="morris-area-chart"></div>
+                <div class="panel-body" id="container">
                 </div>
                 <!-- /.panel-body -->
             </div>
             <!-- /.panel -->
-            <div class="panel panel-default">
+            @*<div class="panel panel-default">
                 <div class="panel-heading">
                     <i class="fa fa-bar-chart-o fa-fw"></i> Bar Chart Example
                     <div class="pull-right">
@@ -148,7 +126,7 @@
                     <!-- /.row -->
                 </div>
                 <!-- /.panel-body -->
-            </div>
+            </div>*@
             <!-- /.panel -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -463,7 +441,85 @@
 
 @section scripts{
     <!-- Page-Level Plugin Scripts - Dashboard -->
-    <script src="~/Content/sb-admin-v2/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="~/Content/sb-admin-v2/js/plugins/morris/morris.js"></script>
-    <script src="~/Content/sb-admin-v2/js/demo/dashboard-demo.js"></script>
+    <script src="~/Scripts/highcharts.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Preparing the chart but with no data
+            var chart;
+            chart = new Highcharts.Chart({
+                chart: {                
+                    renderTo: 'container',                
+                    type: 'bar',
+                },
+                title: {                
+                    text: 'Projects Costing',            
+                },
+                subtitle: {
+                    text: 'Actual vs. Estimated Costs',
+                },
+                credits: {
+                    position: {
+                        align: 'right'
+                    },
+                    text: 'BOU-Projects',
+                    http: 'http://bou.gov.ug'
+                },
+                xAxis: {
+                    categories: [],
+                    labels: {
+                        style: {
+                            width: '300px',
+                            'min-width': '400px'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {                    
+                        text: 'Project Cost (US$)',                
+                    },
+                    labels: {
+                        formatter: function () {
+                            return Highcharts.numberFormat(Math.abs(this.value), 0);
+                        },
+                    }
+                },            
+                plotOptions: {                
+                    series: {                  
+                        stacking: 'normal',                
+                    },         
+                },            
+                series: [
+                    {
+                        name: 'Actual',
+                        data: []
+
+                    },
+                    {
+                        name: 'Estimated',
+                        data: []
+                    }
+                ]
+            });
+            // making the Ajax call to request for chart data
+            $.ajax({
+                url: '@Url.Action("TopTenProjectsCosting", "Project")',
+                dataType: 'json'
+            }).done(function (data)
+            {
+                var projects = [];
+                var series1 = [];
+                var series2 = [];
+                $.each(data, function (index, item) {
+                    $.merge(projects, $.makeArray(item.ProjectCode));
+                    series1.push(parseFloat(item.Actual.Budget));
+                    series2.push(parseFloat(item.Estimated.Budget));
+                });
+                chart.series[0].setData(series1, false);
+                chart.series[1].setData(series2, false);
+                chart.xAxis[0].setCategories(projects, false);
+                chart.redraw();
+            });
+        });
+    </script>
 }

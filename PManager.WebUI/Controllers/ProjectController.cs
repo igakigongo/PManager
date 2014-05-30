@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using PManager.Domain.Entities;
 using PManager.Domain.Concrete;
 using System.Data.Entity.Infrastructure;
+using System.Drawing;
 
 namespace PManager.WebUI.Controllers
 {
@@ -148,6 +149,20 @@ namespace PManager.WebUI.Controllers
                 _unitOfWork.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+
+        #region HighCharts
+        public JsonResult TopTenProjectsCosting()
+        {
+            IQueryable<Project> _TopTen = _unitOfWork.ProjectRepository.Get().OrderByDescending(p => p.Estimated.StartDate).Take(10).AsQueryable();
+            return Json(_TopTen.ToArray(), JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        // GET: 
+        public ActionResult BasicBar()
+        {
+            return View();
         }
     }
 }
