@@ -8,18 +8,30 @@ using System.Web;
 using System.Web.Mvc;
 using PManager.Domain.Entities;
 using PManager.Domain.Concrete;
+using System.Data.Entity.Infrastructure;
+using PManager.Domain.Abstract;
+using PManager.WebUI.Filters;
+using System.Web.Security;
+using WebMatrix.WebData;
 
 namespace PManager.WebUI.Controllers
 {
     public class UserController : Controller
     {
+        
         private UnitOfWork _unitOfWork = new UnitOfWork();
+        private IDataTransferObject _dto;
+
+        // Injecting a dependency of the DataTransferObject
+        public UserController(IDataTransferObject _dtoparam){
+            this._dto = _dtoparam;
+        }
 
         // GET: /User/
         public ActionResult Index()
         {
-            var users = _unitOfWork.UserRepository.Get();
-            return View(users.ToList());
+            IQueryable<User> _users = _unitOfWork.UserRepository.Get().AsQueryable();
+            return View(_users);
         }
 
         // GET: /User/Details/5
@@ -38,9 +50,9 @@ namespace PManager.WebUI.Controllers
         }
 
         // GET: /User/Create
+        [InitializeSimpleMembership]
         public ActionResult Create()
         {
-            //ViewBag.Id = new SelectList(_unitOfWork.UserProfiles, "UserId", "UserName");
             return View();
         }
 
@@ -48,18 +60,40 @@ namespace PManager.WebUI.Controllers
         // To protect from over-posting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include="Id,Firstname,Middlename,Lastname")] User user)
+        [InitializeSimpleMembership]
+        public JsonResult Create(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.UserRepository.Add(user);
-                _unitOfWork.Save();
-                return RedirectToAction("Index");
+                try
+                {
+                    MembershipUser _user = Membership.GetUser(model.UserName);
+                    if (_user == null)
+                    {
+                        WebSecurity.CreateUserAndAccount(userName: model.UserName, password: model.Password, propertyValues: null, requireConfirmationToken: false);
+                        Roles.AddUserToRole(username: model.UserName, roleName: model.Role);
+                        Domain.Entities.User _systemUser = new Domain.Entities.User
+                        {
+                            Firstname = model.Firstname,
+                            Lastname = model.Lastname,
+                            Middlename = model.Middlename,
+                            Id =  WebSecurity.GetUserId(model.UserName)
+                        };
+                        _unitOfWork.UserRepository.Add(_systemUser);
+                        _unitOfWork.Save();
+                        _dto.message = "success";
+                    }
+                    else
+                    {
+                        _dto.message = String.Format("The username {0} is already taken, please choose a different one.");
+                    }
+                }
+                catch (DbUpdateException)
+                {
+                    _dto.message = "Error, Please try again and if the problem persists, contact your system vendor.";
+                }
             }
-
-            //ViewBag.Id = new SelectList(_unitOfWork.UserProfiles, "UserId", "UserName", user.Id);
-            return View(user);
+            return Json(_dto, JsonRequestBehavior.AllowGet);
         }
 
         // GET: /User/Edit/5
@@ -82,8 +116,7 @@ namespace PManager.WebUI.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Firstname,Middlename,Lastname")] User user)
+        public ActionResult Edit(User user)
         {
             if (ModelState.IsValid)
             {
@@ -112,7 +145,6 @@ namespace PManager.WebUI.Controllers
 
         // POST: /User/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             User user = _unitOfWork.UserRepository.Find(id);
@@ -129,5 +161,9 @@ namespace PManager.WebUI.Controllers
             }
             base.Dispose(disposing);
         }
+
+        #region Highcharts Data and Json Requests
+        
+        #endregion
     }
 }

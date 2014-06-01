@@ -10,12 +10,19 @@ using PManager.Domain.Entities;
 using PManager.Domain.Concrete;
 using System.Data.Entity.Infrastructure;
 using System.Drawing;
+using PManager.Domain.Abstract;
 
 namespace PManager.WebUI.Controllers
 {
     public class ProjectController : Controller
     {
+        private IDataTransferObject _dto;
         private UnitOfWork _unitOfWork = new UnitOfWork();
+
+        public ProjectController(IDataTransferObject _dtoParam)
+        {
+            this._dto = _dtoParam;
+        }
 
         // GET: /Project/
         [HttpGet]
@@ -45,6 +52,16 @@ namespace PManager.WebUI.Controllers
             {
                 return HttpNotFound();
             }
+            // Loading Project Tasks - Eager Loading
+            project.ProjectTasks = _unitOfWork.ProjectTaskRepository
+                                            .Get()
+                                            .Where(p => p.ProjectId == project.Id)
+                                            .OrderByDescending(p => p.Estimated.StartDate)
+                                            .ToList();
+            // Loading Users - Eager Loading
+            project.ProjectTasks.ForEach(t => t.User = _unitOfWork.UserRepository.Find(t.UserId));
+            SelectList _userList = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "FullName");
+            ViewBag.UserList = _userList;
             return View(project);
         }
 
@@ -63,24 +80,21 @@ namespace PManager.WebUI.Controllers
         [HttpPost]
         public JsonResult Create(Project project)
         {
-            // load the Json Data Transfer Object
-            JsonDTO dto = new JsonDTO();
             if (ModelState.IsValid)
             {
                 try
                 {
                     _unitOfWork.ProjectRepository.Add(project);
                     _unitOfWork.Save();;
-                    dto.message = "success";
-                    dto.id = _unitOfWork.ProjectRepository.Get().LastOrDefault().Id;
+                    _dto.message = "success";
+                    _dto.id = _unitOfWork.ProjectRepository.Get().LastOrDefault().Id;
                 }
                 catch (DbUpdateException ex)
                 {
-                    dto.message = "Error: " + ex.Message;
+                    _dto.message = "Error: " + ex.Message;
                 }
             }
-
-            return Json(dto, JsonRequestBehavior.AllowGet);
+            return Json(_dto, JsonRequestBehavior.AllowGet);
         }
 
         // GET: /Project/Edit/5
@@ -103,8 +117,7 @@ namespace PManager.WebUI.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,ProjectCode,Name,Description")] Project project)
+        public ActionResult Edit(Project project)
         {
             if (ModelState.IsValid)
             {
@@ -133,7 +146,6 @@ namespace PManager.WebUI.Controllers
 
         // POST: /Project/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             Project project = _unitOfWork.ProjectRepository.Find(id);
@@ -153,16 +165,15 @@ namespace PManager.WebUI.Controllers
 
 
         #region HighCharts
+
+        #region 1.0 Recent Top Ten Project Costing
         public JsonResult TopTenProjectsCosting()
         {
             IQueryable<Project> _TopTen = _unitOfWork.ProjectRepository.Get().OrderByDescending(p => p.Estimated.StartDate).Take(10).AsQueryable();
             return Json(_TopTen.ToArray(), JsonRequestBehavior.AllowGet);
         }
         #endregion
-        // GET: 
-        public ActionResult BasicBar()
-        {
-            return View();
-        }
+
+        #endregion
     }
 }

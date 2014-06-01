@@ -32,6 +32,8 @@ namespace PManager.Domain.Entities
 
         public string TaskDescription { get; set; }
 
+        public bool IsCompleted { get; set; }
+
         public Actual Actual { get; set; }
 
         public Estimated Estimated { get; set; }

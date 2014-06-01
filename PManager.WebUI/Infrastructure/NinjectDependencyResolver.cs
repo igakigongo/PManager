@@ -1,6 +1,6 @@
 ﻿using Ninject;
-using PManager.WebUI.Infrastructure.Abstract;
-using PManager.WebUI.Infrastructure.Concrete;
+using PManager.Domain.Abstract;
+using PManager.Domain.Concrete;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,7 +30,7 @@ namespace PManager.WebUI.Infrastructure
 
         private void AddBindings()
         {
-            //kernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
+            kernel.Bind<IDataTransferObject>().To<JsonDTO>();
         }
     }
 }

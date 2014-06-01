@@ -193,6 +193,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="project.ico" />
+    <Content Include="Scripts\App.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -302,13 +303,12 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Controllers\ProjectTaskController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\Abstract\IAuthProvider.cs" />
-    <Compile Include="Infrastructure\Concrete\FormsAuthProvider.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Migrations\201405181934557_InitialMigration.cs" />
     <Compile Include="Migrations\201405181934557_InitialMigration.Designer.cs">
@@ -330,6 +330,14 @@
     <Compile Include="Migrations\201405271417158_EstimatedModelChanged.Designer.cs">
       <DependentUpon>201405271417158_EstimatedModelChanged.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201405311948127_UserEntityAmmended.cs" />
+    <Compile Include="Migrations\201405311948127_UserEntityAmmended.Designer.cs">
+      <DependentUpon>201405311948127_UserEntityAmmended.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201406011734507_TaskEntityAmmended.cs" />
+    <Compile Include="Migrations\201406011734507_TaskEntityAmmended.Designer.cs">
+      <DependentUpon>201406011734507_TaskEntityAmmended.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -350,7 +358,11 @@
     <Content Include="Views\Project\Details.cshtml" />
     <Content Include="Views\Project\Edit.cshtml" />
     <Content Include="Views\Project\Index.cshtml" />
-    <Content Include="Views\Project\BasicBar.cshtml" />
+    <Content Include="Views\ProjectTask\Create.cshtml" />
+    <Content Include="Views\ProjectTask\Delete.cshtml" />
+    <Content Include="Views\ProjectTask\Details.cshtml" />
+    <Content Include="Views\ProjectTask\Edit.cshtml" />
+    <Content Include="Views\ProjectTask\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -360,7 +372,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PManager.Domain\PManager.Domain.csproj">
@@ -383,6 +394,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201405271417158_EstimatedModelChanged.resx">
       <DependentUpon>201405271417158_EstimatedModelChanged.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201405311948127_UserEntityAmmended.resx">
+      <DependentUpon>201405311948127_UserEntityAmmended.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406011734507_TaskEntityAmmended.resx">
+      <DependentUpon>201406011734507_TaskEntityAmmended.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

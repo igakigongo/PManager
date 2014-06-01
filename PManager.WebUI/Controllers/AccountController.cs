@@ -1,6 +1,5 @@
 ﻿using PManager.Domain.Entities;
 using PManager.WebUI.Filters;
-using PManager.WebUI.Infrastructure.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,5 +56,6 @@ namespace PManager.WebUI.Controllers
                 return View(model);
             }
         }
+
 	}
 }

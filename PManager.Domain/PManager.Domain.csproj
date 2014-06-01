@@ -74,15 +74,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\IDataTransferObject.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\GenericRepository.cs" />
     <Compile Include="Concrete\UnitOfWork.cs" />
     <Compile Include="Entities\Actual.cs" />
     <Compile Include="Entities\Estimated.cs" />
-    <Compile Include="Entities\JsonDTO.cs" />
+    <Compile Include="Concrete\JsonDTO.cs" />
     <Compile Include="Entities\LoginViewModel.cs" />
     <Compile Include="Entities\Project.cs" />
     <Compile Include="Entities\ProjectTask.cs" />
+    <Compile Include="Entities\RegisterModel.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,9 +93,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Abstract\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
