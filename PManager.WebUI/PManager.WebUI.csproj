@@ -230,7 +230,7 @@
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.woff" />
-    <None Include="Properties\PublishProfiles\bou-pmanager.pubxml" />
+    <None Include="Properties\PublishProfiles\bou-promanager.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
@@ -376,7 +376,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>3027</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:16015/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
