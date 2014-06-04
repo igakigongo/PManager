@@ -7,13 +7,13 @@ namespace PManager.WebUI.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class TaskEntityAmmended : IMigrationMetadata
+    public sealed partial class InitialDbMigration : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(TaskEntityAmmended));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(InitialDbMigration));
         
         string IMigrationMetadata.Id
         {
-            get { return "201406011734507_TaskEntityAmmended"; }
+            get { return "201406040727488_InitialDbMigration"; }
         }
         
         string IMigrationMetadata.Source

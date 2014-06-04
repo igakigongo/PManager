@@ -20,13 +20,7 @@ namespace PManager.WebUI.Controllers
     {
         
         private UnitOfWork _unitOfWork = new UnitOfWork();
-        private IDataTransferObject _dto;
-
-        // Injecting a dependency of the DataTransferObject
-        public UserController(IDataTransferObject _dtoparam){
-            this._dto = _dtoparam;
-        }
-
+        
         // GET: /User/
         public ActionResult Index()
         {
@@ -61,8 +55,9 @@ namespace PManager.WebUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [InitializeSimpleMembership]
-        public JsonResult Create(RegisterModel model)
+        public ViewResult Create(RegisterModel model)
         {
+            String message = String.Empty;
             if (ModelState.IsValid)
             {
                 try
@@ -81,19 +76,20 @@ namespace PManager.WebUI.Controllers
                         };
                         _unitOfWork.UserRepository.Add(_systemUser);
                         _unitOfWork.Save();
-                        _dto.message = "success";
+                        message = "success";
                     }
                     else
                     {
-                        _dto.message = String.Format("The username {0} is already taken, please choose a different one.");
+                        message = String.Format("The username {0} is already taken, please choose a different one.");
                     }
                 }
                 catch (DbUpdateException)
                 {
-                    _dto.message = "Error, Please try again and if the problem persists, contact your system vendor.";
+                    message = "Error, Please try again and if the problem persists, contact your system vendor.";
                 }
             }
-            return Json(_dto, JsonRequestBehavior.AllowGet);
+            ViewBag.message = message;
+            return View(model);
         }
 
         // GET: /User/Edit/5

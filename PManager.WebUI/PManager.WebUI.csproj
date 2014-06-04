@@ -230,6 +230,7 @@
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.woff" />
+    <None Include="Properties\PublishProfiles\bou-pmanager.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
@@ -237,6 +238,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.steps.js" />
     <Content Include="Scripts\jquery.steps.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -310,33 +313,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
-    <Compile Include="Migrations\201405181934557_InitialMigration.cs" />
-    <Compile Include="Migrations\201405181934557_InitialMigration.Designer.cs">
-      <DependentUpon>201405181934557_InitialMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201405181950130_InitializedUsersTable.cs" />
-    <Compile Include="Migrations\201405181950130_InitializedUsersTable.Designer.cs">
-      <DependentUpon>201405181950130_InitializedUsersTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201405202031519_ProjectModelEdited.cs" />
-    <Compile Include="Migrations\201405202031519_ProjectModelEdited.Designer.cs">
-      <DependentUpon>201405202031519_ProjectModelEdited.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201405230532534_TaskDescriptionAdded.cs" />
-    <Compile Include="Migrations\201405230532534_TaskDescriptionAdded.Designer.cs">
-      <DependentUpon>201405230532534_TaskDescriptionAdded.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201405271417158_EstimatedModelChanged.cs" />
-    <Compile Include="Migrations\201405271417158_EstimatedModelChanged.Designer.cs">
-      <DependentUpon>201405271417158_EstimatedModelChanged.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201405311948127_UserEntityAmmended.cs" />
-    <Compile Include="Migrations\201405311948127_UserEntityAmmended.Designer.cs">
-      <DependentUpon>201405311948127_UserEntityAmmended.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201406011734507_TaskEntityAmmended.cs" />
-    <Compile Include="Migrations\201406011734507_TaskEntityAmmended.Designer.cs">
-      <DependentUpon>201406011734507_TaskEntityAmmended.cs</DependentUpon>
+    <Compile Include="Migrations\201406040727488_InitialDbMigration.cs" />
+    <Compile Include="Migrations\201406040727488_InitialDbMigration.Designer.cs">
+      <DependentUpon>201406040727488_InitialDbMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -380,26 +359,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201405181934557_InitialMigration.resx">
-      <DependentUpon>201405181934557_InitialMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201405181950130_InitializedUsersTable.resx">
-      <DependentUpon>201405181950130_InitializedUsersTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201405202031519_ProjectModelEdited.resx">
-      <DependentUpon>201405202031519_ProjectModelEdited.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201405230532534_TaskDescriptionAdded.resx">
-      <DependentUpon>201405230532534_TaskDescriptionAdded.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201405271417158_EstimatedModelChanged.resx">
-      <DependentUpon>201405271417158_EstimatedModelChanged.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201405311948127_UserEntityAmmended.resx">
-      <DependentUpon>201405311948127_UserEntityAmmended.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201406011734507_TaskEntityAmmended.resx">
-      <DependentUpon>201406011734507_TaskEntityAmmended.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201406040727488_InitialDbMigration.resx">
+      <DependentUpon>201406040727488_InitialDbMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

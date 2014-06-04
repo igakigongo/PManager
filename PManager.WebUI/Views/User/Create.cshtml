@@ -1,4 +1,6 @@
-﻿@{
+﻿@model PManager.Domain.Entities.RegisterModel
+
+@{
     ViewBag.Title = "Create";
     Layout = "~/Views/Shared/_LayoutManager.cshtml";
 }
@@ -7,13 +9,8 @@
     label {
         font-size: smaller;
     }
-    .visible {
-        visibility: visible;
+    .error {
         color: #f00;
-    }
-
-    .invisible {
-        visibility: hidden;
     }
 </style>
 
@@ -33,55 +30,54 @@
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
-                    <div class="col-lg-12" id="alertDiv">
-                    </div>
-                    <div class="col-lg-6">
-                        <form role="form">
-                            <h4>Basic Info</h4>
-                            <div class="form-group">
-                                <label>First Name</label>
-                                <input type="text" class="form-control" id="FirstName" name="FirstName" />
-                                <label class="invisible" id="FirstNameLabel">* Required</label>
-                            </div>
-                            <div class="form-group">
-                                <label>Middle Name</label>
-                                <input type="text" class="form-control" id="MiddleName" name="MiddleName" />
-                                <label class="invisible" id="MiddleNameLabel">* Required</label> 
-                            </div>
-                            <div class="form-group">
-                                <label>Last Name</label>
-                                <input type="text" class="form-control" id="LastName" name="LastName" />
-                                <label class="invisible" id="LastNameLabel">* Required</label>
-                            </div>      
-                        </form>
-                    </div>
-                    <div class="col-lg-6">
-                        <form role="form">
-                            <h4>Account Information</h4>
-                            <div class="form-group">
-                                <label>Username</label>
-                                <input type="text" class="form-control" id="Username" name="Username" />
-                                <label class="invisible" id="UsernameLabel">* Required</label>
-                            </div>
-                            <div class="form-group">
-                                <label>Password</label>
-                                <input type="text" class="form-control" id="Password" name="Password" />
-                                <label class="invisible" id="PasswordLabel">* Required</label>
-                            </div>
-                            <div class="form-group">
-                                <label>Confirm Password</label>
-                                <input type="text" class="form-control" id="ComparePassword" name="ComparePassword" />
-                                <label class="invisible" id="ComparePasswordLabel">* Required</label>
-                            </div>
-                            <div class="form-group">
-                                <label>User Role</label>
-                                @Html.DropDownList("roles", new SelectList(Roles.GetAllRoles()), new { @class = "form-control" })
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-small">Save</button>
-                            <button type="reset" class="btn btn-success btn-small">Clear Form</button>
-                            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-success btn-small" })
-                        </form>
-                    </div>
+                    @using(Html.BeginForm()){
+                        <div class="col-lg-12" id="alertDiv">
+                        </div>
+
+                        <div class="col-lg-6">
+                                <h4>Basic Info</h4>
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    @Html.TextBoxFor(model => model.Firstname, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Firstname, String.Empty, new { @class = "error"})
+                                </div>
+                                <div class="form-group">
+                                    <label>Middle Name</label>
+                                    @Html.TextBoxFor(model => model.Middlename, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Middlename, String.Empty, new { @class = "error" })
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    @Html.TextBoxFor(model => model.Lastname, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Lastname, String.Empty, new { @class = "error" })
+                                </div>      
+                        </div>
+                        <div class="col-lg-6">
+                                <h4>Account Information</h4>
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.UserName, String.Empty, new { @class = "error" })
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Password, String.Empty, new { @class = "error" })
+                                </div>
+                                <div class="form-group">
+                                    <label>Confirm Password</label>
+                                    @Html.PasswordFor(model => model.ComparePassword, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ComparePassword, String.Empty, new { @class = "error" })
+                                </div>
+                                <div class="form-group">
+                                    <label>User Role</label>
+                                    @Html.DropDownList("roles", new SelectList(Roles.GetAllRoles()), new { @class = "form-control" })
+                                </div>
+                                <input type="submit" class="btn btn-primary btn-small" value="Submit" />
+                                <input type="reset" class="btn btn-success btn-small" value="Reset Form" />
+                                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-success btn-small" })
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -89,13 +85,6 @@
 </div>
 
 @section scripts{
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('button[type="submit"]').click(function (event) {
-                event.preventDefault();
-                alert('attempted to save');
-                return false;
-            });
-        });
-    </script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
 }
