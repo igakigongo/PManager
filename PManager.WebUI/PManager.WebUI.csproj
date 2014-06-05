@@ -313,9 +313,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
-    <Compile Include="Migrations\201406040727488_InitialDbMigration.cs" />
-    <Compile Include="Migrations\201406040727488_InitialDbMigration.Designer.cs">
-      <DependentUpon>201406040727488_InitialDbMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201406051432542_InitialDbMigration.cs" />
+    <Compile Include="Migrations\201406051432542_InitialDbMigration.Designer.cs">
+      <DependentUpon>201406051432542_InitialDbMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -359,8 +359,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201406040727488_InitialDbMigration.resx">
-      <DependentUpon>201406040727488_InitialDbMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201406051432542_InitialDbMigration.resx">
+      <DependentUpon>201406051432542_InitialDbMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

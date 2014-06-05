@@ -59,7 +59,7 @@ namespace PManager.WebUI.Controllers
                                             .OrderByDescending(p => p.Estimated.StartDate)
                                             .ToList();
             // Loading Users - Eager Loading
-            project.ProjectTasks.ForEach(t => t.User = _unitOfWork.UserRepository.Find(t.UserId));
+            // project.ProjectTasks.ForEach(t => t.User = _unitOfWork.UserRepository.Find(t.UserId));
             SelectList _userList = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "FullName");
             ViewBag.UserList = _userList;
             return View(project);

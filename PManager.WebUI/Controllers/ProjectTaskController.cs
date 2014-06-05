@@ -27,8 +27,8 @@ namespace PManager.WebUI.Controllers
         public ActionResult Index()
         {
             List<ProjectTask> projecttasks = _unitOfWork.ProjectTaskRepository.Get().ToList();
-            projecttasks.ForEach(p => p.User = _unitOfWork.UserRepository.Find(p.UserId));
-            projecttasks.ForEach(p => p.Project = _unitOfWork.ProjectRepository.Find(p.ProjectId));
+            //projecttasks.ForEach(p => p.User = _unitOfWork.UserRepository.Find(p.UserId));
+            //projecttasks.ForEach(p => p.Project = _unitOfWork.ProjectRepository.Find(p.ProjectId));
             return View(projecttasks);
         }
 
@@ -82,7 +82,7 @@ namespace PManager.WebUI.Controllers
                 return HttpNotFound();
             }
             //ViewBag.ProjectId = new SelectList(_unitOfWork.Projects, "Id", "ProjectCode", projecttask.ProjectId);
-            ViewBag.UserId = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "Fullname", projecttask.UserId);
+            //ViewBag.UserId = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "Fullname", projecttask.UserId);
             return View(projecttask);
         }
 
@@ -99,7 +99,7 @@ namespace PManager.WebUI.Controllers
                 return RedirectToAction("Index");
             }
             //ViewBag.ProjectId = new SelectList(_unitOfWork.Projects, "Id", "ProjectCode", projecttask.ProjectId);
-            ViewBag.UserId = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "Fullname", projecttask.UserId);
+            //ViewBag.UserId = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "Fullname", projecttask.UserId);
             return View(projecttask);
         }
 
@@ -147,7 +147,7 @@ namespace PManager.WebUI.Controllers
                                         .Where(t => t.ProjectId == projectId)
                                         .OrderByDescending(t => t.Estimated.StartDate)
                                         .ToList();
-            _tasks.ForEach(t => t.User = _unitOfWork.UserRepository.Find(t.UserId));
+            //_tasks.ForEach(t => t.User = _unitOfWork.UserRepository.Find(t.UserId));
             return Json(_tasks, JsonRequestBehavior.AllowGet);
         }
         #endregion

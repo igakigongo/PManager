@@ -15,11 +15,11 @@ namespace PManager.WebUI.Migrations
                         ProjectCode = c.String(nullable: false),
                         Name = c.String(nullable: false),
                         IsClosed = c.Boolean(nullable: false),
-                        Actual_StartDate = c.DateTime(nullable: false),
-                        Actual_EndDate = c.DateTime(nullable: false),
+                        Actual_StartDate = c.DateTime(storeType: "date"),
+                        Actual_EndDate = c.DateTime(storeType: "date"),
                         Actual_Budget = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        Estimated_StartDate = c.DateTime(nullable: false),
-                        Estimated_EndDate = c.DateTime(nullable: false),
+                        Estimated_StartDate = c.DateTime(nullable: false, storeType: "date"),
+                        Estimated_EndDate = c.DateTime(nullable: false, storeType: "date"),
                         Estimated_Budget = c.Decimal(nullable: false, precision: 18, scale: 2),
                         Description = c.String(),
                     })
@@ -31,22 +31,19 @@ namespace PManager.WebUI.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         ProjectId = c.Int(nullable: false),
-                        UserId = c.Int(nullable: false),
                         TaskName = c.String(nullable: false),
                         TaskDescription = c.String(),
                         IsCompleted = c.Boolean(nullable: false),
-                        Actual_StartDate = c.DateTime(nullable: false),
-                        Actual_EndDate = c.DateTime(nullable: false),
+                        Actual_StartDate = c.DateTime(storeType: "date"),
+                        Actual_EndDate = c.DateTime(storeType: "date"),
                         Actual_Budget = c.Decimal(nullable: false, precision: 18, scale: 2),
-                        Estimated_StartDate = c.DateTime(nullable: false),
-                        Estimated_EndDate = c.DateTime(nullable: false),
+                        Estimated_StartDate = c.DateTime(nullable: false, storeType: "date"),
+                        Estimated_EndDate = c.DateTime(nullable: false, storeType: "date"),
                         Estimated_Budget = c.Decimal(nullable: false, precision: 18, scale: 2),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Projects", t => t.ProjectId, cascadeDelete: true)
-                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
-                .Index(t => t.ProjectId)
-                .Index(t => t.UserId);
+                .Index(t => t.ProjectId);
             
             CreateTable(
                 "dbo.Users",
@@ -70,16 +67,32 @@ namespace PManager.WebUI.Migrations
                     })
                 .PrimaryKey(t => t.UserId);
             
+            CreateTable(
+                "dbo.UserProjectTasks",
+                c => new
+                    {
+                        User_Id = c.Int(nullable: false),
+                        ProjectTask_Id = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.User_Id, t.ProjectTask_Id })
+                .ForeignKey("dbo.Users", t => t.User_Id, cascadeDelete: true)
+                .ForeignKey("dbo.ProjectTasks", t => t.ProjectTask_Id, cascadeDelete: true)
+                .Index(t => t.User_Id)
+                .Index(t => t.ProjectTask_Id);
+            
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.ProjectTasks", "UserId", "dbo.Users");
             DropForeignKey("dbo.Users", "Id", "dbo.UserProfile");
+            DropForeignKey("dbo.UserProjectTasks", "ProjectTask_Id", "dbo.ProjectTasks");
+            DropForeignKey("dbo.UserProjectTasks", "User_Id", "dbo.Users");
             DropForeignKey("dbo.ProjectTasks", "ProjectId", "dbo.Projects");
+            DropIndex("dbo.UserProjectTasks", new[] { "ProjectTask_Id" });
+            DropIndex("dbo.UserProjectTasks", new[] { "User_Id" });
             DropIndex("dbo.Users", new[] { "Id" });
-            DropIndex("dbo.ProjectTasks", new[] { "UserId" });
             DropIndex("dbo.ProjectTasks", new[] { "ProjectId" });
+            DropTable("dbo.UserProjectTasks");
             DropTable("dbo.UserProfile");
             DropTable("dbo.Users");
             DropTable("dbo.ProjectTasks");

@@ -24,9 +24,6 @@ namespace PManager.Domain.Entities
         [ForeignKey("Project")]
         public int ProjectId { get; set; }
 
-        [ForeignKey("User")]
-        public int UserId { get; set; }
-
         [Required(ErrorMessage = "* required")]
         public string TaskName { get; set; }
 
@@ -38,10 +35,9 @@ namespace PManager.Domain.Entities
 
         public Estimated Estimated { get; set; }
 
-        //Navigation Property
         public Project Project { get; set; }
 
         //This means that this task may be executed by one or more users:::more like a sub team
-        public User User { get; set; }
+        public List<User> Users { get; set; }
     }
 }

@@ -51,7 +51,7 @@ namespace PManager.Domain.Entities
 
         // 
         // Description of the project
-
+        [DataType(dataType: DataType.MultilineText)]
         public string Description { get; set; }
 
         //
