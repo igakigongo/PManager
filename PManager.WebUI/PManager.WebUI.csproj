@@ -317,6 +317,14 @@
     <Compile Include="Migrations\201406051432542_InitialDbMigration.Designer.cs">
       <DependentUpon>201406051432542_InitialDbMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201406081951111_UserEdited.cs" />
+    <Compile Include="Migrations\201406081951111_UserEdited.Designer.cs">
+      <DependentUpon>201406081951111_UserEdited.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201406090751225_userammended.cs" />
+    <Compile Include="Migrations\201406090751225_userammended.Designer.cs">
+      <DependentUpon>201406090751225_userammended.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -361,6 +369,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201406051432542_InitialDbMigration.resx">
       <DependentUpon>201406051432542_InitialDbMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406081951111_UserEdited.resx">
+      <DependentUpon>201406081951111_UserEdited.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201406090751225_userammended.resx">
+      <DependentUpon>201406090751225_userammended.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

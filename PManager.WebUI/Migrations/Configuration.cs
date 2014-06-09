@@ -18,18 +18,22 @@ namespace PManager.WebUI.Migrations
 
         protected override void Seed(EFDbContext context)
         {
-            //  This method will be called after migrating to the latest version.
+            ///  This method will be called after migrating to the latest version.
+            context.Users.AddOrUpdate(
+                _user => _user.Id,
+                new User
+                {
+                    EmailAddress = "robert.van.der.warf@moonrise.hk",
+                    //EmailAddress = "oneway@redmond.com",
+                    Firstname = "Warf",
+                    Id = 1,
+                    Lastname = "Robert",
+                    Middlename = "Van Der",
+                    PhoneContact = "00085265060294"
+                }
+            );
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
+            #region Projects
             var projects = new List<Project>
             {
                 new Project{
@@ -66,8 +70,28 @@ namespace PManager.WebUI.Migrations
                     ProjectCode = "BOU-298"
                 }
             };
-            context.Projects.AddOrUpdate(projects.ToArray());
+            context.Projects.AddOrUpdate(p => p.ProjectCode, projects.ToArray());
             context.SaveChanges();
+            #endregion
+
+            #region Project Tasks
+            var projecttasks = new List<ProjectTask>
+            {
+                new ProjectTask{
+                    Estimated = new Estimated{
+                        Budget = new Decimal(900),
+                        EndDate = new DateTime(2018, 12, 31),
+                        StartDate = new DateTime(2018, 10, 01)
+                    },
+                    IsCompleted = false,
+                    ProjectId = 2,
+                    TaskName = "Summarizing Project Artifacts",
+                }
+            };
+            context.ProjectTasks.AddOrUpdate(t => t.TaskName, projecttasks.ToArray());
+            context.SaveChanges();
+            #endregion
+
         }
     }
-}
+}  

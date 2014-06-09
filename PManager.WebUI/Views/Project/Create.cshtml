@@ -88,8 +88,6 @@
                                                             <label class="invisible" id="TaskNameLabel" style="color:#f00">* Required</label>
                                                         </div>
                                                         <div class="col-lg-6">
-                                                            <label>Assigned To</label>
-                                                            @Html.DropDownList("UserId", ViewBag.UserList as SelectList, new { @class = "form-control" })<br />
                                                             <label>Estimated Start Date</label>
                                                             <input class="form-control" name="TaskESD" id="TaskESD" placeholder="mm/dd/yyyy" />
                                                             <label class="invisible" id="TaskESDLabel" style="color:#f00">* Required</label>
@@ -105,11 +103,6 @@
                                                             <label>Estimated End Date</label>
                                                             <input class="form-control" name="TaskEED" id="TaskEED" placeholder="mm/dd/yyyy" />
                                                             <label class="invisible" id="TaskEEDLabel" style="color:#f00">* Required</label>
-                                                        </div>
-                                                        <div class="col-lg-12">
-                                                            <label>Task Description</label>
-                                                            <textarea class="form-control" name="TaskDescription" id="TaskDescription" rows="4" ></textarea>
-                                                            <br />
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -127,14 +120,11 @@
                                         <table class="table" id="tasklist" style="font-size: smaller">
                                             <thead>
                                                 <tr>
-                                                    <th>User Id</th>
-                                                    <th>Names</th>
                                                     <th>Task</th>
                                                     <th>Start Date</th>
                                                     <th>End Date</th>
                                                     <th>Estimated Cost($</th>
                                                     <th>Check to remove</th>
-                                                    <th style="visibility:hidden"></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -261,13 +251,11 @@
                     var tasks = Array();
                     $('#tasklist tbody').children('tr').each(function (event) {
                         var task = {
-                            UserId: $(this).find('td:nth-child(1)').text(),
-                            TaskName: $(this).find('td:nth-child(3)').text(),
-                            TaskDescription: $(this).find('td:nth-child(8)').text(),
+                            TaskName: $(this).find('td:nth-child(1)').text(),
                             Estimated: {
-                                StartDate: $(this).find('td:nth-child(4)').text(),
-                                EndDate: $(this).find('td:nth-child(5)').text(),
-                                Budget: $(this).find('td:nth-child(6)').text()
+                                StartDate: $(this).find('td:nth-child(2)').text(),
+                                EndDate: $(this).find('td:nth-child(3)').text(),
+                                Budget: $(this).find('td:nth-child(4)').text()
                             }
                         };
                         tasks.push(task);
@@ -311,12 +299,9 @@
             $('#addtask').click(function () {
                 var isvalid = true;
                 var taskname = $('#TaskName').val();
-                var userid = $('#UserId').val();
-                var username = $('UserId').text();
                 var taskeb = $('#TaskEB').val();
                 var taskesd = $('#TaskESD').val();
                 var taskeed = $('#TaskEED').val();
-                var taskdes = $('#TaskDescription').val();
 
                 // checking the task-name
                 if (!taskname) {
@@ -354,36 +339,28 @@
                 if (isvalid) {
                     var Task = {
                         TaskName: taskname,
-                        UserId: userid,
                         Estimated: {
                             Budget: taskeb,
                             StartDate: taskesd,
                             EndDate: taskeed
-                        },
-                        TaskDescription: taskdes
+                        }
                     };
 
                     $('#tasklist tbody').append(
                         '<tr>' +
-                        '<td>' + Task.UserId + '</td>' +
-                        '<td>' + username + '</td>' +
                         '<td>' + Task.TaskName + '</td>' +
                         '<td>' + Task.Estimated.StartDate + '</td>' +
                         '<td>' + Task.Estimated.EndDate + '</td>' +
                         '<td>' + Task.Estimated.Budget + '</td>' +
                         '<td>' + '<input type="checkbox">' + '</td>' +
-                        '<td style="visibility:hidden">' + Task.TaskDescription + '</td>' +
                         '</tr>'
                     );
 
                     // clear the fields after adding everything to the table
                     var taskname = $('#TaskName').val('');
-                    var userid = $('#UserId').val();
                     var taskeb = $('#TaskEB').val('');
                     var taskesd = $('#TaskESD').val('');
                     var taskeed = $('#TaskEED').val('');
-                    var taskdes = $('#TaskDescription').val('');
-
                     alert('successfully added one task to the task list.');
                 }
                 // control whatever anomalies may happen - return gracefully 

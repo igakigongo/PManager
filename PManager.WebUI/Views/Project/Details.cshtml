@@ -65,7 +65,6 @@
                             <thead>
                                 <tr>
                                     <td>Task</td>
-                                    <td>Assigned To</td>
                                     <td>Actions</td>
                                 </tr>
                             </thead>
@@ -74,7 +73,6 @@
                                 {
                                     <tr id="@task.Id">
                                         <td>@task.TaskName</td>
-                                        <td>@task.User.Fullname</td>
                                         <td>
                                             <a href='#' title="Edit"><i class="fa fa-edit"></i></a> -
                                             <a href='#' title="Details"><i class="fa fa-th-list"></i></a> -
@@ -100,8 +98,6 @@
                                         <label class="invisible" id="TaskNameLabel" style="color:#f00">* Required</label>
                                     </div>
                                     <div class="col-lg-6">
-                                        <label>Assigned To</label>
-                                        @Html.DropDownList("UserId", ViewBag.UserList as SelectList, new { @class = "form-control" })<br />
                                         <label>Estimated Start Date</label>
                                         <input class="form-control" name="TaskESD" id="TaskESD" placeholder="mm/dd/yyyy" />
                                         <label class="invisible" id="TaskESDLabel" style="color:#f00">* Required</label>
@@ -164,12 +160,10 @@
 
             $('#addtask').click(function (event) {
                 var isvalid = true;
-                var userid = $('#UserId').val();
                 var taskname = $('#TaskName').val();
                 var startdate = $('#TaskESD').val();
                 var enddate = $('#TaskEED').val();
                 var budget = $('#TaskEB').val();
-                var taskdesc = '';
                 // checking the task-name
                 if (!taskname) {
                     $('#TaskNameLabel').removeClass('invisible').addClass('visible');
@@ -210,9 +204,7 @@
                     // build the project task and make the request
                     var projecttask = {
                         ProjectId: '@Model.Id',
-                        UserId: userid,
                         TaskName: taskname,
-                        TaskDescription: taskdesc,
                         Estimated: {
                             StartDate: startdate,
                             EndDate: enddate,

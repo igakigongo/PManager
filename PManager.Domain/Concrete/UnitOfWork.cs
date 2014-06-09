@@ -16,13 +16,13 @@ namespace PManager.Domain.Concrete
         private bool disposed = false;
 
         /*
-         *  The Reposotories to use will all be saved here
+         *  The Repositories to use will all be saved here
          */
 
         private GenericRepository<Project> _projectRepository;
-        //private GenericRepository<ProjectRole> _projectRoleRepository;
         private GenericRepository<ProjectTask> _projectTaskRepository;
         private GenericRepository<User> _userRepository;
+        private GenericRepository<UserProfile> _userProfileRepository;
 
 
         public GenericRepository<Project> ProjectRepository
@@ -36,17 +36,7 @@ namespace PManager.Domain.Concrete
                 return _projectRepository;
             }
         }
-        //public GenericRepository<ProjectRole> ProjectRoleRepository
-        //{
-        //    get
-        //    {
-        //        if (_projectRoleRepository == null)
-        //        {
-        //            _projectRoleRepository = new GenericRepository<ProjectRole>(_context);
-        //        }
-        //        return _projectRoleRepository;
-        //    }
-        //}
+
         public GenericRepository<ProjectTask> ProjectTaskRepository
         {
             get
@@ -68,6 +58,18 @@ namespace PManager.Domain.Concrete
                     _userRepository = new GenericRepository<User>(_context);
                 }
                 return _userRepository;
+            }
+        }
+
+        public GenericRepository<UserProfile> UserProfileRepository
+        {
+            get
+            {
+                if (_userProfileRepository == null)
+                {
+                    _userProfileRepository = new GenericRepository<UserProfile>(_context);
+                }
+                return _userProfileRepository;
             }
         }
 

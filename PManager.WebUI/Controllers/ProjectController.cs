@@ -59,9 +59,7 @@ namespace PManager.WebUI.Controllers
                                             .OrderByDescending(p => p.Estimated.StartDate)
                                             .ToList();
             // Loading Users - Eager Loading
-            // project.ProjectTasks.ForEach(t => t.User = _unitOfWork.UserRepository.Find(t.UserId));
-            SelectList _userList = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "FullName");
-            ViewBag.UserList = _userList;
+            // project.ProjectTasks.ForEach(_team => _team.Team.ForEach(_teammember => _teammember = _unitOfWork.UserRepository.Find(_teammember.Id)));
             return View(project);
         }
 
@@ -69,8 +67,6 @@ namespace PManager.WebUI.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            SelectList _userList = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "FullName");
-            ViewBag.UserList = _userList;
             return View();
         }
 
@@ -85,7 +81,7 @@ namespace PManager.WebUI.Controllers
                 try
                 {
                     _unitOfWork.ProjectRepository.Add(project);
-                    _unitOfWork.Save();;
+                    _unitOfWork.Save();
                     _dto.message = "success";
                     _dto.id = _unitOfWork.ProjectRepository.Get().LastOrDefault().Id;
                 }

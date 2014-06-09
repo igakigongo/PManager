@@ -27,8 +27,6 @@ namespace PManager.Domain.Entities
         [Required(ErrorMessage = "* required")]
         public string TaskName { get; set; }
 
-        public string TaskDescription { get; set; }
-
         public bool IsCompleted { get; set; }
 
         public Actual Actual { get; set; }
@@ -38,6 +36,6 @@ namespace PManager.Domain.Entities
         public Project Project { get; set; }
 
         //This means that this task may be executed by one or more users:::more like a sub team
-        public List<User> Users { get; set; }
+        public List<User> Team { get; set; }
     }
 }

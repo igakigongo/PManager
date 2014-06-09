@@ -24,7 +24,8 @@ namespace PManager.WebUI.Controllers
         // GET: /User/
         public ActionResult Index()
         {
-            IQueryable<User> _users = _unitOfWork.UserRepository.Get().AsQueryable();
+            List<User> _users = _unitOfWork.UserRepository.Get().ToList();
+            _users.ForEach(_user => _user.UserProfile = _unitOfWork.UserProfileRepository.Find(_user.Id));
             return View(_users);
         }
 
@@ -69,14 +70,16 @@ namespace PManager.WebUI.Controllers
                         Roles.AddUserToRole(username: model.UserName, roleName: model.Role);
                         Domain.Entities.User _systemUser = new Domain.Entities.User
                         {
+                            EmailAddress = model.EmailAddress,
                             Firstname = model.Firstname,
+                            Id = WebSecurity.GetUserId(model.UserName),
                             Lastname = model.Lastname,
                             Middlename = model.Middlename,
-                            Id =  WebSecurity.GetUserId(model.UserName)
+                            PhoneContact = model.PhoneContact
                         };
                         _unitOfWork.UserRepository.Add(_systemUser);
                         _unitOfWork.Save();
-                        message = "success";
+                        ViewBag.message = "success";
                     }
                     else
                     {

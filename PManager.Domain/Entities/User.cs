@@ -22,6 +22,15 @@ namespace PManager.Domain.Entities
         [Required(ErrorMessage = "* Required")]
         public string Lastname { get; set; }
 
+        [DataType(DataType.EmailAddress)]
+        [Required(ErrorMessage = "* Required")]
+        [RegularExpression(pattern: ".+\\@.+\\..+", ErrorMessage="Please enter a valid email address")]
+        public string EmailAddress { get; set; }
+
+        [DataType(DataType.PhoneNumber)]
+        [Required]
+        public string PhoneContact { get; set; }
+
         [NotMapped]
         public string Fullname
         {
