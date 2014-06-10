@@ -39,12 +39,13 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask projecttask = _unitOfWork.ProjectTaskRepository.Find(id);
-            if (projecttask == null)
+            ProjectTask _projecttask = _unitOfWork.ProjectTaskRepository.Find(id);
+            if (_projecttask == null)
             {
                 return HttpNotFound();
             }
-            return View(projecttask);
+            _projecttask.Project = _unitOfWork.ProjectRepository.Find(_projecttask.ProjectId);
+            return View(_projecttask);
         }
 
         // POST: /ProjectTask/Create
@@ -81,6 +82,8 @@ namespace PManager.WebUI.Controllers
             {
                 return HttpNotFound();
             }
+            projecttask.Project = _unitOfWork.ProjectRepository.Find(projecttask.ProjectId);
+
             //ViewBag.ProjectId = new SelectList(_unitOfWork.Projects, "Id", "ProjectCode", projecttask.ProjectId);
             //ViewBag.UserId = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "Fullname", projecttask.UserId);
             return View(projecttask);

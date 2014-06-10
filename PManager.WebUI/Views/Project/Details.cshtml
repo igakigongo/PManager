@@ -65,18 +65,47 @@
                             <thead>
                                 <tr>
                                     <td>Task</td>
+                                    <td>Progress</td>
+                                    <td>Team Members</td>
                                     <td>Actions</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var task in Model.ProjectTasks)
                                 {
+                                    int count = task.Team.Count;
                                     <tr id="@task.Id">
                                         <td>@task.TaskName</td>
                                         <td>
-                                            <a href='#' title="Edit"><i class="fa fa-edit"></i></a> -
-                                            <a href='#' title="Details"><i class="fa fa-th-list"></i></a> -
-                                            <a href='#' title="Delete"><i class="fa fa-trash-o"></i></a>
+                                            @if(task.IsCompleted){
+                                                @String.Format("Task closed -  completed on {0:D}", task.Actual.EndDate)
+                                            }else{
+                                                if(task.Actual.StartDate==null){
+                                                    @String.Format("Task set to start on: {0:D}", task.Estimated.StartDate)
+                                                }else{
+                                                    if (task.Actual.EndDate >= DateTime.Now)
+                                                    {
+                                                        @String.Format("Ongoing - task ends on: {0:D}", task.Estimated.EndDate)
+                                                    }
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (count < 1)
+                                            {
+                                                @String.Format("No Members Assigned To Task")
+                                            }
+                                            else if (count == 1)
+                                            {
+                                                @String.Format("{0} Member", count)
+                                            }else{
+                                                @String.Format("{0} Members", count)
+                                            }
+                                        </td>
+                                        <td>
+                                            <a href='@Url.Action("Edit", "ProjectTask", new { id = task.Id })' title="Edit"><i class="fa fa-edit"></i></a> -
+                                            <a href='@Url.Action("Details", "ProjectTask", new { id = task.Id })' title="Details"><i class="fa fa-th-list"></i></a> -
+                                            <a href='@Url.Action("Delete", "ProjectTask", new { id =  task.Id })' title="Delete"><i class="fa fa-trash-o"></i></a>
                                         </td>
                                     </tr>
                                 }
@@ -191,7 +220,7 @@
                     $('#TaskESDLabel').removeClass('visible').addClass('invisible');
                 }
 
-                // checking the estim/ated end date
+                // checking the estimated end date
                 if (!enddate) {
                     $('#TaskEEDLabel').removeClass('invisible').addClass('visible');
                     isvalid = false;
@@ -236,15 +265,15 @@
                 return false;
             });
 
-            $('a[title="Details"]').click(function (event) {
-                event.preventDefault();
-                var rowindex = $(this).parent().parent().attr('id');
-                console.log('Task Id: ' + rowindex);
+            //$('a[title="Details"]').click(function (event) {
+            //    event.preventDefault();
+            //    var rowindex = $(this).parent().parent().attr('id');
+            //    console.log('Task Id: ' + rowindex);
 
-                // make an Ajax request of the data
+            //    // make an Ajax request of the data
 
-                return false;
-            });
+            //    return false;
+            //});
 
             $('a[title="Delete"]').click(function (event) {
                 event.preventDefault();

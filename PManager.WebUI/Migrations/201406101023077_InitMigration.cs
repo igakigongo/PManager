@@ -3,7 +3,7 @@ namespace PManager.WebUI.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class InitialDbMigration : DbMigration
+    public partial class InitMigration : DbMigration
     {
         public override void Up()
         {
@@ -32,7 +32,6 @@ namespace PManager.WebUI.Migrations
                         Id = c.Int(nullable: false, identity: true),
                         ProjectId = c.Int(nullable: false),
                         TaskName = c.String(nullable: false),
-                        TaskDescription = c.String(),
                         IsCompleted = c.Boolean(nullable: false),
                         Actual_StartDate = c.DateTime(storeType: "date"),
                         Actual_EndDate = c.DateTime(storeType: "date"),
@@ -53,6 +52,8 @@ namespace PManager.WebUI.Migrations
                         Firstname = c.String(nullable: false),
                         Middlename = c.String(),
                         Lastname = c.String(nullable: false),
+                        EmailAddress = c.String(nullable: false),
+                        PhoneContact = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.UserProfile", t => t.Id)

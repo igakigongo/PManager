@@ -59,7 +59,7 @@ namespace PManager.WebUI.Controllers
                                             .OrderByDescending(p => p.Estimated.StartDate)
                                             .ToList();
             // Loading Users - Eager Loading
-            // project.ProjectTasks.ForEach(_team => _team.Team.ForEach(_teammember => _teammember = _unitOfWork.UserRepository.Find(_teammember.Id)));
+            project.ProjectTasks.ForEach(_team => _team.Team.ForEach(_teammember => _teammember = _unitOfWork.UserRepository.Find(_teammember.Id)));
             return View(project);
         }
 

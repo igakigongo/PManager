@@ -230,7 +230,8 @@
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.woff" />
-    <None Include="Properties\PublishProfiles\bou-promanager.pubxml" />
+    <None Include="Properties\PublishProfiles\bou-pmanager.pubxml" />
+    <None Include="Properties\PublishProfiles\bou-projectmanager.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
@@ -313,17 +314,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
-    <Compile Include="Migrations\201406051432542_InitialDbMigration.cs" />
-    <Compile Include="Migrations\201406051432542_InitialDbMigration.Designer.cs">
-      <DependentUpon>201406051432542_InitialDbMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201406081951111_UserEdited.cs" />
-    <Compile Include="Migrations\201406081951111_UserEdited.Designer.cs">
-      <DependentUpon>201406081951111_UserEdited.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201406090751225_userammended.cs" />
-    <Compile Include="Migrations\201406090751225_userammended.Designer.cs">
-      <DependentUpon>201406090751225_userammended.cs</DependentUpon>
+    <Compile Include="Migrations\201406101023077_InitMigration.cs" />
+    <Compile Include="Migrations\201406101023077_InitMigration.Designer.cs">
+      <DependentUpon>201406101023077_InitMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -367,14 +360,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201406051432542_InitialDbMigration.resx">
-      <DependentUpon>201406051432542_InitialDbMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201406081951111_UserEdited.resx">
-      <DependentUpon>201406081951111_UserEdited.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201406090751225_userammended.resx">
-      <DependentUpon>201406090751225_userammended.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201406101023077_InitMigration.resx">
+      <DependentUpon>201406101023077_InitMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

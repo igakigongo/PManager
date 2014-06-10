@@ -5,45 +5,121 @@
     Layout = "~/Views/Shared/_LayoutManager.cshtml";
 }
 
-<h2>Details</h2>
 
-<div>
-    <h4>ProjectTask</h4>
-	<hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Project.ProjectCode)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Project.ProjectCode)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Firstname)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.User.Firstname)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TaskName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TaskName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TaskDescription)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TaskDescription)
-        </dd>
-
-    </dl>
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Project Task - @Model.TaskName </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-tasks fa-fw"></i>       <strong><small>Project Code: @Model.Project.ProjectCode </small></strong>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                Task Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a href='@Url.Action("Details", "Project", new { id = Model.ProjectId })'><strong><small>Back To Project Details</small></strong></a></li>
+                                <li><a href='@Url.Action("Edit", "ProjectTask", new { id = Model.Id })'><strong><small>Edit Task Resources</small></strong></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <strong>Project Estimations</strong>
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Task Start Date:
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.StartDate == null)
+                            {
+                                @String.Format("Task will start on: {0:D}", Model.Estimated.StartDate)
+                            }
+                            else if(Model.Actual.StartDate < DateTime.Now)
+                            {
+                                @String.Format("Task was started on: {0:D}.", Model.Actual.StartDate)
+                            }
+                            else if (Model.Actual.StartDate == DateTime.Now)
+                            {
+                                @String.Format("Task starts today")
+                            }
+                        </dd>
+                        <dt>
+                            Task End Date:
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.EndDate == null)
+                            {
+                                @String.Format("Task is estimated to end on: {0:D}", Model.Estimated.EndDate)
+                            }
+                            else if(Model.Actual.EndDate < DateTime.Now)
+                            {
+                                @String.Format("Task was ended on: {0:D}.", Model.Actual.EndDate)
+                            }
+                            else if (Model.Actual.EndDate == DateTime.Now)
+                            {
+                                @String.Format("Task ends today")
+                            }
+                        </dd>
+                        <dt>
+                            Budget:
+                        </dt>
+                        <dd>
+                            @String.Format("Task was estimated to cost {0:C}.", Model.Estimated.Budget)
+                        </dd>
+                    </dl>
+                    <strong>Actual Projections</strong>
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Start Date: 
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.StartDate == null)
+                            {
+                                @String.Format("Project Manager has not set the task to be started.")
+                            }
+                            else
+                            {
+                                @String.Format("Task started on {0:D}.", Model.Actual.StartDate)
+                            }
+                        </dd>
+                        <dt>
+                            End Date:
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.EndDate == null)
+                            {
+                                @String.Format("Project Manager has not signed off the task yet.")
+                            }
+                            else
+                            {
+                                @String.Format("Task ended on {0:D}.", Model.Actual.EndDate)
+                            }
+                        </dd>
+                        <dt>
+                            Budget:
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.Budget == 0)
+                            {
+                                @String.Format("The actual task cost has not been posted.")
+                            }
+                            else
+                            {
+                                @String.Format("Task's actual cost at sign off was {0:C}.", Model.Actual.Budget)
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
