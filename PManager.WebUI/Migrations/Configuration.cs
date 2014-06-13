@@ -19,12 +19,20 @@ namespace PManager.WebUI.Migrations
         protected override void Seed(EFDbContext context)
         {
             ///  This method will be called after migrating to the latest version.
+            ///  
+            context.UserProfiles.AddOrUpdate(
+                _userProfile => _userProfile.UserId,
+                new UserProfile
+                {
+                    UserId = 1,
+                    UserName = "admin"
+                }
+            );
             context.Users.AddOrUpdate(
                 _user => _user.Id,
                 new User
                 {
                     EmailAddress = "robert.van.der.warf@moonrise.hk",
-                    //EmailAddress = "oneway@redmond.com",
                     Firstname = "Warf",
                     Id = 1,
                     Lastname = "Robert",
@@ -79,12 +87,12 @@ namespace PManager.WebUI.Migrations
             {
                 new ProjectTask{
                     Estimated = new Estimated{
-                        Budget = new Decimal(900),
-                        EndDate = new DateTime(2018, 12, 31),
-                        StartDate = new DateTime(2018, 10, 01)
+                       Budget = new Decimal(900),
+                       EndDate = new DateTime(2018, 12, 31),
+                       StartDate = new DateTime(2018, 10, 01)
                     },
                     IsCompleted = false,
-                    ProjectId = 2,
+                    ProjectId = 12,
                     TaskName = "Summarizing Project Artifacts",
                 }
             };

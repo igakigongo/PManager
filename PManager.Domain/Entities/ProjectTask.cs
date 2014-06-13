@@ -15,6 +15,7 @@ namespace PManager.Domain.Entities
         {
             Actual = new Actual();
             Estimated = new Estimated();
+            Team = new List<User>();
         }
 
         [Key]
