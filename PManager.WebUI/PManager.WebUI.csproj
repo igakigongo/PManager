@@ -312,9 +312,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
-    <Compile Include="Migrations\201406101023077_InitMigration.cs" />
-    <Compile Include="Migrations\201406101023077_InitMigration.Designer.cs">
-      <DependentUpon>201406101023077_InitMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201406180837288_InitMigration.cs" />
+    <Compile Include="Migrations\201406180837288_InitMigration.Designer.cs">
+      <DependentUpon>201406180837288_InitMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -358,8 +358,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201406101023077_InitMigration.resx">
-      <DependentUpon>201406101023077_InitMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201406180837288_InitMigration.resx">
+      <DependentUpon>201406180837288_InitMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

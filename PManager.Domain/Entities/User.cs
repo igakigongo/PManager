@@ -44,6 +44,6 @@ namespace PManager.Domain.Entities
 
         public UserProfile UserProfile { get; set; }
 
-        public List<ProjectTask> ProjectTasks { get; set; }
+        public List<Team> Teams { get; set; }
     }
 }

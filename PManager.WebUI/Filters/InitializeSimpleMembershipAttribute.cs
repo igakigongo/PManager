@@ -50,14 +50,19 @@ namespace PManager.WebUI.Filters
                     //trying to setup role based security
                     if (Roles.GetAllRoles().Length < 1)
                     {
+                        Roles.CreateRole("Admin");
                         Roles.CreateRole("Manager");
                         Roles.CreateRole("Normal");
-
+                        
                         // ship the default admin account into the system
                         WebSecurity.CreateUserAndAccount(userName: "admin", password: "pass", propertyValues: null, requireConfirmationToken: false);
+                        WebSecurity.CreateUserAndAccount(userName: "manager", password: "pass", propertyValues: null, requireConfirmationToken: false);
+                        WebSecurity.CreateUserAndAccount(userName: "normal", password: "pass", propertyValues: null, requireConfirmationToken: false);
 
                         // they have to login to complete their profile, i won't do that for them
-                        Roles.AddUserToRole("admin", "Manager");
+                        Roles.AddUserToRole("admin", "Admin");
+                        Roles.AddUserToRole("manager", "Manager");
+                        Roles.AddUserToRole("normal", "Normal");
                     }
                 }
                 catch (Exception ex)

@@ -5,6 +5,7 @@
     Layout = "~/Views/Shared/_LayoutManager.cshtml";
 }
 
+<link href="~/Content/sb-admin-v2/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
 
 <div id="page-wrapper">
     <div class="row">
@@ -116,12 +117,43 @@
                             }
                         </dd>
                     </dl>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="members">
+                            <thead>
+                                <tr>
+                                    <td style="text-align:center">
+                                        <strong>Task Team</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Team Member</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var member in Model.Team)
+                                {
+                                    <tr>
+                                        <td>
+                                            @member.Fullname
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+@section scripts{
+    <script src="~/Content/sb-admin-v2/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="~/Content/sb-admin-v2/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/highcharts.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#members').dataTable();
+        });
+    </script>
+}

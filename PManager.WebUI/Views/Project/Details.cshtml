@@ -257,33 +257,7 @@
             // hook up the tasks data table
             $('#project-Tasks').dataTable();
 
-            // wiring up the delete, edit and details events
-            $('a[title="Edit"]').click(function (event) {
-                event.preventDefault();
-                var rowindex = $(this).parent().parent().attr('id');
-                console.log('Task Id: ' + rowindex);
-                return false;
-            });
-
-            //$('a[title="Details"]').click(function (event) {
-            //    event.preventDefault();
-            //    var rowindex = $(this).parent().parent().attr('id');
-            //    console.log('Task Id: ' + rowindex);
-
-            //    // make an Ajax request of the data
-
-            //    return false;
-            //});
-
-            $('a[title="Delete"]').click(function (event) {
-                event.preventDefault();
-                console.log('Attempted to delete task....');
-                return false;
-            });
-
-            // create the actual-s pie chart
             var chart;
-            // create the estimates pie chart
             chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'container',

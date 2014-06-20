@@ -13,7 +13,7 @@ namespace PManager.WebUI.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201406101023077_InitMigration"; }
+            get { return "201406180837288_InitMigration"; }
         }
         
         string IMigrationMetadata.Source

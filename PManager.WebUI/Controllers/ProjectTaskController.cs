@@ -16,7 +16,7 @@ namespace PManager.WebUI.Controllers
     public class ProjectTaskController : Controller
     {
         private IDataTransferObject _dto;
-        private UnitOfWork _unitOfWork = new UnitOfWork();
+        private EFDbContext _context = new EFDbContext();
 
         public ProjectTaskController(IDataTransferObject _dtoParam)
         {
@@ -26,10 +26,8 @@ namespace PManager.WebUI.Controllers
         // GET: /ProjectTask/
         public ActionResult Index()
         {
-            List<ProjectTask> projecttasks = _unitOfWork.ProjectTaskRepository.Get().ToList();
-            //projecttasks.ForEach(p => p.User = _unitOfWork.UserRepository.Find(p.UserId));
-            //projecttasks.ForEach(p => p.Project = _unitOfWork.ProjectRepository.Find(p.ProjectId));
-            return View(projecttasks);
+            IQueryable<ProjectTask> _projecttasks = _context.ProjectTasks.Include(t => t.Team).Include(t => t.Project);
+            return View(_projecttasks);
         }
 
         // GET: /ProjectTask/Details/5
@@ -39,12 +37,11 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask _projecttask = _unitOfWork.ProjectTaskRepository.Find(id);
+            ProjectTask _projecttask = _context.ProjectTasks.Include(t => t.Project).Include(t => t.Team).Where(t => t.Id == id).SingleOrDefault();
             if (_projecttask == null)
             {
                 return HttpNotFound();
             }
-            _projecttask.Project = _unitOfWork.ProjectRepository.Find(_projecttask.ProjectId);
             return View(_projecttask);
         }
 
@@ -58,8 +55,8 @@ namespace PManager.WebUI.Controllers
             {
                 try
                 {
-                    _unitOfWork.ProjectTaskRepository.Add(projecttask);
-                    _unitOfWork.Save();
+                    _context.ProjectTasks.Add(projecttask);
+                    _context.SaveChanges();
                     _dto.message = "success";
                 }
                 catch (DbUpdateException)
@@ -77,13 +74,12 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask projecttask = _unitOfWork.ProjectTaskRepository.Find(id);
+            ProjectTask projecttask = _context.ProjectTasks.Include(t => t.Project).Include(t => t.Team).SingleOrDefault(t => t.Id == id);
             if (projecttask == null)
             {
                 return HttpNotFound();
             }
-            projecttask.Project = _unitOfWork.ProjectRepository.Find(projecttask.ProjectId);
-
+            ViewBag.Team = new SelectList(_context.Users, "Id", "Fullname");
             //ViewBag.ProjectId = new SelectList(_unitOfWork.Projects, "Id", "ProjectCode", projecttask.ProjectId);
             //ViewBag.UserId = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "Fullname", projecttask.UserId);
             return View(projecttask);
@@ -93,17 +89,35 @@ namespace PManager.WebUI.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit(ProjectTask projecttask)
+        public ActionResult Edit(ProjectTaskViewModel projecttaskvm)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.ProjectTaskRepository.Update(projecttask);
-                _unitOfWork.Save();
-                return RedirectToAction("Index");
+                // pick all team members that are new and complete the projecttaskvm fully
+                //projecttaskvm.AssociatedMemberIds.ForEach(t => projecttaskvm.Task.Team.Add(_context.Users.Find(t)));
+
+
+                var existingtask = _context.ProjectTasks.Include(t => t.Team);
+
+                //_context.Entry(projecttaskvm.Task).State = EntityState.Modified;
+                //_context.SaveChanges();
+                //foreach (int id in projecttaskvm.AssociatedMemberIds)
+                //{
+                //    projecttaskvm.Task.Team.Add(_context.Users.Find(id));
+
+                //}
+                _context.SaveChanges();
+                _dto.message = "success";
+                if (Request.IsAjaxRequest())
+                {
+                    return Json(_dto, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return RedirectToAction("Details", "Project", new { id = projecttaskvm.Task.ProjectId });
+                }
             }
-            //ViewBag.ProjectId = new SelectList(_unitOfWork.Projects, "Id", "ProjectCode", projecttask.ProjectId);
-            //ViewBag.UserId = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "Fullname", projecttask.UserId);
-            return View(projecttask);
+            return View(projecttaskvm.Task);
         }
 
         // GET: /ProjectTask/Delete/5
@@ -113,7 +127,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask projecttask = _unitOfWork.ProjectTaskRepository.Find(id);
+            ProjectTask projecttask = _context.ProjectTasks.Find(id);
             if (projecttask == null)
             {
                 return HttpNotFound();
@@ -125,9 +139,9 @@ namespace PManager.WebUI.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
-            ProjectTask projecttask = _unitOfWork.ProjectTaskRepository.Find(id);
-            _unitOfWork.ProjectTaskRepository.Delete(projecttask);
-            _unitOfWork.Save();
+            ProjectTask projecttask = _context.ProjectTasks.Find(id);
+            _context.ProjectTasks.Remove(entity: projecttask);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -135,7 +149,7 @@ namespace PManager.WebUI.Controllers
         {
             if (disposing)
             {
-                _unitOfWork.Dispose();
+                _context.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -145,12 +159,10 @@ namespace PManager.WebUI.Controllers
         #region 1.0 Requesting All Tasks For A Given Project
         public JsonResult GetAllTasks(int projectId)
         {
-            var _tasks = _unitOfWork.ProjectTaskRepository
-                                        .Get()
-                                        .Where(t => t.ProjectId == projectId)
-                                        .OrderByDescending(t => t.Estimated.StartDate)
-                                        .ToList();
-            //_tasks.ForEach(t => t.User = _unitOfWork.UserRepository.Find(t.UserId));
+            var _tasks = _context
+                .ProjectTasks
+                .Where(t => t.ProjectId == projectId)
+                .OrderByDescending(t => t.Estimated.StartDate);
             return Json(_tasks, JsonRequestBehavior.AllowGet);
         }
         #endregion

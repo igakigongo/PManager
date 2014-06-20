@@ -52,14 +52,14 @@ namespace PManager.WebUI.Controllers
             {
                 return HttpNotFound();
             }
-            // Loading Project Tasks - Eager Loading
+            // Loading Project Tasks
             project.ProjectTasks = _unitOfWork.ProjectTaskRepository
                                             .Get()
                                             .Where(p => p.ProjectId == project.Id)
                                             .OrderByDescending(p => p.Estimated.StartDate)
                                             .ToList();
-            // Loading Users - Eager Loading
-            project.ProjectTasks.ForEach(_team => _team.Team.ForEach(_teammember => _teammember = _unitOfWork.UserRepository.Find(_teammember.Id)));
+            // Loading Users
+            // project.ProjectTasks.ForEach(_team => _team.Team.ForEach(_teammember => _teammember = _unitOfWork.UserRepository.Find(_teammember.Id)));
             return View(project);
         }
 
@@ -112,6 +112,7 @@ namespace PManager.WebUI.Controllers
         // POST: /Project/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         public ActionResult Edit(Project project)
         {

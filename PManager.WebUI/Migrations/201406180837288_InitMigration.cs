@@ -45,6 +45,17 @@ namespace PManager.WebUI.Migrations
                 .Index(t => t.ProjectId);
             
             CreateTable(
+                "dbo.Teams",
+                c => new
+                    {
+                        Id = c.Int(nullable: false),
+                        Name = c.String(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.ProjectTasks", t => t.Id)
+                .Index(t => t.Id);
+            
+            CreateTable(
                 "dbo.Users",
                 c => new
                     {
@@ -59,43 +70,46 @@ namespace PManager.WebUI.Migrations
                 .ForeignKey("dbo.UserProfile", t => t.Id)
                 .Index(t => t.Id);
             
-            CreateTable(
-                "dbo.UserProfile",
-                c => new
-                    {
-                        UserId = c.Int(nullable: false, identity: true),
-                        UserName = c.String(),
-                    })
-                .PrimaryKey(t => t.UserId);
+            //CreateTable(
+            //    "dbo.UserProfile",
+            //    c => new
+            //        {
+            //            UserId = c.Int(nullable: false, identity: true),
+            //            UserName = c.String(),
+            //        })
+            //    .PrimaryKey(t => t.UserId);
             
             CreateTable(
-                "dbo.UserProjectTasks",
+                "dbo.UserTeams",
                 c => new
                     {
                         User_Id = c.Int(nullable: false),
-                        ProjectTask_Id = c.Int(nullable: false),
+                        Team_Id = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => new { t.User_Id, t.ProjectTask_Id })
+                .PrimaryKey(t => new { t.User_Id, t.Team_Id })
                 .ForeignKey("dbo.Users", t => t.User_Id, cascadeDelete: true)
-                .ForeignKey("dbo.ProjectTasks", t => t.ProjectTask_Id, cascadeDelete: true)
+                .ForeignKey("dbo.Teams", t => t.Team_Id, cascadeDelete: true)
                 .Index(t => t.User_Id)
-                .Index(t => t.ProjectTask_Id);
+                .Index(t => t.Team_Id);
             
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.Users", "Id", "dbo.UserProfile");
-            DropForeignKey("dbo.UserProjectTasks", "ProjectTask_Id", "dbo.ProjectTasks");
-            DropForeignKey("dbo.UserProjectTasks", "User_Id", "dbo.Users");
+            DropForeignKey("dbo.UserTeams", "Team_Id", "dbo.Teams");
+            DropForeignKey("dbo.UserTeams", "User_Id", "dbo.Users");
+            DropForeignKey("dbo.Teams", "Id", "dbo.ProjectTasks");
             DropForeignKey("dbo.ProjectTasks", "ProjectId", "dbo.Projects");
-            DropIndex("dbo.UserProjectTasks", new[] { "ProjectTask_Id" });
-            DropIndex("dbo.UserProjectTasks", new[] { "User_Id" });
+            DropIndex("dbo.UserTeams", new[] { "Team_Id" });
+            DropIndex("dbo.UserTeams", new[] { "User_Id" });
             DropIndex("dbo.Users", new[] { "Id" });
+            DropIndex("dbo.Teams", new[] { "Id" });
             DropIndex("dbo.ProjectTasks", new[] { "ProjectId" });
-            DropTable("dbo.UserProjectTasks");
+            DropTable("dbo.UserTeams");
             DropTable("dbo.UserProfile");
             DropTable("dbo.Users");
+            DropTable("dbo.Teams");
             DropTable("dbo.ProjectTasks");
             DropTable("dbo.Projects");
         }

@@ -14,32 +14,40 @@ namespace PManager.WebUI.Migrations
         {
             AutomaticMigrationsEnabled = true;
             MigrationsDirectory = @"Migrations";
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(EFDbContext context)
         {
-            ///  This method will be called after migrating to the latest version.
-            ///  
-            context.UserProfiles.AddOrUpdate(
-                _userProfile => _userProfile.UserId,
-                new UserProfile
-                {
-                    UserId = 1,
-                    UserName = "admin"
-                }
-            );
-            context.Users.AddOrUpdate(
-                _user => _user.Id,
-                new User
-                {
-                    EmailAddress = "robert.van.der.warf@moonrise.hk",
-                    Firstname = "Warf",
+            #region Users
+            var users = new List<User>
+            {
+                new User{
+                    EmailAddress = "admin@erbium.org",
+                    Firstname = "Herbert",
                     Id = 1,
-                    Lastname = "Robert",
-                    Middlename = "Van Der",
-                    PhoneContact = "00085265060294"
+                    Lastname = "Krypton",
+                    PhoneContact = "000256776523452"
+                },
+                new User{
+                    EmailAddress = "manager@erbium.org",
+                    Firstname = "Dean",
+                    Id = 2,
+                    Lastname = "Edmond",
+                    PhoneContact = "000256778573412"
+                },
+                new User{
+                    EmailAddress = "lambert@erbium.org",
+                    Firstname = "Lambert",
+                    Id = 3,
+                    Lastname = "Christopher",
+                    PhoneContact = "000256776523452"
                 }
-            );
+            };
+
+            context.Users.AddOrUpdate(u => u.Id, users.ToArray());
+            context.SaveChanges();
+            #endregion
 
             #region Projects
             var projects = new List<Project>
@@ -92,11 +100,42 @@ namespace PManager.WebUI.Migrations
                        StartDate = new DateTime(2018, 10, 01)
                     },
                     IsCompleted = false,
-                    ProjectId = 12,
-                    TaskName = "Summarizing Project Artifacts",
+                    ProjectId = 1,
+                    TaskName = "Summarizing Project Artifacts"
+                },
+                new ProjectTask{
+                    Estimated = new Estimated{
+                       Budget = new Decimal(900),
+                       EndDate = new DateTime(2018, 12, 31),
+                       StartDate = new DateTime(2018, 10, 01)
+                    },
+                    IsCompleted = false,
+                    ProjectId = 1,
+                    TaskName = "Create Schematics"
+                },
+                new ProjectTask{
+                    Estimated = new Estimated{
+                       Budget = new Decimal(900),
+                       EndDate = new DateTime(2018, 12, 31),
+                       StartDate = new DateTime(2018, 10, 01)
+                    },
+                    IsCompleted = false,
+                    ProjectId = 1,
+                    TaskName = "Feasibility Study"
                 }
             };
             context.ProjectTasks.AddOrUpdate(t => t.TaskName, projecttasks.ToArray());
+            context.SaveChanges();
+
+            var teams = new List<Team>
+            {
+                new Team{
+                    Id = 1,
+                    Name = "BOU-453 Outsourcing Team",
+                    Users = context.Users.ToList()
+                }
+            };
+            context.Teams.AddOrUpdate(t => t.Id, teams.ToArray());
             context.SaveChanges();
             #endregion
 

@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<PManager.Domain.Entities.ProjectTask>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Project Tasks";
     Layout = "~/Views/Shared/_LayoutManager.cshtml";
 }
 
@@ -27,10 +27,10 @@
                                     Project Code
                                 </th>
                                 <th>
-                                    Assigned To
+                                    Task Name
                                 </th>
                                 <th>
-                                    Task Name
+                                    Team Members
                                 </th>
                                 <th>
                                     Task Status
@@ -47,10 +47,10 @@
                                         @Html.DisplayFor(modelItem => item.Project.ProjectCode)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.User.Fullname)
+                                        @Html.DisplayFor(modelItem => item.TaskName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.TaskName)
+                                        @Html.DisplayFor(modelItem => item.Team.Count)
                                     </td>
                                     <td>
                                         @if (item.IsCompleted)

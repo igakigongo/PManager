@@ -10,6 +10,7 @@
         color: #f00;
     }
 </style>
+<link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
 
 <div id="page-wrapper">
     <div class="row">
@@ -46,28 +47,144 @@
                                 </div>
                             </div>
                             <div class="form-group">
+                                @Html.LabelFor(model => model.Estimated.StartDate, new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.Estimated.StartDate, new { @class= "form-control", id = "StartDate" })
+                                    @Html.ValidationMessageFor(model => model.Estimated.StartDate, String.Empty, new { @class = "error" })
+                                </div>
+                                @Html.LabelFor(model => model.Estimated.EndDate, new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.Estimated.EndDate, new { @class= "form-control", id = "EndDate" })
+                                    @Html.ValidationMessageFor(model => model.Estimated.EndDate, String.Empty, new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 @Html.LabelFor(model => model.Estimated.Budget, new { @class = "control-label col-md-2" })
                                 <div class="col-md-10">
-                                    @Html.TextBoxFor(model => model.Estimated.Budget, new { @class= "form-control" })
+                                    @Html.TextBoxFor(model => model.Estimated.Budget, new { @class= "form-control", id = "Budget" })
                                     @Html.ValidationMessageFor(model => model.Estimated.Budget, String.Empty, new { @class = "error" })
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label class = "control-label col-md-2">Select Team Members</label>
+                                <div class="col-md-6">
+                                    @Html.DropDownList("teammembers", ViewBag.Team as SelectList, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-default btn-primary" title="Add Member">Add To Team</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class = "control-label col-md-2">Team Members</label>
+                                <div class="col-md-6 table-responsive">
+                                    <table class="table table-striped table-bordered table-hover" id="members-table">
+                                        <thead>
+                                            <tr>
+                                                <td>Team Members</td>
+                                                <td>Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                @foreach (var member in Model.Team)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @member.Fullname
+                                                        </td>
+                                                        <td>
+                                                            <button id="@member.Id" title="Remove Member">Remove</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <div class="col-md-offset-2 col-md-10">
-                                    <input type="submit" value="Save" class="btn btn-primary" />
+                                    <input type="submit" value="Save" class="btn btn-primary btn-small" id="mainsubmit" />
+                                    @Html.ActionLink("Back", "Details", "Project", new { id = Model.ProjectId }, new { @class = "btn btn-success btn-small" })
                                 </div>
                             </div>
                         </div>
                     }
-
-                    <div>
-                        @Html.ActionLink("Back to List", "Index")
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            $.ajaxSetup({
+                dataType: 'json',
+                contentType: 'application/json, charset=utf-8'
+            });
+
+            $('#StartDate').datepicker();
+            $('#EndDate').datepicker();
+
+            $('button[title="Add Member"]').click(function (event) {
+                event.preventDefault();
+                var userid = $('#teammembers').val();
+                var username = $('#teammembers option:selected').text();
+                //console.log('Selected User Id: ' + userid + '\tUsername: ' + username);
+                var rowcount = $('#members-table tbody').children('tr[id="'+ userid +'"]').length;
+                //console.log('Matching Row Count: ' + rowcount);
+                if (rowcount == 0) {
+                    $('#members-table tbody').append(
+                        '<tr id="'+ userid +'">' +
+                        '<td>' + username + '</td>' +
+                        '<td><a href="#" title="remove"><i class="fa fa-trash-o"></i></a></td>' +
+                        '</tr>'
+                    );
+                } else {
+                    alert('User already on team, please choose another one.');
+                }
+                return false;
+            });
+
+            $('#mainsubmit').click(function (event) {
+                event.preventDefault();
+                //console.log('attempted to submit this form');
+                var users = Array();
+                $('#members-table tbody').children('tr').each(function (event) {
+                    var userid = $(this).attr('id');
+                    //console.log('User Identity: ' + userid);
+                    users.push(userid);
+                });
+
+                var projecttaskvm = {
+                    Task: {
+                        ProjectId: $('#ProjectId').val(),
+                        TaskName: $('#TaskName').val(),
+                        Estimated: {
+                            StartDate: $('#StartDate').val(),
+                            EndDate: $('#EndDate').val(),
+                            Budget: $('#Budget').val()
+                        }
+                    },
+                    AssociatedMemberIds: users
+                };
+                console.log(JSON.stringify(projecttaskvm))
+                $.post('@Url.Action("Edit", "ProjectTask")', JSON.stringify(projecttaskvm), function (result) {
+                    console.log('Server Result: ' + JSON.stringify(result));
+                    return false;
+                    if (result.message == 'success') {
+                        window.location = "/Project/Details/" + result.id;
+
+                    } else {
+                        alert('Error editing project, please try again later');
+                    }
+                });
+                return false;
+            });
+        });
+    </script>
+}
+

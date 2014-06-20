@@ -56,7 +56,7 @@ namespace PManager.WebUI.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [InitializeSimpleMembership]
-        public ViewResult Create(RegisterModel model)
+        public ActionResult Create(RegisterModel model)
         {
             String message = String.Empty;
             if (ModelState.IsValid)
@@ -80,6 +80,7 @@ namespace PManager.WebUI.Controllers
                         _unitOfWork.UserRepository.Add(_systemUser);
                         _unitOfWork.Save();
                         ViewBag.message = "success";
+                        return RedirectToAction("Index");
                     }
                     else
                     {

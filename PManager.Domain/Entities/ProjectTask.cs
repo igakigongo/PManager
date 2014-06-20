@@ -15,7 +15,6 @@ namespace PManager.Domain.Entities
         {
             Actual = new Actual();
             Estimated = new Estimated();
-            Team = new List<User>();
         }
 
         [Key]
@@ -36,7 +35,6 @@ namespace PManager.Domain.Entities
 
         public Project Project { get; set; }
 
-        //This means that this task may be executed by one or more users:::more like a sub team
-        public List<User> Team { get; set; }
+        public Team Team { get; set; }
     }
 }
