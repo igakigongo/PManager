@@ -7,7 +7,7 @@
 
 <link href="~/Content/sb-admin-v2/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
 
-<div id="page-wrapper">
+<div id="page-wrapper" data-ng-controller="TeamsController">
     <div class="row">
         <div class="col-lg-12">
             <h3 class="page-header">Projects' Tasks</h3>
@@ -30,7 +30,7 @@
                                     Task Name
                                 </th>
                                 <th>
-                                    Team Members
+                                    Team
                                 </th>
                                 <th>
                                     Task Status
@@ -38,7 +38,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model) {
+                            @foreach (var item in Model)
+                            {
                                 <tr>
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Id)
@@ -50,7 +51,7 @@
                                         @Html.DisplayFor(modelItem => item.TaskName)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Team.Count)
+                                        @Html.DisplayFor(modelItem => item.Team.Name)
                                     </td>
                                     <td>
                                         @if (item.IsCompleted)
@@ -69,6 +70,62 @@
                 </div>
             </div>
         </div>
+    </div>
+
+
+
+
+
+    <div ng-controller="TeamsController">
+        @*<button class="btn btn-default" ng-click="open()">Open me!</button>*@
+        <script type="text/ng-template" id="myModalContent.html">
+            <div class="modal-header">
+                <h3 class="modal-title">Authorisation is required</h3>
+            </div>
+            <div class="modal-body">
+                <form id="meta-data-form">
+                    <div class="field-box customer-wrapper padding-top-15">
+                        <div class="alert alert-info">
+                            <span class="alert-msg"><i class=""></i>You are authorising as:<strong> Paul</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="field-box customer-wrapper padding-top-15">
+                        <label class="light">Your Password</label>
+                        <input data-required="true" id="customers" class="form-control textbox" type="text" placeholder="password" />
+                        <div class="search-results"></div>
+                        <div class="warning">
+                            <span class="alert-msg"><i class="icon-warning-sign"></i>Sorry, no matching customer found</span>
+                        </div>
+                        <div class="error">
+                            <span class="alert-msg"><i class="icon-remove-sign"></i>Please provide the customer details</span>
+                        </div>
+                    </div>
+
+                    <div class="field-box customer-wrapper padding-top-15">
+                        <label class="light">Comments</label>
+                        <textarea data-required="true" id="comments" class="form-control textarea"></textarea>
+                        <div class="search-results"></div>
+                        <div class="warning">
+                            <span class="alert-msg"><i class="icon-warning-sign"></i>Sorry, no matching customer found</span>
+                        </div>
+                        <div class="error">
+                            <span class="alert-msg"><i class="icon-remove-sign"></i>Please provide the customer details</span>
+                        </div>
+                    </div>
+
+
+                    <div class="field-box" id="message-box"></div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" ng-click="ok()">OK</button>
+                <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            </div>
+        </script>
+
+
     </div>
 </div>
 

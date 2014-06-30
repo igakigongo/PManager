@@ -90,6 +90,7 @@
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\TeamEditViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

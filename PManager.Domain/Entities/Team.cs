@@ -11,13 +11,14 @@ namespace PManager.Domain.Entities
     public class Team
     {
         [Key]
-        [ForeignKey("ProjectTask")]
+        [ForeignKey("Project")]
         public int Id { get; set; }
 
         [Required(ErrorMessage="* Required")]
         public string Name { get; set; }
 
-        public ProjectTask ProjectTask { get; set; }
+        [Required]
+        public Project Project { get; set; }
 
         public List<User> Users { get; set; }
     }

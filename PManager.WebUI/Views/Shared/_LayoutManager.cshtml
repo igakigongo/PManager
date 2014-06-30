@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 
-<html>
+<html data-ng-app="MainApp">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,8 +17,11 @@
     <!-- Page-Level Plugin CSS - Dashboard -->
     <!-- SB Admin CSS - Include with every page -->
     <link href="~/Content/sb-admin-v2/css/sb-admin.css" rel="stylesheet">
+    <link href="~/Content/toaster.css" rel="stylesheet" />
+    <link href="~/Content/Styles.css" rel="stylesheet" />
+    
 </head>
-<body>
+<body ng-cloak>
     <div id="wrapper">
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -149,12 +152,15 @@
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        <li>
+                            <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                         </li>
-                        <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        <li>
+                            <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href='@Url.Action("Logout", "Account")'><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li>
+                            <a href='@Url.Action("Logout", "Account")'><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -170,10 +176,10 @@
                             <div class="input-group custom-search-form">
                                 <input type="text" class="form-control" placeholder="Search...">
                                 <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
                             </div>
                             <!-- /input-group -->
                         </li>
@@ -233,6 +239,11 @@
                             </ul>
                             <!-- /.nav-second-level -->
                         </li>
+
+                        <li>
+                            <a href='@Url.Action("Index", "Teams")'><i class="fa fa-dashboard fa-fw"></i> Teams</a>
+                        </li>
+
                         <li>
                             <a href="#"><i class="fa fa-wrench fa-fw"></i>  Resource Pool<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
@@ -260,7 +271,7 @@
                                             <a href="#">Available</a>
                                         </li>
                                         <li>
-                                            <a href="#">Assigned</a> 
+                                            <a href="#">Assigned</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -295,7 +306,6 @@
 
     </div>
     <!-- /#wrapper -->
-
     <!-- Core Scripts - Include with every page -->
     <script src="~/Scripts/jquery-2.0.3.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
@@ -303,7 +313,17 @@
 
     <!-- SB Admin Scripts - Include with every page -->
     <script src="~/Content/sb-admin-v2/js/sb-admin.js"></script>
-    
+
+    <script src="~/Scripts/Angularjs/angular.js"></script>
+    @*<script src="http://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/0.4.4/toaster.js"></script>*@
+    @*<script src="~/Scripts/AngularMain/toaster.js"></script>*@
+    <script src="~/Scripts/Angularjs/ui-bootstrap-0.10.0.js"></script>
+    <script src="~/Scripts/Angularjs/ui-bootstrap-tpls-0.10.0.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>
+    <script src="~/Scripts/AngularMain/MainApp.js"></script>
+    <script src="~/Scripts/AngularMain/services.js"></script>
+    <script src="~/Scripts/AngularMain/controllers.js"></script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

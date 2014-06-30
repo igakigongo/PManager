@@ -185,6 +185,8 @@
     <Content Include="Content\sb-admin-v2\panels-wells.html" />
     <Content Include="Content\sb-admin-v2\tables.html" />
     <Content Include="Content\sb-admin-v2\typography.html" />
+    <Content Include="Content\Styles.css" />
+    <Content Include="Content\toaster.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -193,6 +195,34 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="project.ico" />
+    <Content Include="Scripts\Angularjs\angular-animate.js" />
+    <Content Include="Scripts\Angularjs\angular-animate.min.js" />
+    <Content Include="Scripts\Angularjs\angular-cookies.js" />
+    <Content Include="Scripts\Angularjs\angular-cookies.min.js" />
+    <Content Include="Scripts\Angularjs\angular-csp.css" />
+    <Content Include="Scripts\Angularjs\angular-loader.js" />
+    <Content Include="Scripts\Angularjs\angular-loader.min.js" />
+    <Content Include="Scripts\Angularjs\angular-local-storage.js" />
+    <Content Include="Scripts\Angularjs\angular-mocks.js" />
+    <Content Include="Scripts\Angularjs\angular-resource.js" />
+    <Content Include="Scripts\Angularjs\angular-resource.min.js" />
+    <Content Include="Scripts\Angularjs\angular-route.js" />
+    <Content Include="Scripts\Angularjs\angular-route.min.js" />
+    <Content Include="Scripts\Angularjs\angular-sanitize.js" />
+    <Content Include="Scripts\Angularjs\angular-sanitize.min.js" />
+    <Content Include="Scripts\Angularjs\angular-scenario.js" />
+    <Content Include="Scripts\Angularjs\angular-touch.js" />
+    <Content Include="Scripts\Angularjs\angular-touch.min.js" />
+    <Content Include="Scripts\Angularjs\angular.js" />
+    <Content Include="Scripts\Angularjs\angular.min.js" />
+    <Content Include="Scripts\Angularjs\ui-bootstrap-0.10.0.js" />
+    <Content Include="Scripts\Angularjs\ui-bootstrap-0.10.0.min.js" />
+    <Content Include="Scripts\Angularjs\ui-bootstrap-tpls-0.10.0.js" />
+    <Content Include="Scripts\Angularjs\ui-bootstrap-tpls-0.10.0.min.js" />
+    <Content Include="Scripts\AngularMain\controllers.js" />
+    <Content Include="Scripts\AngularMain\MainApp.js" />
+    <Content Include="Scripts\AngularMain\services.js" />
+    <Content Include="Scripts\AngularMain\toaster.js" />
     <Content Include="Scripts\App.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -232,6 +262,14 @@
     <Content Include="Content\sb-admin-v2\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\bou-pmanager.pubxml" />
     <None Include="Properties\PublishProfiles\bou-projectmanager.pubxml" />
+    <Content Include="Scripts\Angularjs\angular-animate.min.js.map" />
+    <Content Include="Scripts\Angularjs\angular-cookies.min.js.map" />
+    <Content Include="Scripts\Angularjs\angular-loader.min.js.map" />
+    <Content Include="Scripts\Angularjs\angular-resource.min.js.map" />
+    <Content Include="Scripts\Angularjs\angular-route.min.js.map" />
+    <Content Include="Scripts\Angularjs\angular-sanitize.min.js.map" />
+    <Content Include="Scripts\Angularjs\angular-touch.min.js.map" />
+    <Content Include="Scripts\Angularjs\angular.min.js.map" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
@@ -296,6 +334,7 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.vi.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.js" />
+    <Content Include="Scripts\select2.min.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -306,6 +345,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\ProjectTaskController.cs" />
+    <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -341,6 +381,11 @@
     <Content Include="Views\ProjectTask\Details.cshtml" />
     <Content Include="Views\ProjectTask\Edit.cshtml" />
     <Content Include="Views\ProjectTask\Index.cshtml" />
+    <Content Include="Views\Teams\Index.cshtml" />
+    <Content Include="Views\Teams\Create.cshtml" />
+    <Content Include="Views\Teams\Edit.cshtml" />
+    <Content Include="Views\Teams\Details.cshtml" />
+    <Content Include="Views\Teams\AddTeamMember.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -58,5 +58,7 @@ namespace PManager.Domain.Entities
         // The list of task for the project
 
         public List<ProjectTask> ProjectTasks { get; set; }
+
+        public Team Team { get; set; }
     }
 }
