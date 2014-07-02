@@ -66,6 +66,10 @@ border: 0;
 box-shadow: none;
 }
 
+.error {
+    color: #a94442;
+}
+
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;

@@ -14,30 +14,30 @@
     </div>
     <div class="row">
         <div class="col-lg-6">
-            <form>
-                <div class="form-group">
+            <form name="teamForm" novalidate>
+                <div class="form-group" ng-class="{ 'has-error' : teamForm.teamName.$invalid && !teamForm.teamName.$pristine }">
                     @Html.LabelFor(x => Model.Name)
-                    <input type="text" class="form-control" data-ng-model="teamName" data-ng-required />
-                    @*@Html.TextBoxFor(x => Model.Name, new { @class = "form-control" })*@
+                    <input type="text" name="teamName" class="form-control" data-ng-model="teamName" required />
+                    <span ng-show="teamForm.teamName.$invalid && !teamForm.teamName.$pristine" class="error"><i class="fa fa-warning"></i> Name for the team is required.</span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-class="{ 'has-error' : teamForm.projectName.$invalid && !teamForm.projectName.$pristine }">
                     @Html.LabelFor(x => Model.Project)
-                    <input type="text" class="form-control" data-ng-model="projectName" data-ng-required />
-                    @*@Html.TextBoxFor(x => Model.Project.Name, new { @class = "form-control" })*@
+                    <input type="text" class="form-control" name="projectName" data-ng-model="projectName" required />
+                    <span ng-show="teamForm.projectName.$invalid && !teamForm.projectName.$pristine" class="error"><i class="fa fa-warning"></i> Name for the project is required.</span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-class="{ 'has-error' : teamForm.projectCode.$invalid && !teamForm.projectCode.$pristine }">
                     @Html.Label("Project code")
-                    <input type="text" class="form-control" data-ng-model="projectCode" data-ng-required />
-                    @*@Html.TextBoxFor(x => Model.Project.ProjectCode, new { @class = "form-control" })*@
+                    <input type="text" class="form-control" data-ng-model="projectCode" required name="projectCode" />
+                    <span ng-show="teamForm.projectCode.$invalid && !teamForm.projectCode.$pristine" class="error"><i class="fa fa-warning"></i> Code for the project is required.</span>
                 </div>
-                <div class="form-group">
+                <div class="form-group" ng-class="{ 'has-error' : teamForm.projectDescription.$invalid && !teamForm.projectDescription.$pristine }">
                     @Html.Label("Project description")
-                    <textarea class="form-control" data-ng-model="projectDescription" data-ng-required></textarea>
-                    @*@Html.TextAreaFor(x => Model.Project.Description, new { @class = "form-control" })*@
+                    <textarea class="form-control" data-ng-model="projectDescription" name="projectDescription" required></textarea>
+                    <span ng-show="teamForm.projectDescription.$invalid && !teamForm.projectDescription.$pristine" class="error"><i class="fa fa-warning"></i> Description for the project is required.</span>
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-success" data-ng-click="save()" /> <a href="/Teams/Index" class="btn btn-default"> Back to list</a>
+                    <input type="submit" value="Create" class="btn btn-success" data-ng-click="save()" ng-disabled="teamForm.$invalid" /> <a href="/Teams/Index" class="btn btn-default"> Back to list</a>
                 </div>
             </form>
         </div>

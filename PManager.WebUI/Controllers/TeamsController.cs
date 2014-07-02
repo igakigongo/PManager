@@ -19,9 +19,7 @@ namespace PManager.WebUI.Controllers
         [Authorize(Roles = "Manager")]
         public ActionResult Index()
         {
-            
-                return View(context.Teams.Include(x => x.Project).ToList());
-            
+                return View(context.Teams.Include(x => x.Project).Where(x=>x.Status==Status.Active).ToList());
         }
 
         public ActionResult GetTeams()
@@ -124,10 +122,23 @@ namespace PManager.WebUI.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public ActionResult Delete()
+        public ActionResult Delete(int id)
         {
-            string message = "";
-            return Json(message, JsonRequestBehavior.AllowGet);
+            var teamToRemove = context.Teams.Find(id);
+            teamToRemove.Status = Status.Inactive;
+            context.Teams.AddOrUpdate(teamToRemove);
+            context.SaveChanges();
+            return RedirectToAction("Index","Teams");
+        }
+
+        public ActionResult RemoveUser(int teamId,int userId)
+        {
+            var team = context.Teams.Find(teamId);
+            var userToRemove = context.Users.FirstOrDefault(x => x.Id == userId);
+            team.Users.Remove(userToRemove);
+            context.SaveChanges();
+
+            return RedirectToAction("Details", "Teams",new{id=teamId});
         }
 
         

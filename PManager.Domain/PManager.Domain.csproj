@@ -86,6 +86,7 @@
     <Compile Include="Entities\ProjectTask.cs" />
     <Compile Include="Entities\ProjectTaskViewModel.cs" />
     <Compile Include="Entities\RegisterModel.cs" />
+    <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\Team.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserProfile.cs" />

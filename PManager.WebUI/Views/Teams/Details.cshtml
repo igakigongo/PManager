@@ -57,7 +57,7 @@
                                         </td>
                                
                                         <td>
-                                            <a href='@Url.Action("Delete", "Teams", new { id = item.Id })' title="Delete"><i class="fa fa-trash-o"></i></a>
+                                            <a href='@Url.Action("RemoveUser", "Teams", new { teamId = Model.Id, userId=item.Id })' title="Delete"><i class="fa fa-trash-o"></i></a>
                                         </td>
                                     </tr>
                                 }
