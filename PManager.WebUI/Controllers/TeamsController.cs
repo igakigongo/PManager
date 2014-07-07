@@ -19,16 +19,17 @@ namespace PManager.WebUI.Controllers
         [Authorize(Roles = "Manager")]
         public ActionResult Index()
         {
-                return View(context.Teams.Include(x => x.Project).Where(x=>x.Status==Status.Active).ToList());
+            var teams = context.Teams.Include(x => x.Tasks).Where(x => x.Status == Status.Active).ToList();
+            return View(teams);
         }
 
         public ActionResult GetTeams()
         {
             
-                var teams=context.Teams.Include(x => x.Project).Select(x=>new
+                var teams=context.Teams.Include(x => x.Tasks).Select(x=>new
                 {
                     Team = x.Name,
-                    Project = x.Project.Name
+                    ProjectTasks = x.Tasks
                 });
 
                 return Json(teams, JsonRequestBehavior.AllowGet);
@@ -47,13 +48,13 @@ namespace PManager.WebUI.Controllers
         {
             var newTeam = new Team
             {
-                Name = teamName,
-                Project = new Project()
-                {
-                    Name = projectName,
-                    ProjectCode = projectCode,
-                    Description = projectDescription
-                }
+                Name = teamName
+                //Project = new Project()
+                //{
+                //    Name = projectName,
+                //    ProjectCode = projectCode,
+                //    Description = projectDescription
+                //}
             };
 
             bool message;
@@ -81,8 +82,8 @@ namespace PManager.WebUI.Controllers
         {
             using (var db = new EFDbContext())
             {
-                ViewBag.projectsDone = db.Projects.Where(p => p.Team.Id == id).Distinct().ToList();
-                return View(db.Teams.Include(x => x.Users).Include(x => x.Project).FirstOrDefault(p => p.Id == id));
+                //ViewBag.projectsDone = db.Projects.Where(p => p.Team.Id == id).Distinct().ToList();
+                return View(db.Teams.Include(x => x.Users).Include(x => x.Tasks).FirstOrDefault(p => p.Id == id));
             }
         }
 
@@ -108,8 +109,8 @@ namespace PManager.WebUI.Controllers
             {
                 if (user != null)
                 {
-                    user.Team = team;
-                    context.Users.AddOrUpdate(user);
+                    team.Users.Add(user);
+                    context.Teams.AddOrUpdate(team);
                 }
 
                 context.SaveChanges();

@@ -59,6 +59,6 @@ namespace PManager.Domain.Entities
 
         public List<ProjectTask> ProjectTasks { get; set; }
 
-        public Team Team { get; set; }
+        //public Team Team { get; set; }
     }
 }

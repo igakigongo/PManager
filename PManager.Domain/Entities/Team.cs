@@ -15,14 +15,12 @@ namespace PManager.Domain.Entities
             this.Status = Status.Active;
         }
 
-        [Key]
-        [ForeignKey("Project")]
         public int Id { get; set; }
 
         //[Required(ErrorMessage="* Required")]
         public string Name { get; set; }
 
-        public Project Project { get; set; }
+        public IList<ProjectTask> Tasks { get; set; }
 
         public List<User> Users { get; set; }
 

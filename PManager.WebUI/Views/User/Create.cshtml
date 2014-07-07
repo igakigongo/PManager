@@ -16,14 +16,16 @@
 </style>
 
 <div id="page-wrapper">
-    <div class="row">
+    <div class="row" style="
+    padding-top: 15px;
+">
         <div class="col-lg-12">
             @if (!String.IsNullOrEmpty(message))
             {
                 <div class="alert alert-danger alert-dismissable">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     @message
-                </div>            
+                </div>
             }
         </div>
         <!-- /.col-lg-12 -->
@@ -70,30 +72,34 @@
                             </div>
                         </div>
                         <div class="col-lg-6">
-                                <h4>Account Information</h4>
-                                <div class="form-group">
-                                    <label>Username</label>
-                                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.UserName, String.Empty, new { @class = "error" })
-                                </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.Password, String.Empty, new { @class = "error" })
-                                </div>
-                                <div class="form-group">
-                                    <label>Confirm Password</label>
-                                    @Html.PasswordFor(model => model.ComparePassword, new { @class = "form-control" })
-                                    @Html.ValidationMessageFor(model => model.ComparePassword, String.Empty, new { @class = "error" })
-                                </div>
-                                <div class="form-group">
-                                    <label>User Role</label>
-                                    @Html.DropDownListFor(model => model.Role, new SelectList(Roles.GetAllRoles()), new { @class = "form-control" })
-                                </div>
-                                <input type="submit" class="btn btn-primary btn-small" value="Submit" />
-                                <input type="reset" class="btn btn-success btn-small" value="Reset Form" />
-                                @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-success btn-small" })
+                            <h4>Account Information</h4>
+                            <div class="form-group">
+                                <label>Username</label>
+                                @Html.TextBoxFor(model => model.UserName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.UserName, String.Empty, new { @class = "error" })
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Password, String.Empty, new { @class = "error" })
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password</label>
+                                @Html.PasswordFor(model => model.ComparePassword, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ComparePassword, String.Empty, new { @class = "error" })
+                            </div>
+                            <div class="form-group">
+                                <label>User Role</label>
+                                @Html.DropDownListFor(model => model.Role, new SelectList(Roles.GetAllRoles()), "-- Select Role --", new { @class = "form-control" })
+                            </div>
+                                
                         </div>
+                        
+                    <div class="col-lg-12 padding-top-15">
+                                  <input type="submit" class="btn btn-success btn-sm" value="Submit" />
+                                  <input type="reset" class="btn btn-primary btn-sm" value="Reset Form" />
+                                  @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default btn-sm" })
+                              </div>
                     }
                 </div>
             </div>

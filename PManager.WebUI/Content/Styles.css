@@ -70,6 +70,22 @@ box-shadow: none;
     color: #a94442;
 }
 
+.wizard ul, .tabcontrol ul {
+list-style: none !important;
+padding: 15px !important;
+margin: 0;
+}
+
+.number {
+    display: none !important;
+}
+
+.dataTables_empty {
+    text-align: center !important;
+    font-style: italic !important;
+    color: #31708f !important;
+}
+
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;

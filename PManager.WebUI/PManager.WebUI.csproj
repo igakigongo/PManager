@@ -352,11 +352,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
-    <Compile Include="Migrations\201406180837288_InitMigration.cs" />
-    <Compile Include="Migrations\201406180837288_InitMigration.Designer.cs">
-      <DependentUpon>201406180837288_InitMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -384,8 +379,8 @@
     <Content Include="Views\Teams\Index.cshtml" />
     <Content Include="Views\Teams\Create.cshtml" />
     <Content Include="Views\Teams\Edit.cshtml" />
-    <Content Include="Views\Teams\Details.cshtml" />
     <Content Include="Views\Teams\AddTeamMember.cshtml" />
+    <Content Include="Views\Teams\Details.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -401,11 +396,6 @@
       <Project>{803ce894-12eb-4931-b3d7-582b7e5c118b}</Project>
       <Name>PManager.Domain</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201406180837288_InitMigration.resx">
-      <DependentUpon>201406180837288_InitMigration.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

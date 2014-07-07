@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -17,9 +18,12 @@ namespace PManager.WebUI.Controllers
     {
         private IDataTransferObject _dto;
         private EFDbContext _context = new EFDbContext();
-
+        private GenericRepository<ProjectTask> projectTaskRepository;
+        private UnitOfWork unitOfWork;
         public ProjectTaskController(IDataTransferObject _dtoParam)
         {
+            projectTaskRepository = new GenericRepository<ProjectTask>(_context);
+            unitOfWork = new UnitOfWork();
             _dto = _dtoParam;
         }
 
@@ -79,7 +83,7 @@ namespace PManager.WebUI.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.Team = new SelectList(_context.Users, "Id", "Fullname");
+            ViewBag.Team = new SelectList(_context.Teams, "Id", "Name");
             //ViewBag.ProjectId = new SelectList(_unitOfWork.Projects, "Id", "ProjectCode", projecttask.ProjectId);
             //ViewBag.UserId = new SelectList(_unitOfWork.UserRepository.Get(), "Id", "Fullname", projecttask.UserId);
             return View(projecttask);
@@ -89,35 +93,25 @@ namespace PManager.WebUI.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit(ProjectTaskViewModel projecttaskvm)
+        public ActionResult Edit(ProjectTask projecttaskvm)
         {
             if (ModelState.IsValid)
             {
-                // pick all team members that are new and complete the projecttaskvm fully
-                //projecttaskvm.AssociatedMemberIds.ForEach(t => projecttaskvm.Task.Team.Add(_context.Users.Find(t)));
 
-
-                var existingtask = _context.ProjectTasks.Include(t => t.Team);
-
-                //_context.Entry(projecttaskvm.Task).State = EntityState.Modified;
-                //_context.SaveChanges();
-                //foreach (int id in projecttaskvm.AssociatedMemberIds)
-                //{
-                //    projecttaskvm.Task.Team.Add(_context.Users.Find(id));
-
-                //}
+                 _context.ProjectTasks.AddOrUpdate(projecttaskvm);
                 _context.SaveChanges();
                 _dto.message = "success";
                 if (Request.IsAjaxRequest())
                 {
+                    _dto.id = projecttaskvm.ProjectId;
                     return Json(_dto, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    return RedirectToAction("Details", "Project", new { id = projecttaskvm.Task.ProjectId });
+                    return RedirectToAction("Details", "Project", new { id = projecttaskvm.ProjectId });
                 }
             }
-            return View(projecttaskvm.Task);
+            return View(projecttaskvm);
         }
 
         // GET: /ProjectTask/Delete/5
@@ -154,7 +148,7 @@ namespace PManager.WebUI.Controllers
             base.Dispose(disposing);
         }
 
-        #region HighCharts 
+        #region HighCharts
 
         #region 1.0 Requesting All Tasks For A Given Project
         public JsonResult GetAllTasks(int projectId)

@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="col-lg-12 alert alert-info">
-                <strong>Project being worked on:</strong><em> @(Model.Project.Name == null ? Html.Label("None", new {@class = "font-weight-normal"}) : Html.DisplayFor(x => Model.Project.Name))</em>
+                <strong>Project being worked on:</strong><em> @*@(Model.Tasks.Name == null ? Html.Label("None", new {@class = "font-weight-normal"}) : Html.DisplayFor(x => Model.Project.Name))*@</em>
             </div>
         </div>
 
@@ -45,7 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                   
+
                                 @foreach (var item in Model.Users)
                                 {
                                     <tr>
@@ -55,13 +55,13 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.PhoneContact)
                                         </td>
-                               
+
                                         <td>
                                             <a href='@Url.Action("RemoveUser", "Teams", new { teamId = Model.Id, userId=item.Id })' title="Delete"><i class="fa fa-trash-o"></i></a>
                                         </td>
                                     </tr>
                                 }
-                    
+
                             </tbody>
                         </table>
                     </div>
@@ -72,7 +72,7 @@
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> Projects Worked on
+                    <i class="fa fa-bar-chart-o fa-fw"></i> Tasks Worked on
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body" id="container">
@@ -81,10 +81,10 @@
                             <thead>
                                 <tr>
                                     <th>
-                                        Project Name
+                                        Task Name
                                     </th>
                                     <th style="width: 200px">
-                                        Description
+                                        Project
                                     </th>
                                     <th>
                                         Status
@@ -92,30 +92,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                
-                                @foreach (var item in projectsDone)
+
+                                @foreach (var item in Model.Tasks)
                                 {
                                     <tr>
                                         <td>
-                                            @item.Name
+                                            @item.TaskName
                                         </td>
                                         <td>
-                                           @item.Description
+                                            @item.Project.Name
                                         </td>
-                               
+
                                         <td>
-                                            @if (item.IsClosed)
-                                            {
-                                                @String.Format("{0}", "Closed");
-                                            }
-                                            else
-                                            {
-                                                @String.Format("{0}", "In progress");
-                                            }
+                                            @item.IsCompleted
                                         </td>
                                     </tr>
                                 }
-                    
+
                             </tbody>
                         </table>
                     </div>

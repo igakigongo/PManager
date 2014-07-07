@@ -35,6 +35,8 @@ namespace PManager.Domain.Entities
 
         public Project Project { get; set; }
 
+        [ForeignKey("Team")]
+        public int? TeamId { get; set; }
         public Team Team { get; set; }
     }
 }

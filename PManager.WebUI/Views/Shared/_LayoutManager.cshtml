@@ -187,8 +187,8 @@
                             <a href='@Url.Action("Index", "Home")'><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Projects<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <a href='@Url.Action("Index", "Project")'><i class="fa fa-bar-chart-o fa-fw"></i> Projects</a>
+                            @*<ul class="nav nav-second-level">
                                 <li>
                                     <a href='@Url.Action("Index", "Project")'>All</a>
                                 </li>
@@ -198,45 +198,20 @@
                                 <li>
                                     <a href='@Url.Action("Create", "Project")'>New</a>
                                 </li>
-                            </ul>
+                            </ul>*@
                             <!-- /.nav-second-level -->
                         </li>
+                        
                         <li>
-                            <a href="#"><i class="fa fa-tasks fa-fw"></i> Project Tasks<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href='@Url.Action("Index", "ProjectTask")'>All</a>
-                                </li>
-                                <li>
-                                    <a href="#">On-Going Projects <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="#">All</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Current Month</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Completed</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">Pending Completion</a>
-                                        </li>
-                                    </ul>
-                                    <!-- /.nav-third-level -->
-                                </li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-users fa-fw"></i> Users<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
+                            <a href='@Url.Action("Index", "User")'><i class="fa fa-users fa-fw"></i> Users</a>
+                            @*<ul class="nav nav-second-level">
                                 <li>
                                     <a href='@Url.Action("Index", "User")'>All</a>
                                 </li>
                                 <li>
                                     <a href='@Url.Action("Create", "User")'>New</a>
                                 </li>
-                            </ul>
+                            </ul>*@
                             <!-- /.nav-second-level -->
                         </li>
 

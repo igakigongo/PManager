@@ -42,7 +42,7 @@
                             {
                                 @String.Format("Task will start on: {0:D}", Model.Estimated.StartDate)
                             }
-                            else if(Model.Actual.StartDate < DateTime.Now)
+                            else if (Model.Actual.StartDate < DateTime.Now)
                             {
                                 @String.Format("Task was started on: {0:D}.", Model.Actual.StartDate)
                             }
@@ -59,7 +59,7 @@
                             {
                                 @String.Format("Task is estimated to end on: {0:D}", Model.Estimated.EndDate)
                             }
-                            else if(Model.Actual.EndDate < DateTime.Now)
+                            else if (Model.Actual.EndDate < DateTime.Now)
                             {
                                 @String.Format("Task was ended on: {0:D}.", Model.Actual.EndDate)
                             }
@@ -78,7 +78,7 @@
                     <strong>Actual Projections</strong>
                     <dl class="dl-horizontal">
                         <dt>
-                            Start Date: 
+                            Start Date:
                         </dt>
                         <dd>
                             @if (Model.Actual.StartDate == null)
@@ -130,14 +130,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var member in Model.Team)
+                                @if (Model.Team != null)
                                 {
-                                    <tr>
-                                        <td>
-                                            @member.Fullname
-                                        </td>
-                                    </tr>
+                                    foreach (var member in Model.Team.Users)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @member.Fullname
+                                            </td>
+                                        </tr>
+                                    }
                                 }
+                                
                             </tbody>
                         </table>
                     </div>

@@ -52,9 +52,10 @@ namespace PManager.WebUI.Controllers
             {
                 return HttpNotFound();
             }
+
             // Loading Project Tasks
             project.ProjectTasks = _unitOfWork.ProjectTaskRepository
-                                            .Get()
+                                            .Get(null,null,"Team")
                                             .Where(p => p.ProjectId == project.Id)
                                             .OrderByDescending(p => p.Estimated.StartDate)
                                             .ToList();
@@ -145,8 +146,9 @@ namespace PManager.WebUI.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
-            Project project = _unitOfWork.ProjectRepository.Find(id);
-            _unitOfWork.ProjectRepository.Delete(project);
+            var project = _unitOfWork.ProjectRepository.Find(id);
+            project.IsClosed = true;
+            _unitOfWork.ProjectRepository.Update(project);
             _unitOfWork.Save();
             return RedirectToAction("Index");
         }
@@ -166,7 +168,7 @@ namespace PManager.WebUI.Controllers
         #region 1.0 Recent Top Ten Project Costing
         public JsonResult TopTenProjectsCosting()
         {
-            IQueryable<Project> _TopTen = _unitOfWork.ProjectRepository.Get().OrderByDescending(p => p.Estimated.StartDate).Take(10).AsQueryable();
+            IQueryable<Project> _TopTen = _unitOfWork.ProjectRepository.Get(tt=>tt.IsClosed==false).OrderByDescending(p => p.Estimated.StartDate).Take(10).AsQueryable();
             return Json(_TopTen.ToArray(), JsonRequestBehavior.AllowGet);
         }
         #endregion

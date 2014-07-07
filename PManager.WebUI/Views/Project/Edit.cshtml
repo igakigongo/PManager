@@ -5,14 +5,14 @@
     Layout = "~/Views/Shared/_LayoutManager.cshtml";
 }
 
-<h2>Edit</h2>
-
-@using (Html.BeginForm())
+<div id="page-wrapper">
+    <div class="row">
+        @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
-        <h4>Project</h4>
+        <h4>Edit Project</h4>
         <hr />
         @Html.ValidationSummary(true)
         @Html.HiddenFor(model => model.Id)
@@ -43,12 +43,13 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" value="Save" class="btn btn-primary" /> <a class="btn btn-default" href='@Url.Action("Index", "Project")'>Back to list</a>
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "Index")
+    </div>
 </div>
+
+

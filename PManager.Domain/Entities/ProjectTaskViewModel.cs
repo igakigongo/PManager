@@ -10,6 +10,6 @@ namespace PManager.Domain.Entities
     {
         public ProjectTask Task { get; set; }
 
-        public List<int> AssociatedMemberIds { get; set; }
+        public int AssociatedTeamId { get; set; }
     }
 }

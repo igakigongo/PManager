@@ -66,14 +66,13 @@
                                 <tr>
                                     <td>Task</td>
                                     <td>Progress</td>
-                                    <td>Team Members</td>
+                                    <td>Team</td>
                                     <td>Actions</td>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach (var task in Model.ProjectTasks)
                                 {
-                                    int count = task.Team.Count;
                                     <tr id="@task.Id">
                                         <td>@task.TaskName</td>
                                         <td>
@@ -91,15 +90,13 @@
                                             }
                                         </td>
                                         <td>
-                                            @if (count < 1)
+                                            @if (task.Team == null)
                                             {
-                                                @String.Format("No Members Assigned To Task")
+                                                <span class="text-info"><em>No Team Attached</em></span>
                                             }
-                                            else if (count == 1)
+                                            else
                                             {
-                                                @String.Format("{0} Member", count)
-                                            }else{
-                                                @String.Format("{0} Members", count)
+                                                @task.Team.Name
                                             }
                                         </td>
                                         <td>
