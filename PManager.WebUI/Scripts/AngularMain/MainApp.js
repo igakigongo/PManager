@@ -1,4 +1,4 @@
-﻿var app = angular.module('MainApp', ['ui.bootstrap']);
+﻿var app = angular.module('MainApp', ['ui.bootstrap', 'ui.select2']);
 
 app.filter('startFrom', function () {
     return function (input, start) {

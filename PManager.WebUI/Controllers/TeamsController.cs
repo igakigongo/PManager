@@ -80,11 +80,10 @@ namespace PManager.WebUI.Controllers
         [Authorize(Roles = "Manager")]
         public ActionResult Details(int id)
         {
-            using (var db = new EFDbContext())
-            {
+           
                 //ViewBag.projectsDone = db.Projects.Where(p => p.Team.Id == id).Distinct().ToList();
-                return View(db.Teams.Include(x => x.Users).Include(x => x.Tasks).FirstOrDefault(p => p.Id == id));
-            }
+                return View(context.Teams.Include(x => x.Users).Include(x => x.Tasks).FirstOrDefault(p => p.Id == id));
+           
         }
 
         [Authorize(Roles = "Manager")]
@@ -140,6 +139,42 @@ namespace PManager.WebUI.Controllers
             context.SaveChanges();
 
             return RedirectToAction("Details", "Teams",new{id=teamId});
+        }
+
+        public ActionResult TestResult()
+        {
+            return View();
+        }
+
+        public ActionResult CreateTeam(TeamViewModel teamViewModel)
+        {
+            var team = new Team()
+            {
+                Name = teamViewModel.Name
+                
+            };
+
+            var users = new List<User>();
+
+            foreach (var userId in teamViewModel.UserIds)
+            {
+                users.Add(context.Users.Find(userId));
+            }
+
+            team.Users = users;
+            context.Teams.Add(team);
+
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (Exception)
+            {
+                
+                throw;
+            }
+            
+            return Json(teamViewModel,JsonRequestBehavior.AllowGet);
         }
 
         

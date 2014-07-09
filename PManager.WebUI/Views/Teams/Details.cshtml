@@ -104,7 +104,11 @@
                                         </td>
 
                                         <td>
-                                            @item.IsCompleted
+                                            @if (item.IsCompleted)
+                                            {
+                                                <span>Complete</span>
+                                            }
+                                            <span>Incomplete</span>
                                         </td>
                                     </tr>
                                 }

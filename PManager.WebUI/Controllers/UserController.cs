@@ -20,6 +20,13 @@ namespace PManager.WebUI.Controllers
     {
         
         private UnitOfWork _unitOfWork = new UnitOfWork();
+
+        private EFDbContext context;
+
+        public UserController()
+        {
+            context = new EFDbContext();
+        }
         
         // GET: /User/
         public ActionResult Index()
@@ -27,6 +34,11 @@ namespace PManager.WebUI.Controllers
             List<User> _users = _unitOfWork.UserRepository.Get().ToList();
             _users.ForEach(_user => _user.UserProfile = _unitOfWork.UserProfileRepository.Find(_user.Id));
             return View(_users);
+        }
+
+        public ActionResult GetAllUsers()
+        {
+            return Json(_unitOfWork.UserRepository.Get().ToList(), JsonRequestBehavior.AllowGet);
         }
 
         // GET: /User/Details/5

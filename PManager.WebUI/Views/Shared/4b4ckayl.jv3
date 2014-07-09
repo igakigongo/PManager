@@ -300,7 +300,7 @@
     <script src="~/Scripts/AngularMain/MainApp.js"></script>
     <script src="~/Scripts/AngularMain/services.js"></script>
     <script src="~/Scripts/AngularMain/controllers.js"></script>
-    <script src="~/Scripts/AngularMain/toastr.js"></script>
+    <script src="~/Scripts/AngularMain/toaster.js"></script>
 
     @RenderSection("scripts", required: false)
 </body>

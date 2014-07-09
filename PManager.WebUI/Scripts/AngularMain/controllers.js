@@ -1,29 +1,42 @@
 ﻿app.controller("TeamsController", function ($scope, filterFilter, $window, $modal, teamsService) {
 
+
+
+    $scope.listOfSelectedUsers = [];
+
     $scope.teams = function() {
         return teamsService.getAllTeams();
     }
 
-    $scope.showId=function(id) {
-        alert(id);
-    }
+    teamsService.getAllUsers().success(function(users) {
+        $scope.users = users;
+
+        console.log($scope.users);
+    }).error();
 
 
     $scope.save = function () {
+
         var newTeam = {
-            teamName: $scope.teamName,
-            projectName: $scope.projectName,
-            projectCode: $scope.projectCode,
-            projectDescription: $scope.projectDescription
+            Name: $scope.teamName,
+            UserIds: $scope.listOfSelectedUsers
         };
 
-        teamsService.saveTeam(newTeam).success(function (response) {
-           
-            if (angular.equals(JSON.stringify(true), response)) {
-                //toaster.pop('success', "Successful", "You have successfully created a team");
-                window.location.href = "/Teams/Index";
+        
 
-            }
+        teamsService.createNewTeam(newTeam).success(function (response) {
+
+            //if (angular.equals(JSON.stringify(true), response)) {
+            //    //toaster.pop('success', "Successful", "You have successfully created a team");
+            //    window.location.href = "/Teams/Index";
+
+            //}
+
+            toastr.success(newTeam.Name + ' has been created successfully');
+            $scope.teamForm.$setPristine();
+            $scope.teamName = '';
+            $scope.listOfSelectedUsers = [];
+
         }).error();
     }
 
@@ -34,6 +47,11 @@
     };
 
 
+    //$scope.select2Options = {
+    //    'multiple': true,
+    //    'simple_tags': true,
+    //    'tags': []  // Can be empty list.
+    //};
 
 
     

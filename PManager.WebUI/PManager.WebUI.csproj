@@ -185,6 +185,10 @@
     <Content Include="Content\sb-admin-v2\panels-wells.html" />
     <Content Include="Content\sb-admin-v2\tables.html" />
     <Content Include="Content\sb-admin-v2\typography.html" />
+    <Content Include="Content\select2-bootstrap.css" />
+    <Content Include="Content\spinner.gif" />
+    <Content Include="Content\select2.css" />
+    <Content Include="Content\select2.png" />
     <Content Include="Content\Styles.css" />
     <Content Include="Content\toaster.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -221,8 +225,10 @@
     <Content Include="Scripts\Angularjs\ui-bootstrap-tpls-0.10.0.min.js" />
     <Content Include="Scripts\AngularMain\controllers.js" />
     <Content Include="Scripts\AngularMain\MainApp.js" />
+    <Content Include="Scripts\AngularMain\select2.js" />
     <Content Include="Scripts\AngularMain\services.js" />
     <Content Include="Scripts\AngularMain\toaster.js" />
+    <Content Include="Scripts\AngularMain\toastr.js" />
     <Content Include="Scripts\App.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -381,6 +387,7 @@
     <Content Include="Views\Teams\Edit.cshtml" />
     <Content Include="Views\Teams\AddTeamMember.cshtml" />
     <Content Include="Views\Teams\Details.cshtml" />
+    <Content Include="Views\Teams\TestResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

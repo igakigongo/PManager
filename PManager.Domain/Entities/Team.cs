@@ -17,7 +17,6 @@ namespace PManager.Domain.Entities
 
         public int Id { get; set; }
 
-        //[Required(ErrorMessage="* Required")]
         public string Name { get; set; }
 
         public IList<ProjectTask> Tasks { get; set; }

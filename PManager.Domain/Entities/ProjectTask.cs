@@ -33,7 +33,7 @@ namespace PManager.Domain.Entities
 
         public Estimated Estimated { get; set; }
 
-        public Project Project { get; set; }
+        public virtual Project Project { get; set; }
 
         [ForeignKey("Team")]
         public int? TeamId { get; set; }
