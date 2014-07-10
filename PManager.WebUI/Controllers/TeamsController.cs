@@ -12,28 +12,25 @@ using PManager.Domain.ViewModels;
 
 namespace PManager.WebUI.Controllers
 {
-    public class TeamsController: Controller
+    public class TeamsController : Controller
     {
 
-        private EFDbContext context = new EFDbContext();
+        private EFDbContext context;
+
+        public TeamsController()
+        {
+            context = new EFDbContext();
+        }
+
         [Authorize(Roles = "Manager")]
         public ActionResult Index()
         {
-            var teams = context.Teams.Include(x => x.Tasks).Where(x => x.Status == Status.Active).ToList();
-            return View(teams);
+            return View(context.Teams.ToList());
         }
 
         public ActionResult GetTeams()
         {
-            
-                var teams=context.Teams.Include(x => x.Tasks).Select(x=>new
-                {
-                    Team = x.Name,
-                    ProjectTasks = x.Tasks
-                });
-
-                return Json(teams, JsonRequestBehavior.AllowGet);
-           
+            return Json(context.Teams.ToList(), JsonRequestBehavior.AllowGet);
         }
 
         [Authorize(Roles = "Manager")]
@@ -42,58 +39,22 @@ namespace PManager.WebUI.Controllers
             return View();
         }
 
-        [HttpPost]
-        [Authorize(Roles = "Manager")]
-        public ActionResult Create(string teamName, string projectName, string projectCode, string projectDescription)
-        {
-            var newTeam = new Team
-            {
-                Name = teamName
-                //Project = new Project()
-                //{
-                //    Name = projectName,
-                //    ProjectCode = projectCode,
-                //    Description = projectDescription
-                //}
-            };
-
-            bool message;
-
-            using (var db = new EFDbContext())
-            {
-                db.Teams.Add(newTeam);
-                try
-                {
-                    db.SaveChanges();
-                    message = true;
-                }
-                catch (Exception)
-                {
-                    message = false;
-                    throw;
-                }
-            }
-
-            return Json(message,JsonRequestBehavior.AllowGet);
-        }
-
         [Authorize(Roles = "Manager")]
         public ActionResult Details(int id)
         {
-           
-                //ViewBag.projectsDone = db.Projects.Where(p => p.Team.Id == id).Distinct().ToList();
-                return View(context.Teams.Include(x => x.Users).Include(x => x.Tasks).FirstOrDefault(p => p.Id == id));
-           
+            //ViewBag.projectsDone = db.Projects.Where(p => p.Team.Id == id).Distinct().ToList();
+            return View(context.Teams.Include(x => x.Users).Include(x => x.Tasks).FirstOrDefault(p => p.Id == id));
+
         }
 
         [Authorize(Roles = "Manager")]
         public ActionResult AddTeamMember(int id)
         {
             var team = context.Teams.FirstOrDefault(x => x.Id == id);
-            
-                ViewBag.users = new SelectList(context.UserProfiles.ToList(), "UserId", "UserName");
 
-                return View(team);
+            ViewBag.users = new SelectList(context.UserProfiles.ToList(), "UserId", "UserName");
+
+            return View(team);
 
         }
 
@@ -116,9 +77,9 @@ namespace PManager.WebUI.Controllers
 
             }
 
-             ViewBag.users = new SelectList(context.UserProfiles.ToList(), "UserId", "UserName");
+            ViewBag.users = new SelectList(context.UserProfiles.ToList(), "UserId", "UserName");
 
-                return View(team);
+            return View(team);
         }
 
         [Authorize(Roles = "Manager")]
@@ -128,22 +89,22 @@ namespace PManager.WebUI.Controllers
             teamToRemove.Status = Status.Inactive;
             context.Teams.AddOrUpdate(teamToRemove);
             context.SaveChanges();
-            return RedirectToAction("Index","Teams");
+            return RedirectToAction("Index", "Teams");
         }
 
-        public ActionResult RemoveUser(int teamId,int userId)
+        public ActionResult RemoveUser(int teamId, int userId)
         {
             var team = context.Teams.Find(teamId);
             var userToRemove = context.Users.FirstOrDefault(x => x.Id == userId);
             team.Users.Remove(userToRemove);
             context.SaveChanges();
 
-            return RedirectToAction("Details", "Teams",new{id=teamId});
+            return RedirectToAction("Details", "Teams", new { id = teamId });
         }
 
         public ActionResult TestResult()
         {
-            return View();
+            return Json(context.Teams, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult CreateTeam(TeamViewModel teamViewModel)
@@ -151,7 +112,7 @@ namespace PManager.WebUI.Controllers
             var team = new Team()
             {
                 Name = teamViewModel.Name
-                
+
             };
 
             var users = new List<User>();
@@ -170,13 +131,13 @@ namespace PManager.WebUI.Controllers
             }
             catch (Exception)
             {
-                
+
                 throw;
             }
-            
-            return Json(teamViewModel,JsonRequestBehavior.AllowGet);
+
+            return Json(teamViewModel, JsonRequestBehavior.AllowGet);
         }
 
-        
+
     }
 }

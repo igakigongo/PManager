@@ -1,17 +1,16 @@
 ﻿app.controller("TeamsController", function ($scope, filterFilter, $window, $modal, teamsService) {
-
-
-
+    
     $scope.listOfSelectedUsers = [];
 
-    $scope.teams = function() {
-        return teamsService.getAllTeams();
-    }
+
+    teamsService.getAllTeams().success(function(teams) {
+        $scope.teams = teams;
+        console.log($scope.teams);
+    }).error();
 
     teamsService.getAllUsers().success(function(users) {
         $scope.users = users;
 
-        console.log($scope.users);
     }).error();
 
 
@@ -22,9 +21,8 @@
             UserIds: $scope.listOfSelectedUsers
         };
 
-        
 
-        teamsService.createNewTeam(newTeam).success(function (response) {
+    teamsService.createNewTeam(newTeam).success(function (response) {
 
             //if (angular.equals(JSON.stringify(true), response)) {
             //    //toaster.pop('success', "Successful", "You have successfully created a team");
@@ -46,33 +44,48 @@
         name: $scope.name
     };
 
+    /// open the authentication dialog
+    $scope.delete = function (team) {
+        var format = team.split(',');
 
-    //$scope.select2Options = {
-    //    'multiple': true,
-    //    'simple_tags': true,
-    //    'tags': []  // Can be empty list.
-    //};
+       
 
+        $scope.team = {
+            Name: format[0],
+            Id:format[1]
+        };
 
-    
+        var modalInstance = $modal.open({
+            templateUrl: 'myModalContent.html',
+            controller: authenticationController,
+            resolve: {
+                item: function () {
+                    return $scope.team;
+                }
+            }
+        });
 
+    };
 });
 
 
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
+var authenticationController = function ($scope, $modalInstance, item, teamsService) {
 
-app.controller("ModalInstanceCtrl", function ($scope, $modalInstance,team) {
+   // model to hold user password and comment
+    $scope.teamToDelete = item;
 
-    //$scope.items = team;
-    //$scope.names = "festo";
 
     $scope.ok = function () {
-        console.log($scope.names);
-        $modalInstance.close();
+        teamsService.deleteTeam($scope.teamToDelete).success(function (response) {
+            
+        }).error();
     };
 
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
-});
+};
+
+
+
+

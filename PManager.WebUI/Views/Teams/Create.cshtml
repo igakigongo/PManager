@@ -1,7 +1,5 @@
-﻿@model PManager.Domain.Entities.Team
-
-@{
-    ViewBag.Title = "Teams | Create New";
+﻿@{
+    ViewBag.Title = "title";
     Layout = "~/Views/Shared/_LayoutManager.cshtml";
 }
 
@@ -16,21 +14,25 @@
         <div class="col-lg-6">
             <form name="teamForm" novalidate>
                 <div class="form-group" ng-class="{ 'has-error' : teamForm.teamName.$invalid && !teamForm.teamName.$pristine }">
-                    @Html.LabelFor(x => Model.Name)
+                    <span class="control-label">Team </span>
                     <input type="text" name="teamName" class="form-control" data-ng-model="teamName" required />
                     <span ng-show="teamForm.teamName.$invalid && !teamForm.teamName.$pristine" class="error"><i class="fa fa-warning"></i> Name for the team is required.</span>
                 </div>
-                
-                @*<div class="form-group" ng-class="{ 'has-error' : teamForm.projectCode.$invalid && !teamForm.projectCode.$pristine }">
-                    @Html.Label("Project code")
-                    <input type="text" class="form-control" data-ng-model="projectCode" required name="projectCode" />
-                    <span ng-show="teamForm.projectCode.$invalid && !teamForm.projectCode.$pristine" class="error"><i class="fa fa-warning"></i> Code for the project is required.</span>
-                </div>*@
-                @*<div class="form-group" ng-class="{ 'has-error' : teamForm.projectDescription.$invalid && !teamForm.projectDescription.$pristine }">
-                    @Html.Label("Project description")
-                    <textarea class="form-control" data-ng-model="projectDescription" name="projectDescription" required></textarea>
-                    <span ng-show="teamForm.projectDescription.$invalid && !teamForm.projectDescription.$pristine" class="error"><i class="fa fa-warning"></i> Description for the project is required.</span>
-                </div>*@
+
+                <div class="form-group" ng-class="{ 'has-error' : teamForm.projectCode.$invalid && !teamForm.projectCode.$pristine }">
+
+                    <span class="control-label">Team Members</span>
+
+                    <select multiple class="form-control multi-select" data-ng-model="listOfSelectedUsers" data-ui-select2 name="projectCode" data-placeholder="Pick team members">
+
+                        <option value=""></option>
+                        <option ng-repeat="user in users" value="{{user.Id}}">{{user.Fullname}}</option>
+                    </select>
+                    @*<span ng-show="teamForm.projectCode.$invalid && !teamForm.projectCode.$pristine" class="error"><i class="fa fa-warning"></i> Atleast one team member should be provided.</span>*@
+                </div>
+                <div class="form-group" ng-class="{ 'has-error' : teamForm.projectDescription.$invalid && !teamForm.projectDescription.$pristine }">
+
+                </div>
 
                 <div class="form-group">
                     <input type="submit" value="Create" class="btn btn-success" data-ng-click="save()" ng-disabled="teamForm.$invalid" /> <a href="/Teams/Index" class="btn btn-default"> Back to list</a>

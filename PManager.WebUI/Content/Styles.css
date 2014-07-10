@@ -149,6 +149,10 @@ background-image:none;
  min-height: 30px; 
 }
 
+.fa-glyp-3 {
+    font-size: 2em;
+}
+
 .select2-input {
     min-height: 29px;
     border-radius: 0;
