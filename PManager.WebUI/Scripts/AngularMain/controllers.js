@@ -1,11 +1,14 @@
 ﻿app.controller("TeamsController", function ($scope, filterFilter, $window, $modal, teamsService) {
+
+    var pathname = window.location.pathname;
+    var controller = pathname.split("/")[1];
+    var action = pathname.split("/")[2];
+    var params = pathname.split("/")[3];
     
     $scope.listOfSelectedUsers = [];
 
-
     teamsService.getAllTeams().success(function(teams) {
         $scope.teams = teams;
-        console.log($scope.teams);
     }).error();
 
     teamsService.getAllUsers().success(function(users) {
@@ -13,23 +16,17 @@
 
     }).error();
 
-
     $scope.save = function () {
 
         var newTeam = {
+            //Id:0,
             Name: $scope.teamName,
             UserIds: $scope.listOfSelectedUsers
         };
 
 
     teamsService.createNewTeam(newTeam).success(function (response) {
-
-            //if (angular.equals(JSON.stringify(true), response)) {
-            //    //toaster.pop('success', "Successful", "You have successfully created a team");
-            //    window.location.href = "/Teams/Index";
-
-            //}
-
+        
             toastr.success(newTeam.Name + ' has been created successfully');
             $scope.teamForm.$setPristine();
             $scope.teamName = '';
@@ -37,7 +34,6 @@
 
         }).error();
     }
-
 
     $scope.team = {
         text: "",
@@ -66,6 +62,39 @@
         });
 
     };
+
+    teamsService.getTeamToEdit(params).success(function(team) {
+        $scope.teamToEdit = team;
+    }).error();
+
+
+    $scope.editTeam = function(teamToEdit) {
+
+        var editedTeam = {
+            Id:teamToEdit.Id,
+            Name: teamToEdit.Name,
+            UserIds: $scope.listOfSelectedUsers
+        };
+
+        teamsService.editTeam(editedTeam).success(function (response) {
+            if (response == 'true') {
+                toastr.success("Your changes have been saved");
+            } else {
+                toastr.error("An error occurred while trying to save the changes, please contact your systems administrator for help ");
+            }
+
+            $scope.teamForm.$setPristine();
+            $scope.listOfSelectedUsers = [];
+
+            setTimeout(function () {
+                window.location.href = "/Teams/Edit/" + params+"";
+            }, 4000);
+
+            
+        }).error();
+    }
+    
+    
 });
 
 
@@ -73,12 +102,21 @@ var authenticationController = function ($scope, $modalInstance, item, teamsServ
 
    // model to hold user password and comment
     $scope.teamToDelete = item;
-
-
+    
     $scope.ok = function () {
         teamsService.deleteTeam($scope.teamToDelete).success(function (response) {
-            
+            if (response == 'true') {
+                toastr.success("Team has been deleted successfully");
+            } else {
+                toastr.success("Error has occurred while trying to delete the team, please contact the systems administrator for help");
+            }
+
+            $modalInstance.close();
         }).error();
+
+        setTimeout(function () {
+            window.location.href = "/Teams/Index";
+        }, 4000);
     };
 
     $scope.cancel = function () {

@@ -18,6 +18,22 @@
     padding-top: 15px;
 }
 
+.select2-input {
+    z-index: 200000000;
+}
+
+.no-padding {
+    padding: 0;
+}
+
+#userTable tr td:first-child {
+    width: 10em;
+}
+
+#userTable tr td {
+    border-top: 0;
+}
+
 .select2-container-multi .select2-choices .select2-search-choice {
 -webkit-border-radius: 3px;
 -moz-border-radius: 3px;

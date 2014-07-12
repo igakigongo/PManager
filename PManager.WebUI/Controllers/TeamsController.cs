@@ -25,12 +25,12 @@ namespace PManager.WebUI.Controllers
         [Authorize(Roles = "Manager")]
         public ActionResult Index()
         {
-            return View(context.Teams.ToList());
+            return View(context.Teams.Where(x => x.Status == Status.Active).ToList());
         }
 
         public ActionResult GetTeams()
         {
-            return Json(context.Teams.ToList(), JsonRequestBehavior.AllowGet);
+            return Json(context.Teams.Where(x=>x.Status==Status.Active).ToList(), JsonRequestBehavior.AllowGet);
         }
 
         [Authorize(Roles = "Manager")]
@@ -83,29 +83,35 @@ namespace PManager.WebUI.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int teamId)
         {
-            var teamToRemove = context.Teams.Find(id);
+            bool success;
+            var teamToRemove = context.Teams.Find(teamId);
             teamToRemove.Status = Status.Inactive;
-            context.Teams.AddOrUpdate(teamToRemove);
-            context.SaveChanges();
-            return RedirectToAction("Index", "Teams");
+            //context.Teams.AddOrUpdate(teamToRemove);
+            context.Entry(teamToRemove).State = EntityState.Modified;
+            try
+            {
+                context.SaveChanges();
+                success = true;
+            }
+            catch (Exception)
+            {
+                success = false;
+            }
+            return Json(success, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult RemoveUser(int teamId, int userId)
         {
-            var team = context.Teams.Find(teamId);
+            var team = context.Teams.Include(x => x.Users).FirstOrDefault(d=>d.Id==teamId);
             var userToRemove = context.Users.FirstOrDefault(x => x.Id == userId);
             team.Users.Remove(userToRemove);
             context.SaveChanges();
 
-            return RedirectToAction("Details", "Teams", new { id = teamId });
+            return RedirectToAction("Edit", "Teams", new { id = teamId });
         }
 
-        public ActionResult TestResult()
-        {
-            return Json(context.Teams, JsonRequestBehavior.AllowGet);
-        }
 
         public ActionResult CreateTeam(TeamViewModel teamViewModel)
         {
@@ -117,12 +123,15 @@ namespace PManager.WebUI.Controllers
 
             var users = new List<User>();
 
-            foreach (var userId in teamViewModel.UserIds)
+            if (teamViewModel.UserIds!=null)
             {
-                users.Add(context.Users.Find(userId));
-            }
+                foreach (var userId in teamViewModel.UserIds)
+                {
+                    users.Add(context.Users.Find(userId));
+                }
 
-            team.Users = users;
+                team.Users = users;
+            }
             context.Teams.Add(team);
 
             try
@@ -138,6 +147,61 @@ namespace PManager.WebUI.Controllers
             return Json(teamViewModel, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult Edit(int id)
+        {
+            return View(context.Teams.Include(x => x.Users).FirstOrDefault(p => p.Id == id));
+        }
 
+        public ActionResult GetTeam(int teamId=0)
+        {
+            Team team = null;
+            if (teamId != 0)
+            {
+                team = context.Teams.Find(teamId);
+            }
+            return Json(team, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult EditTeam(TeamViewModel teamViewModel)
+        {
+            
+            bool successful = false;
+            var teamToEdit = context.Teams.Include(x=>x.Users).FirstOrDefault(x=>x.Id==teamViewModel.Id);
+
+            if (teamToEdit != null)
+            {
+                teamToEdit.Name = teamViewModel.Name;
+
+                var users = new List<User>();
+
+                if (teamViewModel.UserIds!=null)
+                {
+                    foreach (var userId in teamViewModel.UserIds)
+                    {
+                        if (!teamToEdit.Users.Exists(x => x.Id == userId))
+                        {
+                            //var users.Add(context.Users.Find(userId));
+                            teamToEdit.Users.Add(context.Users.Find(userId));
+                        }
+
+                    }
+                }
+
+                try
+                {
+                    context.Entry(teamToEdit).State = EntityState.Modified;
+                    context.SaveChanges();
+                    successful = true;
+
+                }
+                catch (Exception)
+                {
+                    successful = false;
+                    //throw;
+                }
+            }
+
+            return Json(successful, JsonRequestBehavior.AllowGet);
+        }
     }
 }

@@ -57,8 +57,8 @@
                                             </td>
 
                                             <td>
-                                                @*<a href='@Url.Action("Edit", "Teams", new { id = item.Id })' title="Edit"><i class="fa fa-edit"></i></a> -*@
-                                                <a href='@Url.Action("AddTeamMember", "Teams", new { id = item.Id })' title="Add team member"><i class="fa fa-edit"></i></a> -
+                                                <a href='@Url.Action("Edit", "Teams", new { id = item.Id })' title="Edit"><i class="fa fa-edit"></i></a> 
+                                                @*<a href='@Url.Action("AddTeamMember", "Teams", new { id = item.Id })' title="Add team member"><i class="fa fa-edit"></i></a>*@ -
                                                 <a href='@Url.Action("Details", "Teams", new { id = item.Id })' title="Details"><i class="fa fa-th-list"></i></a> -
                                                 <a href='#' title="Delete" data-ng-click="delete('@item.Name,@item.Id')"><i class="fa fa-trash-o"></i></a>
                                             </td>

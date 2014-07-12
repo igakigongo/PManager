@@ -39,9 +39,7 @@
                                     <th>
                                         Contact
                                     </th>
-                                    <th>
-                                        Actions
-                                    </th>
+                                   
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,10 +54,7 @@
                                             @Html.DisplayFor(modelItem => item.PhoneContact)
                                         </td>
 
-                                        <td>
-                                            <a href='@Url.Action("RemoveUser", "Teams", new { teamId = Model.Id, userId=item.Id })' title="Delete"><i class="fa fa-trash-o"></i></a>
-                                        </td>
-                                    </tr>
+                                       </tr>
                                 }
 
                             </tbody>

@@ -15,4 +15,16 @@
         console.log(params);
         return $http.post('/Teams/CreateTeam', {teamViewModel:params});
     }
+
+    this.deleteTeam = function (params) {
+        return $http.post('/Teams/Delete', { teamId: params.Id });
+    }
+
+    this.getTeamToEdit = function(parameters) {
+        return $http.post('/Teams/GetTeam', { teamId: parameters });
+    }
+
+    this.editTeam = function (params) {
+        return $http.post('/Teams/EditTeam', { teamViewModel: params });
+    }
 });

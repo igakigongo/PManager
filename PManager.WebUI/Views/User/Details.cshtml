@@ -8,46 +8,25 @@
 
 <div id="page-wrapper">
 
-    <div>
+    <div class="row" style="padding-top: 15px;">
         <h4>User Details</h4>
         <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.UserProfile.UserName)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.UserProfile.UserName)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Firstname)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Firstname)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Middlename)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Middlename)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(model => model.Lastname)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.Lastname)
-            </dd>
-
-        </dl>
     </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
+    <div class="row">
+        <div class="col-lg-6 no-padding">
+            <table class="table  table-responsive" id="userTable">
+
+                <tbody>
+                    <tr><td class="control-label"><span>Username</span></td><td><span class="text-info">@Html.DisplayFor(model => model.UserProfile.UserName)</span></td></tr>
+                    <tr><td><span class="control-label">Firstname</span></td><td><span class="text-info">@Html.DisplayFor(model => model.Firstname)</span></td></tr>
+                    <tr><td><span>Middlename</span></td><td><span class="text-info">@Html.DisplayFor(model => model.Middlename)</span></td></tr>
+                    <tr><td><span>Lastname</span></td><td><span class="text-info">@Html.DisplayFor(model => model.Lastname)</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id },new{@class="btn btn-primary"}) 
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+    </div>
 </div>
