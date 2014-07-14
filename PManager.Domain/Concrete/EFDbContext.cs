@@ -21,5 +21,7 @@ namespace PManager.Domain.Concrete
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<ProjectTask> ProjectTasks { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<Laptop> Laptops { get; set; }
+        public DbSet<Vehicle> Vehicles { get; set; }
     }
 }

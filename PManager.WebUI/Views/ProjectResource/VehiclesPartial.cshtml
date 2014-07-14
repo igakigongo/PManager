@@ -1,0 +1,50 @@
+﻿@model IEnumerable<PManager.Domain.Entities.Vehicle>
+
+<div class="col-lg-6">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Registered Vehicles
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover" id="vehiclesTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                Number Plate
+                            </th>
+                            <th>
+                                Car Type
+                            </th>
+                            <th>
+                                Assigned To Project
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model) {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.NumberPlate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CarType)
+                                </td>
+                                <td>
+                                    @if (item.Project == null)
+                                    {
+                                        @String.Format("No");
+                                    }
+                                    else
+                                    {
+                                        @String.Format("Yes - {0}", item.Project.ProjectCode);
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

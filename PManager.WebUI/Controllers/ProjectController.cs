@@ -16,12 +16,12 @@ namespace PManager.WebUI.Controllers
 {
     public class ProjectController : Controller
     {
-        private IDataTransferObject _dto;
-        private UnitOfWork _unitOfWork = new UnitOfWork();
+        private IDataTransferObject dto;
+        private EFDbContext context = new EFDbContext();
 
-        public ProjectController(IDataTransferObject _dtoParam)
+        public ProjectController(IDataTransferObject dtoParam)
         {
-            this._dto = _dtoParam;
+            this.dto = dtoParam;
         }
 
         // GET: /Project/
@@ -31,11 +31,11 @@ namespace PManager.WebUI.Controllers
 
             if (filter == null)
             {
-                return View(_unitOfWork.ProjectRepository.Get());
+                return View(context.Projects.ToList());
             }
             else
             {
-                return View(_unitOfWork.ProjectRepository.Get(filter: p => p.IsClosed == false, orderBy: null));
+                return View(context.Projects.Where(p => p.IsClosed == false).OrderBy(p => p.ProjectCode));
             }
         }
 
@@ -47,20 +47,15 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = _unitOfWork.ProjectRepository.Find(id);
+            var project = context.Projects
+                                     .Include(p => p.ProjectTasks)
+                                     .OrderByDescending(p => p.Estimated.StartDate)
+                                     .Where(p => p.Id == id)
+                                     .SingleOrDefault();
             if (project == null)
             {
                 return HttpNotFound();
             }
-
-            // Loading Project Tasks
-            project.ProjectTasks = _unitOfWork.ProjectTaskRepository
-                                            .Get(null,null,"Team")
-                                            .Where(p => p.ProjectId == project.Id)
-                                            .OrderByDescending(p => p.Estimated.StartDate)
-                                            .ToList();
-            // Loading Users
-            // project.ProjectTasks.ForEach(_team => _team.Team.ForEach(_teammember => _teammember = _unitOfWork.UserRepository.Find(_teammember.Id)));
             return View(project);
         }
 
@@ -81,17 +76,17 @@ namespace PManager.WebUI.Controllers
             {
                 try
                 {
-                    _unitOfWork.ProjectRepository.Add(project);
-                    _unitOfWork.Save();
-                    _dto.message = "success";
-                    _dto.id = _unitOfWork.ProjectRepository.Get().LastOrDefault().Id;
+                    context.Projects.Add(project);
+                    context.SaveChanges();
+                    dto.message = "success";
+                    dto.id = context.Projects.LastOrDefault().Id;
                 }
                 catch (DbUpdateException ex)
                 {
-                    _dto.message = "Error: " + ex.Message;
+                    dto.message = "Error: " + ex.Message;
                 }
             }
-            return Json(_dto, JsonRequestBehavior.AllowGet);
+            return Json(dto, JsonRequestBehavior.AllowGet);
         }
 
         // GET: /Project/Edit/5
@@ -102,7 +97,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = _unitOfWork.ProjectRepository.Find(id);
+            var project = context.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -119,8 +114,9 @@ namespace PManager.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.ProjectRepository.Update(project);
-                _unitOfWork.Save();
+                context.Projects.Attach(project);
+                context.Entry(project).State = EntityState.Modified;
+                context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(project);
@@ -134,7 +130,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Project project = _unitOfWork.ProjectRepository.Find(id);
+            var project = context.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -146,10 +142,9 @@ namespace PManager.WebUI.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
-            var project = _unitOfWork.ProjectRepository.Find(id);
-            project.IsClosed = true;
-            _unitOfWork.ProjectRepository.Update(project);
-            _unitOfWork.Save();
+            Project project = context.Projects.Find(id);
+            context.Projects.Remove(project);
+            context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -157,7 +152,7 @@ namespace PManager.WebUI.Controllers
         {
             if (disposing)
             {
-                _unitOfWork.Dispose();
+                context.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -168,9 +163,18 @@ namespace PManager.WebUI.Controllers
         #region 1.0 Recent Top Ten Project Costing
         public JsonResult TopTenProjectsCosting()
         {
-            IQueryable<Project> _TopTen = _unitOfWork.ProjectRepository.Get(tt=>tt.IsClosed==false).OrderByDescending(p => p.Estimated.StartDate).Take(10).AsQueryable();
-            return Json(_TopTen.ToArray(), JsonRequestBehavior.AllowGet);
+            var projects = context.Projects.Where(p => p.IsClosed == false).OrderByDescending(p => p.Estimated.StartDate).Take(10);
+            return Json(projects, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        #region Reports
+        //public JsonResult OnGoingProjects()
+        //{
+        //    var projects = _unitOfWork.ProjectRepository.Get(filter: t => t.IsClosed == false);
+        //    projects.ForEach(
+        //    return null;                           
+        //}
         #endregion
 
         #endregion
