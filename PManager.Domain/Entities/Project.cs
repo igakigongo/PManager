@@ -12,12 +12,13 @@ namespace PManager.Domain.Entities
     {
         //
         // Configuration for Complex Types Actual and Estimated
-
         public Project()
         {
             Actual = new Actual();
             Estimated = new Estimated();
             ProjectTasks = new List<ProjectTask>();
+            Vehicles = new List<Vehicle>();
+            Laptops = new List<Laptop>();
         }
 
         [Key]
@@ -59,6 +60,8 @@ namespace PManager.Domain.Entities
 
         public List<ProjectTask> ProjectTasks { get; set; }
 
-        //public Team Team { get; set; }
+        // The resources assigned to the project
+        public List<Vehicle> Vehicles { get; set; }
+        public List<Laptop> Laptops { get; set; }
     }
 }

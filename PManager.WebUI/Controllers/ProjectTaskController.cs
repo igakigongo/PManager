@@ -195,8 +195,7 @@ namespace PManager.WebUI.Controllers
         {
             var _tasks = _context
                 .ProjectTasks
-                .Where(t => t.ProjectId == projectId)
-                .OrderByDescending(t => t.Estimated.StartDate);
+                .Where(t => t.ProjectId == projectId);
             return Json(_tasks, JsonRequestBehavior.AllowGet);
         }
         #endregion
