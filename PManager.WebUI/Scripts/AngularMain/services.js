@@ -28,3 +28,15 @@
         return $http.post('/Teams/EditTeam', { teamViewModel: params });
     }
 });
+
+
+app.service('taskService', function($http) {
+    this.getAllProjects= function() {
+        return $http.post('/Project/GetProjects');
+    }
+
+    this.saveNewTask = function (params) {
+        console.log(params);
+        return $http.post('/ProjectTask/AddTask', { model: params });
+    }
+});

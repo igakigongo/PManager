@@ -11,6 +11,7 @@ using PManager.Domain.Entities;
 using PManager.Domain.Concrete;
 using System.Data.Entity.Infrastructure;
 using PManager.Domain.Abstract;
+using ProjectTaskViewModel = PManager.Domain.ViewModels.ProjectTaskViewModel;
 
 namespace PManager.WebUI.Controllers
 {
@@ -47,6 +48,11 @@ namespace PManager.WebUI.Controllers
                 return HttpNotFound();
             }
             return View(_projecttask);
+        }
+
+        public ActionResult Create()
+        {
+            return View();
         }
 
         // POST: /ProjectTask/Create
@@ -98,7 +104,7 @@ namespace PManager.WebUI.Controllers
             if (ModelState.IsValid)
             {
 
-                 _context.ProjectTasks.AddOrUpdate(projecttaskvm);
+                _context.ProjectTasks.AddOrUpdate(projecttaskvm);
                 _context.SaveChanges();
                 _dto.message = "success";
                 if (Request.IsAjaxRequest())
@@ -146,6 +152,40 @@ namespace PManager.WebUI.Controllers
                 _context.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        [HttpPost]
+        public ActionResult AddTask(ProjectTaskViewModel model)
+        {
+            var project = _context.Projects.Include(x => x.ProjectTasks).FirstOrDefault(d => d.Id == model.ProjectId);
+            bool successful = false;
+            if (project != null)
+            {
+                project.ProjectTasks.Add(new ProjectTask
+                {
+                    TaskName = model.TaskName,
+                    Estimated = new Estimated
+                    {
+                        Budget = model.Budget,
+                        EndDate = DateTime.Parse(model.EndDate),
+                        StartDate = DateTime.Parse(model.StartDate)
+                    }
+                });
+
+            }
+
+            try
+            {
+                _context.Entry(project).State = EntityState.Modified;
+                _context.SaveChanges();
+                successful = true;
+            }
+            catch (Exception)
+            {
+
+                successful = false;
+            }
+            return Json(successful,JsonRequestBehavior.AllowGet);
         }
 
         #region HighCharts

@@ -163,6 +163,11 @@ namespace PManager.WebUI.Controllers
         }
 
 
+        public ActionResult GetProjects()
+        {
+            return Json(_unitOfWork.ProjectRepository.Get(x=>x.IsClosed==false), JsonRequestBehavior.AllowGet);
+        }
+
         #region HighCharts
 
         #region 1.0 Recent Top Ten Project Costing
