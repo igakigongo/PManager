@@ -13,7 +13,12 @@ namespace PManager.WebUI.Controllers
 {
     public class ProjectResourceController : Controller
     {
-        private EFDbContext db = new EFDbContext();
+        private EFDbContext db;
+
+        public ProjectResourceController()
+        {
+            db = new EFDbContext();
+        }
 
         // GET: /ProjectResource/
         public ActionResult Index()
@@ -24,21 +29,34 @@ namespace PManager.WebUI.Controllers
         // JSONRESULT /Get
         public JsonResult GetResourceUsage()
         {
-            //var laptops = db.Laptops.Include(l => l.Project).ToList();
-            //var vehicles = db.Vehicles.Include(v => v.Project).ToList();
-            var projects = db.Projects.Take(10).ToList();
 
-            //foreach(var project in projects)
-            //{
-            //    for (int i = 0; i < laptops.Count; i++)
-            //    {
-            //        if (project.Id == laptops[i].Project.Id)
-            //        {
-            //            project.Laptops.Add(laptops[i]);
-            //        }
-            //    }
-            //}
-            return Json(projects, JsonRequestBehavior.AllowGet);
+            var projects = db.Projects
+                .Include(p => p.Laptops)
+                .Include(v=>v.Vehicles)
+                .Take(10).ToList();
+
+            var projectsToRender = from project in projects
+                select new
+                {
+                    Id = project.Id,
+                    Code = project.ProjectCode,
+                    Cost = project.Estimated.Budget,
+                    Laptops = project.Laptops.Select(p => new
+                    {
+                        Id = p.Id,
+                        SN = p.SerialNumber
+
+                    }),
+                    Vehicles = project.Vehicles.Select(v => new
+                    {
+                        Id=v.Id
+                    })
+                    
+                    
+                };
+
+
+            return Json(projectsToRender, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Resources()

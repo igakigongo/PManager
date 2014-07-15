@@ -160,7 +160,7 @@ namespace PManager.WebUI.Controllers
 
         public ActionResult GetProjects()
         {
-            return Json(_unitOfWork.ProjectRepository.Get(x=>x.IsClosed==false), JsonRequestBehavior.AllowGet);
+            return Json(context.Projects.Where(x=>x.IsClosed==false), JsonRequestBehavior.AllowGet);
         }
 
         #region HighCharts

@@ -15,5 +15,17 @@ namespace PManager.WebUI.Controllers
         {
             return View();
         }
+
+        [Authorize(Roles = "Admin")]
+        public ActionResult AdminIndex()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Normal")]
+        public ActionResult NormalIndex()
+        {
+            return View();
+        }
 	}
 }
