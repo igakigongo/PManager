@@ -29,12 +29,21 @@
     }
 });
 
+app.service('resourceService', function($http) {
+    this.AssignLaptopToProject = function(parameters) {
+        return $http.post('/ProjectResource/AssignLaptop', { laptopId: parameters.LaptopId, projectId: parameters.ProjectId });
+    }
+});
 
-app.service('taskService', function($http) {
-    this.getAllProjects= function() {
+app.service('projectService', function ($http) {
+    this.getAllProjects = function () {
         return $http.post('/Project/GetProjects');
     }
+});
 
+
+app.service('taskService', function($http) {
+    
     this.saveNewTask = function (params) {
         console.log(params);
         return $http.post('/ProjectTask/AddTask', { model: params });

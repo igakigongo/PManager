@@ -32,7 +32,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Erbium v1.0</a>
+                <a class="navbar-brand" href="#">Erbium v1.0</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -160,19 +160,15 @@
                             <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li>@{
-                                <text>
-                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {id = "logoutForm"}))
-                                    {
-                                        @Html.AntiForgeryToken()
-                                        <a href="javascript:document.getElementById('logoutForm').submit()" style="color: #000000" ><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                                    }
-                                </text>
-                            }
+                        <li>
+                            <a href='@Url.Action("Logout", "Account")' id="signout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
+                    <!-- /.dropdown-user -->
                 </li>
+                <!-- /.dropdown -->
             </ul>
+            <!-- /.navbar-top-links -->
 
             <div class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
@@ -214,10 +210,10 @@
                                     <a href="#">Equipment<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
-                                            <a href='@Url.Action("Laptops","ProjectResource")'>Machinery - Laptops</a>
+                                            <a href="#">Machinery - Laptops</a>
                                         </li>
                                         <li>
-                                            <a href='@Url.Action("Vehicles","ProjectResource")'>Machinery - Vehicles</a>
+                                            <a href="#">Machinery - Vehicles</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -262,10 +258,14 @@
     <script src="~/Scripts/jquery-2.0.3.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Content/sb-admin-v2/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
     <!-- SB Admin Scripts - Include with every page -->
     <script src="~/Content/sb-admin-v2/js/sb-admin.js"></script>
+
     <script src="~/Scripts/Angularjs/angular.js"></script>
     <script src="~/Scripts/Angularjs/ui-bootstrap-0.10.0.js"></script>
     <script src="~/Scripts/Angularjs/ui-bootstrap-tpls-0.10.0.js"></script>
@@ -276,16 +276,8 @@
     <script src="~/Scripts/AngularMain/controllers.js"></script>
     <script src="~/Scripts/AngularMain/toastr.js"></script>
     <script>
-        $('a[id="signout"]').click(function (e) {
-            e.preventDefault();
-            $.post('@Url.Action("LogOff", "Home")', null, function (data) {
-                console.log(JSON.stringify(data));
-                var msg = data.message;
-                console.log('Message: ' + msg);
-                if (message == 'success') {
-                    window.Location = '@Url.Action("Login","Home")';
-                }
-            });
+        $('a[id="signout"]').click(function(event) {
+            
         });
     </script>
     @RenderSection("scripts", required: false)

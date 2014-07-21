@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Net;
-using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
-using PManager.Domain.Entities;
 using PManager.Domain.Concrete;
+using PManager.Domain.Entities;
+using PManager.WebUI.DTOS;
 
 namespace PManager.WebUI.Controllers
 {
     public class ProjectResourceController : Controller
     {
-        private EFDbContext db;
+        private readonly EFDbContext db;
 
         public ProjectResourceController()
         {
@@ -29,54 +28,59 @@ namespace PManager.WebUI.Controllers
         // JSONRESULT /Get
         public JsonResult GetResourceUsage()
         {
-
-            var projects = db.Projects
+            List<Project> projects = db.Projects
                 .Include(p => p.Laptops)
-                .Include(v=>v.Vehicles)
+                .Include(v => v.Vehicles)
                 .Take(10).ToList();
 
             var projectsToRender = from project in projects
-                select new
-                {
-                    Id = project.Id,
-                    Code = project.ProjectCode,
-                    Cost = project.Estimated.Budget,
-                    Laptops = project.Laptops.Select(p => new
-                    {
-                        Id = p.Id,
-                        SN = p.SerialNumber
-
-                    }),
-                    Vehicles = project.Vehicles.Select(v => new
-                    {
-                        Id=v.Id
-                    })
-                    
-                    
-                };
+                                   select new
+                                   {
+                                       project.Id,
+                                       Code = project.ProjectCode,
+                                       Cost = project.Estimated.Budget,
+                                       Laptops = project.Laptops.Select(p => new
+                                       {
+                                           p.Id,
+                                           SN = p.SerialNumber
+                                       }),
+                                       Vehicles = project.Vehicles.Select(v => new
+                                       {
+                                           v.Id
+                                       })
+                                   };
 
 
             return Json(projectsToRender, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetResourcesCount()
+        {
+            var dict = new Dictionary<string, object>();
+            dict.Add("vehicles", 5);
+            dict.Add("laptops", 8);
+            var jobj = new DynamicJsonObject(dict);
+            return Json(jobj, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Resources()
         {
             return View();
         }
-        // GET: /ProjectResource/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    ProjectResource projectresource = db.ProjectResources.Find(id);
-        //    if (projectresource == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(projectresource);
-        //}
+
+        [Authorize(Roles = "Admin, Manager")]
+        public ActionResult Laptops()
+        {
+            IQueryable<Laptop> laptops = db.Laptops.Include(l => l.Project).AsQueryable();
+            return View(laptops);
+        }
+
+        [Authorize(Roles = "Admin, Manager")]
+        public ActionResult Vehicles()
+        {
+            IQueryable<Vehicle> vehicles = db.Vehicles.AsQueryable();
+            return View(vehicles);
+        }
 
         // GET: /ProjectResource/Create
         public ActionResult Create()
@@ -84,9 +88,20 @@ namespace PManager.WebUI.Controllers
             return View();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
         #region Resources
+
         // GET: /ProjectResource/CreateLaptop
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateLaptop()
         {
             return View();
@@ -99,18 +114,20 @@ namespace PManager.WebUI.Controllers
             {
                 db.Laptops.Add(laptop);
                 db.SaveChanges();
-                return RedirectToAction("Resources");
+                return RedirectToAction("Laptops");
             }
             return View(laptop);
         }
 
+        [Authorize(Roles = "Manager")]
         public PartialViewResult LaptopsPartial()
         {
-            var laptops = db.Laptops.Include(l => l.Project).ToList();
+            List<Laptop> laptops = db.Laptops.Include(l => l.Project).ToList();
             return PartialView(laptops);
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateVehicle()
         {
             return View();
@@ -123,102 +140,72 @@ namespace PManager.WebUI.Controllers
             {
                 db.Vehicles.Add(vehicle);
                 db.SaveChanges();
-                return RedirectToAction("Resources");
+                return RedirectToAction("Vehicles");
             }
             return View(vehicle);
         }
 
+        [Authorize(Roles = "Manager")]
         public PartialViewResult VehiclesPartial()
         {
-            var vehicles = db.Vehicles.Include(v => v.Project).ToList();
+            List<Vehicle> vehicles = db.Vehicles.Include(v => v.Project).ToList();
             return PartialView(vehicles);
         }
-        #endregion
-        
 
-        
-
-        // POST: /ProjectResource/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create([Bind(Include="Id,IsAssignedToProject")] ProjectResource projectresource)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        //db.ProjectResources.Add(projectresource);
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    return View(projectresource);
-        //}
-
-        // GET: /ProjectResource/Edit/5
-        //public ActionResult Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    ProjectResource projectresource = db.ProjectResources.Find(id);
-        //    if (projectresource == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(projectresource);
-        //}
-
-        // POST: /ProjectResource/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit([Bind(Include="Id,IsAssignedToProject")] ProjectResource projectresource)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(projectresource).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(projectresource);
-        //}
-
-        // GET: /ProjectResource/Delete/5
-        //public ActionResult Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    ProjectResource projectresource = db.ProjectResources.Find(id);
-        //    if (projectresource == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(projectresource);
-        //}
-
-        // POST: /ProjectResource/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult DeleteConfirmed(int id)
-        //{
-        //    ProjectResource projectresource = db.ProjectResources.Find(id);
-        //    db.ProjectResources.Remove(projectresource);
-        //    db.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
-
-        protected override void Dispose(bool disposing)
+        public ActionResult AssignLaptop(int laptopId, int projectId)
         {
-            if (disposing)
+            var message = new Message
             {
-                db.Dispose();
+                Status = false,
+                Text = "The resource or project your are trying to update does not exist, please contact systems administrator for help"
+            };
+
+            var laptopToAssign = db.Laptops.Include(x => x.Project).FirstOrDefault(l => l.Id == laptopId);
+            var projectToBeAssigned = db.Projects.Include(x => x.Laptops).FirstOrDefault(p => p.Id == projectId);
+
+            if (laptopToAssign != null && projectToBeAssigned != null)
+            {
+                if (projectToBeAssigned.Laptops.Contains(laptopToAssign))
+                {
+                    message = new Message
+                    {
+                        Status = false,
+                        Text = "Resource is already assigned to " + projectToBeAssigned.Name
+                    };
+                }
+                else
+                {
+                    projectToBeAssigned.Laptops.Add(laptopToAssign);
+                    db.Entry(laptopToAssign).State = EntityState.Modified;
+
+                    try
+                    {
+                        db.SaveChanges();
+                        message = new Message
+                        {
+                            Status = true,
+                            Text = "Resource successfully assigned to " + projectToBeAssigned.Name
+                        };
+                    }
+                    catch (Exception)
+                    {
+                        message = new Message
+                        {
+                            Status = false,
+                            Text = "An error occurred while trying to save the entries, please contact your systems administrator for help"
+                        };
+                    }
+
+                }
+
+
+                return Json(message, JsonRequestBehavior.AllowGet);
             }
-            base.Dispose(disposing);
+            return Json(message, JsonRequestBehavior.AllowGet);
+
+
         }
+
+        #endregion
     }
 }

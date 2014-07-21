@@ -97,7 +97,7 @@
 
 });
 
-app.controller("TasksController", function ($scope, taskService) {
+app.controller("TasksController", function ($scope, taskService, projectService) {
     $('#EstimatedStartDate').datepicker({
         format:'dd/mm/yyyy'
     });
@@ -107,7 +107,7 @@ app.controller("TasksController", function ($scope, taskService) {
 
     $scope.Task = {};
 
-    taskService.getAllProjects().success(function (projects) {
+    projectService.getAllProjects().success(function (projects) {
         $scope.projects = projects;
     }).error();
 
@@ -127,25 +127,60 @@ app.controller("TasksController", function ($scope, taskService) {
 
 });
 
-var authenticationController = function ($scope, $modalInstance, item, teamsService) {
+app.controller('ResourceController', function ($scope, $modal, resourceService) {
 
-    // model to hold user password and comment
-    $scope.teamToDelete = item;
+    $scope.assignToProject = function (item) {
+        var format = item.split(',');
+
+        $scope.laptop = {
+            Id: format[0].trim(),
+            Name: format[1].trim(),
+            Serial:format[2].trim()
+        };
+
+
+       var modalInstance = $modal.open({
+           templateUrl: 'dialogModal.html',
+            controller: 'dialogController',
+            resolve: {
+                item: function () {
+                    return $scope.laptop;
+                }
+            }
+        });
+    };
+});
+
+var dialogController = function ($scope, $modalInstance, item, resourceService, projectService) {
+    
+    $scope.Project = {}
+
+    projectService.getAllProjects().success(function (projects) {
+        $scope.projects = projects;
+    }).error();
+
+    $scope.displayName = item.Serial + ", " + item.Name;
 
     $scope.ok = function () {
-        teamsService.deleteTeam($scope.teamToDelete).success(function (response) {
-            if (response == 'true') {
-                toastr.success("Team has been deleted successfully");
-            } else {
-                toastr.success("Error has occurred while trying to delete the team, please contact the systems administrator for help");
-            }
+        $scope.resourceToAssign = {
+            LaptopId: item.Id,
+            ProjectId: $scope.Project.ProjectId
+        };
+
+        resourceService.AssignLaptopToProject($scope.resourceToAssign).success(function (response) {
 
             $modalInstance.close();
-        }).error();
 
-        setTimeout(function () {
-            window.location.href = "/Teams/Index";
-        }, 4000);
+            if (JSON.stringify(response.Status) == "true") {
+                toastr.success(response.Text);
+                setTimeout(function () {
+                    window.location.href = "/ProjectResource/Laptops";
+                }, 4000);
+            } else {
+                toastr.error(response.Text);
+            }
+            
+        }).error();
     };
 
     $scope.cancel = function () {

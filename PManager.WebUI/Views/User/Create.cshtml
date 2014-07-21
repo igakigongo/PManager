@@ -2,11 +2,10 @@
 
 @{
     ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     string message = ViewBag.message;
 }
 <style type="text/css">
-    /* just a dummy class */
     label {
         font-size: smaller;
     }
@@ -16,9 +15,7 @@
 </style>
 
 <div id="page-wrapper">
-    <div class="row" style="
-    padding-top: 15px;
-">
+    <div class="row" style="padding-top: 15px;">
         <div class="col-lg-12">
             @if (!String.IsNullOrEmpty(message))
             {
@@ -95,11 +92,11 @@
                                 
                         </div>
                         
-                    <div class="col-lg-12 padding-top-15">
-                                  <input type="submit" class="btn btn-success btn-sm" value="Submit" />
-                                  <input type="reset" class="btn btn-primary btn-sm" value="Reset Form" />
-                                  @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default btn-sm" })
-                              </div>
+                        <div class="col-lg-12 padding-top-15">
+                            <input type="submit" class="btn btn-success btn-sm" value="Submit" />
+                            <input type="reset" class="btn btn-primary btn-sm" value="Reset Form" />
+                            @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default btn-sm" })
+                        </div>
                     }
                 </div>
             </div>

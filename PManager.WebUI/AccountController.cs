@@ -38,12 +38,21 @@ namespace PManager.WebUI.Controllers
                     WebSecurity.Login(userName: model.UserName, password: model.Password, persistCookie: model.RememberMe);
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
 
-                    String[] UserRoles = Roles.GetRolesForUser(model.UserName);
-                    if (UserRoles[0].ToString() == "Manager")
+                    String[] userRoles = Roles.GetRolesForUser(model.UserName);
+                    String userrole = userRoles[0];
+                    if (userrole == "Manager")
                     {
                         return RedirectToAction("Index", "Home");
                     }
-                    return RedirectToAction("Index", "Home");
+                    else if (userrole == "Admin")
+                    {
+                        return RedirectToAction("AdminIndex", "Home");
+                    }
+                    else if (userrole == "Normal")
+                    {
+                        return RedirectToAction("NormalIndex", "Home");
+                    }
+                    return RedirectToAction("Login");
                 }
                 else
                 {
@@ -57,5 +66,15 @@ namespace PManager.WebUI.Controllers
             }
         }
 
+        //
+        // POST: /Account/LogOff
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult LogOff()
+        {
+            WebSecurity.Logout();
+            return RedirectToAction("Login");
+        }
 	}
 }

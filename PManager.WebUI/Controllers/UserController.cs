@@ -19,21 +19,20 @@ namespace PManager.WebUI.Controllers
     public class UserController : Controller
     {
         
-        private UnitOfWork _unitOfWork = new UnitOfWork();
-
-        private EFDbContext context;
+        private readonly UnitOfWork _unitOfWork = new UnitOfWork();
+        private EFDbContext db;
 
         public UserController()
         {
-            context = new EFDbContext();
+            db = new EFDbContext();
         }
         
         // GET: /User/
         public ActionResult Index()
         {
-            List<User> _users = _unitOfWork.UserRepository.Get().ToList();
-            _users.ForEach(_user => _user.UserProfile = _unitOfWork.UserProfileRepository.Find(_user.Id));
-            return View(_users);
+            List<User> users = _unitOfWork.UserRepository.Get().ToList();
+            users.ForEach(user => user.UserProfile = _unitOfWork.UserProfileRepository.Find(user.Id));
+            return View(users);
         }
 
         public ActionResult GetAllUsers()
@@ -48,7 +47,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = _unitOfWork.UserRepository.Find(id);
+            User user = db.Users.Include(u => u.UserProfile).Where(u => u.Id == id).SingleOrDefault();
             if (user == null)
             {
                 return HttpNotFound();

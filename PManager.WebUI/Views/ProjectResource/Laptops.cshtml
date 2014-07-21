@@ -1,0 +1,118 @@
+﻿@model IQueryable<PManager.Domain.Entities.Laptop>
+
+@{
+    ViewBag.Title = "Laptops";
+    string userrole = Roles.GetRolesForUser(WebSecurity.CurrentUserName)[0];
+    if (userrole == "Manager")
+    {
+        Layout = "~/Views/Shared/_LayoutManager.cshtml";
+    }
+    else if (userrole == "Admin")
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+}
+
+<link href="~/Content/sb-admin-v2/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+
+<div id="page-wrapper" data-ng-controller="ResourceController">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Administrator - Dashboard</h1>
+        </div>
+    </div>
+    <div class="row">
+        @if (userrole == "Admin")
+        {
+            <div class="col-lg-12">
+                <div class="padding-bottom-20">
+                    <a href='@Url.Action("CreateLaptop")' class="btn btn-primary">Register New Laptop</a>
+                </div>
+            </div>
+        }
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-desktop fa-fw"></i>     Laptops
+                </div>
+                <div class="panel-body">
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <thead>
+                                <tr><th>Laptop Id</th><th>Serial Number</th><th>Laptop Name</th><th>Cost</th><th></th></tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var l in Model)
+                                {
+                                    <tr>
+                                        <td>@l.Id</td>
+                                        <td>@l.SerialNumber</td>
+                                        <td>@l.LaptopName</td>
+                                        <td>@String.Format("{0:C}", l.Cost)</td>
+                                        <td>@if (l.Project != null)
+                                            {
+                                                <a href="#" data-ng-click="assignToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to new project</a>
+                                            }
+                                            else {<a href="#" data-ng-click="assignToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to project</a> }
+                                            
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="dialogModal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Assign Laptop to a project</h3>
+    </div>
+    <div class="modal-body">
+        <form id="resource-form" name="resourceForm">
+
+            <div class="field-box customer-wrapper padding-top-15">
+                <label class="light">Laptop</label>
+                <input disabled id="laptop-name" class="form-control textbox" type="text" data-ng-model="displayName" />
+               
+            </div>
+
+            <div class="field-box customer-wrapper padding-top-15" ng-class="{ 'has-error' : resourceForm.ProjectId.$invalid && !resourceForm.ProjectId.$pristine }">
+                <label class="control-label">Project</label>
+                <select name="ProjectId" class="form-control" required ng-model="Project.ProjectId">
+                    <option value="">-- Select project --</option>
+                    <option ng-repeat="project in projects" value="{{project.Id}}">{{project.Name}}</option>
+                </select>
+               
+                <div class="error" data-ng-show="resourceForm.ProjectId.$invalid && !resourceForm.ProjectId.$pristine">
+                    <span class="alert-msg"><i class="fa fa-warning"></i> Please select the project</span>
+                </div>
+            </div>
+            <div class="field-box" id="message-box"></div>
+        </form>
+    </div>
+    <div class="modal-footer ">
+        <button class="btn btn-primary" ng-click="ok()" data-ng-disabled="resourceForm.$invalid">OK</button>
+        <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
+
+@section scripts{
+    <!-- Page-Level Plugin Scripts - Tables -->
+    <script src="~/Content/sb-admin-v2/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="~/Content/sb-admin-v2/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#dataTables-example').dataTable();
+        });
+    </script>
+}
+
+
+
+

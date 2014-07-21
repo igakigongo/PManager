@@ -354,6 +354,7 @@
     <Compile Include="Controllers\ProjectTaskController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="DTOS\Message.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -403,6 +404,9 @@
     <Content Include="Views\Home\NormalIndex.cshtml" />
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Views\Shared\_LayoutNormal.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\ProjectResource\Vehicles.cshtml" />
+    <Content Include="Views\ProjectResource\Laptops.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

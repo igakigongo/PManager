@@ -44,7 +44,6 @@ namespace PManager.Domain.Migrations
 
             context.Users.AddOrUpdate(u => u.Id, users.ToArray());
             context.SaveChanges();
-            
         }
     }
 }

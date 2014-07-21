@@ -9,7 +9,7 @@
     <!-- Favicon -->
     <link href="~/project.ico" rel="icon" type="image/x-icon" />
 
-    
+
     <!-- Core CSS - Include with every page -->
     <link href="~/Content/bootstrap.min.css" rel="stylesheet">
     <link href="~/Content/sb-admin-v2/font-awesome/css/font-awesome.min.css" rel="stylesheet">
@@ -20,7 +20,7 @@
     <link href="~/Content/sb-admin-v2/css/sb-admin.css" rel="stylesheet">
     <link href="~/Content/toaster.css" rel="stylesheet" />
     <link href="~/Content/Styles.css" rel="stylesheet" />
-    
+
 </head>
 <body ng-cloak>
     <div id="wrapper">
@@ -34,10 +34,8 @@
                 </button>
                 <a class="navbar-brand" href="index.html">Erbium v1.0</a>
             </div>
-            <!-- /.navbar-header -->
-
             <ul class="nav navbar-top-links navbar-right">
-                <li class="dropdown">
+                <!--<li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
@@ -85,10 +83,8 @@
                             </a>
                         </li>
                     </ul>
-                    <!-- /.dropdown-messages -->
-                </li>
-                <!-- /.dropdown -->
-                <li class="dropdown">
+                </li>-->
+                <!--<li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
@@ -145,9 +141,7 @@
                             </a>
                         </li>
                     </ul>
-                    <!-- /.dropdown-alerts -->
-                </li>
-                <!-- /.dropdown -->
+                </li>-->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
@@ -160,12 +154,13 @@
                             <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                         </li>
                         <li class="divider"></li>
-                        <li>@{
+                        <li>
+                            @{
                                 <text>
-                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {id = "logoutForm"}))
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
                                     {
                                         @Html.AntiForgeryToken()
-                                        <a href="javascript:document.getElementById('logoutForm').submit()" style="color: #000000" ><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                                        <a href="javascript:document.getElementById('logoutForm').submit()" style="color: #000000"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                                     }
                                 </text>
                             }
@@ -186,25 +181,12 @@
                                     </button>
                                 </span>
                             </div>
-                            <!-- /input-group -->
                         </li>
                         <li>
-                            <a href='@Url.Action("Index", "Home")'><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                            <a href='@Url.Action("AdminIndex", "Home")'><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         </li>
-                        <li>
-                            <a href='@Url.Action("Index", "Project")'><i class="fa fa-bar-chart-o fa-fw"></i> Projects</a>
-                        </li>
-                        
-                        <li>
-                            <a href='@Url.Action("Index", "ProjectTask")'><i class="fa fa-bar-chart-o fa-fw"></i> Tasks</a>
-                        </li>
-                        
                         <li>
                             <a href='@Url.Action("Index", "User")'><i class="fa fa-users fa-fw"></i> Users</a>
-                        </li>
-
-                        <li>
-                            <a href='@Url.Action("Index", "Teams")'><i class="fa fa-dashboard fa-fw"></i> Teams</a>
                         </li>
 
                         <li>
@@ -214,18 +196,15 @@
                                     <a href="#">Equipment<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
-                                            <a href='@Url.Action("Laptops","ProjectResource")'>Machinery - Laptops</a>
+                                            <a href='@Url.Action("Laptops", "ProjectResource")'>Machinery - Laptops</a>
                                         </li>
                                         <li>
-                                            <a href='@Url.Action("Vehicles","ProjectResource")'>Machinery - Vehicles</a>
+                                            <a href='@Url.Action("Vehicles", "ProjectResource")'>Machinery - Vehicles</a>
                                         </li>
                                     </ul>
                                 </li>
                                 <li>
-                                    <a href="#">Office Space</a>
-                                </li>
-                                <li>
-                                    <a href='@Url.Action("Index", "ProjectResource")'>Resource Usage</a>
+                                    <a href='@Url.Action("Index", "ProjectResource")'>Office Space</a>
                                 </li>
                             </ul>
                         </li>
@@ -247,26 +226,27 @@
                             </ul>
                         </li>
                     </ul>
-                    <!-- /#side-menu -->
                 </div>
-                <!-- /.sidebar-collapse -->
             </div>
-            <!-- /.navbar-static-side -->
         </nav>
         @RenderBody()
-        <!-- /#page-wrapper -->
-
     </div>
     <!-- /#wrapper -->
     <!-- Core Scripts - Include with every page -->
     <script src="~/Scripts/jquery-2.0.3.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Content/sb-admin-v2/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+
     <!-- SB Admin Scripts - Include with every page -->
     <script src="~/Content/sb-admin-v2/js/sb-admin.js"></script>
+
     <script src="~/Scripts/Angularjs/angular.js"></script>
+    @*<script src="http://cdnjs.cloudflare.com/ajax/libs/angularjs-toaster/0.4.4/toaster.js"></script>*@
+    @*<script src="~/Scripts/AngularMain/toaster.js"></script>*@
     <script src="~/Scripts/Angularjs/ui-bootstrap-0.10.0.js"></script>
     <script src="~/Scripts/Angularjs/ui-bootstrap-tpls-0.10.0.js"></script>
     <script src="~/Scripts/AngularMain/select2.js"></script>
@@ -275,19 +255,8 @@
     <script src="~/Scripts/AngularMain/services.js"></script>
     <script src="~/Scripts/AngularMain/controllers.js"></script>
     <script src="~/Scripts/AngularMain/toastr.js"></script>
-    <script>
-        $('a[id="signout"]').click(function (e) {
-            e.preventDefault();
-            $.post('@Url.Action("LogOff", "Home")', null, function (data) {
-                console.log(JSON.stringify(data));
-                var msg = data.message;
-                console.log('Message: ' + msg);
-                if (message == 'success') {
-                    window.Location = '@Url.Action("Login","Home")';
-                }
-            });
-        });
-    </script>
+
     @RenderSection("scripts", required: false)
 </body>
 </html>
+

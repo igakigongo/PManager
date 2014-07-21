@@ -2,61 +2,45 @@
 
 @{
     ViewBag.Title = "Laptop Entry Form";
-    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <div id="page-wrapper">
     <div class="row">
         <div class="col-lg-12">
-            @using (Html.BeginForm()) 
-            {
-                @Html.AntiForgeryToken()
-    
-                <div class="form-horizontal">
-                    <h4>Laptop Registration</h4>
-                    <hr />
-                    @Html.ValidationSummary(true)
+            <h1 class="page-header">Administrator - Dashboard</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>BOU - Laptop Registration Form</strong>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="col-lg-6">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true)
 
-@*                    <div class="form-group">
-                        @Html.LabelFor(model => model.CarType, new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.CarType)
-                            @Html.ValidationMessageFor(model => model.CarType)
-                        </div>
-                    </div>*@
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.SerialNumber, new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.SerialNumber)
-                            @Html.ValidationMessageFor(model => model.SerialNumber)
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.LaptopName, new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.LaptopName)
-                            @Html.ValidationMessageFor(model => model.LaptopName)
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Cost, new { @class = "control-label col-md-2" })
-                        <div class="col-md-10">
-                            @Html.EditorFor(model => model.Cost)
-                            @Html.ValidationMessageFor(model => model.Cost)
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="Create" class="btn btn-primary" />
-                            @Html.ActionLink("Back to List", "Resources", null, new { @class = "btn btn-success" })
-                        </div>
-                    </div>
+                        <label>Serial Number</label>
+                        <input class="form-control" name="SerialNumber" id="SerialNumber" />
+                        @Html.ValidationMessageFor(model => model.SerialNumber, "* Required", new { style = "color:red" })<br />
+                        
+                        <label>Laptop Name</label>
+                        <input class="form-control" name="LaptopName" id="LaptopName" />
+                        @Html.ValidationMessageFor(model => model.LaptopName, "* Required", new { style = "color:red" })<br />
+                        
+                        <label>Laptop Cost (US$)</label>
+                        <input class="form-control" name="Cost" id="Cost" />
+                        @Html.ValidationMessageFor(model => model.Cost, "* Required", new { style = "color:red" })<br />
+                       
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                        @Html.ActionLink("Back to List", "Laptops", null, new { @class = "btn btn-success" })
+                    }
                 </div>
-            }
+            </div>
         </div>
     </div>
 </div>

@@ -1,8 +1,16 @@
 ﻿@model IEnumerable<PManager.Domain.Entities.User>
 
 @{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+    ViewBag.Title = "Users";
+    string userrole = Roles.GetRolesForUser(WebSecurity.CurrentUserName)[0];
+    if (userrole == "Manager")
+    {
+        Layout = "~/Views/Shared/_LayoutManager.cshtml";
+    }
+    else if (userrole == "Admin")
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
 }
 
 <link href="~/Content/sb-admin-v2/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
@@ -17,9 +25,12 @@
     <!-- /.row -->
     <div class="row">
         <div class="col-lg-12">
-            <div class="padding-bottom-20">
-                <a href='/User/Create' class="btn btn-primary">Create New</a>
-            </div>
+            @if (userrole == "Admin")
+            {
+                <div class="padding-bottom-20">
+                    <a href='/User/Create' class="btn btn-primary">Create New</a>
+                </div>
+            }
             <div class="panel panel-default">
                 <div class="panel-heading">
                     BOU- System Users
@@ -63,9 +74,15 @@
                                             @Html.DisplayFor(modelItem => item.PhoneContact)
                                         </td>
                                         <td>
-                                            <a href='@Url.Action("Edit", "User", new { id = item.Id })' title="Edit"><i class="fa fa-edit"></i></a> -
-                                            <a href='@Url.Action("Details", "User", new { id = item.Id })' title="Details"><i class="fa fa-th-list"></i></a> -
-                                            <a href='@Url.Action("Delete", "User", new { id = item.Id })' title="Delete"><i class="fa fa-trash-o"></i></a>
+                                            @if (userrole == "Admin")
+                                            {
+                                                <a href='@Url.Action("Edit", "User", new {id = item.Id})' title="Edit"><i class="fa fa-edit"></i> - </a>
+                                            }
+                                            <a href='@Url.Action("Details", "User", new { id = item.Id })' title="Details"><i class="fa fa-th-list"></i></a>
+                                            @if(userrole == "Admin")
+                                            { 
+                                                <a href='@Url.Action("Delete", "User", new { id = item.Id })' title="Delete"> - <i class="fa fa-trash-o"></i></a>
+                                            }
                                         </td>
                                     </tr>
                                 }

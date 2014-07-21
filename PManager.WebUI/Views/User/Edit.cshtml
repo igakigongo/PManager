@@ -1,8 +1,16 @@
 ﻿@model PManager.Domain.Entities.User
 
 @{
-    ViewBag.Title = "Edit";
-    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+    ViewBag.Title = "Edit Profile";
+    string userrole = Roles.GetRolesForUser(WebSecurity.CurrentUserName)[0];
+    if (userrole == "Manager")
+    {
+        Layout = "~/Views/Shared/_LayoutManager.cshtml";
+    }
+    else if (userrole == "Admin")
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
 }
 
 
