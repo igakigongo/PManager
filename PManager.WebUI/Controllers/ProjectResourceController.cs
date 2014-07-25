@@ -78,7 +78,7 @@ namespace PManager.WebUI.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public ActionResult Vehicles()
         {
-            IQueryable<Vehicle> vehicles = db.Vehicles.AsQueryable();
+            IQueryable<Vehicle> vehicles = db.Vehicles.Include(l => l.Project).AsQueryable();
             return View(vehicles);
         }
 
@@ -177,6 +177,60 @@ namespace PManager.WebUI.Controllers
                 {
                     projectToBeAssigned.Laptops.Add(laptopToAssign);
                     db.Entry(laptopToAssign).State = EntityState.Modified;
+
+                    try
+                    {
+                        db.SaveChanges();
+                        message = new Message
+                        {
+                            Status = true,
+                            Text = "Resource successfully assigned to " + projectToBeAssigned.Name
+                        };
+                    }
+                    catch (Exception)
+                    {
+                        message = new Message
+                        {
+                            Status = false,
+                            Text = "An error occurred while trying to save the entries, please contact your systems administrator for help"
+                        };
+                    }
+
+                }
+
+
+                return Json(message, JsonRequestBehavior.AllowGet);
+            }
+            return Json(message, JsonRequestBehavior.AllowGet);
+
+
+        }
+
+        public ActionResult AssignVehicle(int vehicleId, int projectId)
+        {
+            var message = new Message
+            {
+                Status = false,
+                Text = "The resource or project your are trying to update does not exist, please contact systems administrator for help"
+            };
+
+            var vehiclToAssign = db.Vehicles.Include(x => x.Project).FirstOrDefault(l => l.Id == vehicleId);
+            var projectToBeAssigned = db.Projects.Include(x => x.Laptops).FirstOrDefault(p => p.Id == projectId);
+
+            if (vehiclToAssign != null && projectToBeAssigned != null)
+            {
+                if (projectToBeAssigned.Vehicles.Contains(vehiclToAssign))
+                {
+                    message = new Message
+                    {
+                        Status = false,
+                        Text = "Resource is already assigned to " + projectToBeAssigned.Name
+                    };
+                }
+                else
+                {
+                    projectToBeAssigned.Vehicles.Add(vehiclToAssign);
+                    db.Entry(vehiclToAssign).State = EntityState.Modified;
 
                     try
                     {

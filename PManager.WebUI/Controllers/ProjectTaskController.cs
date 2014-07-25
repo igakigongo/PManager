@@ -188,6 +188,18 @@ namespace PManager.WebUI.Controllers
             return Json(successful,JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetTasks(int projectId)
+        {
+            var tasks =
+                _context.ProjectTasks.Include(p => p.Project).Where(x => x.ProjectId == projectId).Select(task => new
+                {
+                    Id = task.Id,
+                    TaskName = task.TaskName
+                });
+            return Json(tasks,
+                JsonRequestBehavior.AllowGet);
+        }
+
         #region HighCharts
 
         #region 1.0 Requesting All Tasks For A Given Project

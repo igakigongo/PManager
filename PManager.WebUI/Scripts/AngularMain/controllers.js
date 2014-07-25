@@ -1,4 +1,4 @@
-﻿app.controller("TeamsController", function ($scope, filterFilter, $window, $modal, teamsService) {
+﻿app.controller("TeamsController", function ($scope, filterFilter, $window, $modal, teamsService, projectService, taskService) {
 
     var pathname = window.location.pathname;
     var controller = pathname.split("/")[1];
@@ -6,6 +6,24 @@
     var params = pathname.split("/")[3];
 
     $scope.listOfSelectedUsers = [];
+    $scope.projectSelected = false;
+
+    $scope.loadProjectTasks = function (id) {
+
+        if (id!='') {
+            taskService.getProjectTasks(id).success(function (tasks) {
+                $scope.projectSelected = true;
+                $scope.tasks = tasks;
+            }).error();
+        } else {
+            $scope.projectSelected = false;
+            angular.element('#task').empty().html('<option value="">-- Select Task --</option>');
+        }
+    }
+
+    projectService.getAllProjects().success(function (projects) {
+        $scope.projects = projects;
+    }).error();
 
     teamsService.getAllTeams().success(function (teams) {
         $scope.teams = teams;
@@ -19,18 +37,21 @@
     $scope.save = function () {
 
         var newTeam = {
-            //Id:0,
+            TaskId:$scope.selectedTask,
             Name: $scope.teamName,
             UserIds: $scope.listOfSelectedUsers
         };
-
-
+        
         teamsService.createNewTeam(newTeam).success(function (response) {
 
             toastr.success(newTeam.Name + ' has been created successfully');
             $scope.teamForm.$setPristine();
             $scope.teamName = '';
             $scope.listOfSelectedUsers = [];
+
+            setTimeout(function () {
+                window.location.href = "/Teams/Index";
+            }, 4000);
 
         }).error();
     }
@@ -99,7 +120,7 @@
 
 app.controller("TasksController", function ($scope, taskService, projectService) {
     $('#EstimatedStartDate').datepicker({
-        format:'dd/mm/yyyy'
+        format: 'dd/mm/yyyy'
     });
     $('#EstimatedEndDate').datepicker({
         format: 'dd/mm/yyyy'
@@ -114,7 +135,7 @@ app.controller("TasksController", function ($scope, taskService, projectService)
     $scope.saveTask = function () {
 
         taskService.saveNewTask($scope.Task).success(function (response) {
-            if (response=="true") {
+            if (response == "true") {
                 toastr.success("Task has been created successfully");
             } else {
                 toastr.error("An error occurred while saving the task, please contact your system's administrator for help");
@@ -127,60 +148,90 @@ app.controller("TasksController", function ($scope, taskService, projectService)
 
 });
 
-app.controller('ResourceController', function ($scope, $modal, resourceService) {
+app.controller('resourceController', function ($scope, $modal) {
 
-    $scope.assignToProject = function (item) {
+    $scope.assignResourceToProject = function (item) {
         var format = item.split(',');
 
-        $scope.laptop = {
+        var resource = {
             Id: format[0].trim(),
             Name: format[1].trim(),
-            Serial:format[2].trim()
+            Model: format[2] == null ? "" : format[2].trim()
         };
 
-
-       var modalInstance = $modal.open({
-           templateUrl: 'dialogModal.html',
+        var modalInstance = $modal.open({
+            templateUrl: 'dialogModal.html',
             controller: 'dialogController',
             resolve: {
                 item: function () {
-                    return $scope.laptop;
+                    return resource;
                 }
             }
         });
     };
 });
 
+
 var dialogController = function ($scope, $modalInstance, item, resourceService, projectService) {
-    
+
+    var pathname = window.location.pathname;
+    var controller = pathname.split("/")[1];
+    var action = pathname.split("/")[2];
+    var params = pathname.split("/")[3];
+
+    console.log(action);
+
     $scope.Project = {}
 
     projectService.getAllProjects().success(function (projects) {
         $scope.projects = projects;
     }).error();
 
-    $scope.displayName = item.Serial + ", " + item.Name;
+    $scope.displayName = item.Model + ", " + item.Name;
 
     $scope.ok = function () {
         $scope.resourceToAssign = {
-            LaptopId: item.Id,
+            resourceId: item.Id,
             ProjectId: $scope.Project.ProjectId
         };
 
-        resourceService.AssignLaptopToProject($scope.resourceToAssign).success(function (response) {
+        if (action == 'Laptops') {
+            resourceService.AssignLaptopToProject($scope.resourceToAssign).success(function (response) {
 
-            $modalInstance.close();
+                $modalInstance.close();
 
-            if (JSON.stringify(response.Status) == "true") {
-                toastr.success(response.Text);
-                setTimeout(function () {
-                    window.location.href = "/ProjectResource/Laptops";
-                }, 4000);
-            } else {
-                toastr.error(response.Text);
-            }
-            
-        }).error();
+                if (JSON.stringify(response.Status) == "true") {
+                    toastr.success(response.Text);
+                    setTimeout(function () {
+                        window.location.href = "/ProjectResource/Laptops";
+                    }, 4000);
+                } else {
+                    toastr.error(response.Text);
+                }
+
+            }).error();
+
+            return;
+        }
+
+        if (action == 'Vehicles') {
+            resourceService.AssignVehicleToProject($scope.resourceToAssign).success(function (response) {
+
+                $modalInstance.close();
+
+                if (JSON.stringify(response.Status) == "true") {
+                    toastr.success(response.Text);
+                    setTimeout(function () {
+                        window.location.href = "/ProjectResource/Vehicles";
+                    }, 4000);
+                } else {
+                    toastr.error(response.Text);
+                }
+
+            }).error();
+
+            return;
+        }
     };
 
     $scope.cancel = function () {

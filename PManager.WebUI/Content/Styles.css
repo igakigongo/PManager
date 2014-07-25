@@ -178,6 +178,14 @@ background-image:none;
     display: none !important;
 }
 
+.no-left-padding-important {
+    padding-left: 0 !important;
+}
+
+.no-right-padding-important {
+    padding-right: 0 !important;
+}
+
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;

@@ -31,9 +31,15 @@
 
 app.service('resourceService', function($http) {
     this.AssignLaptopToProject = function(parameters) {
-        return $http.post('/ProjectResource/AssignLaptop', { laptopId: parameters.LaptopId, projectId: parameters.ProjectId });
+        return $http.post('/ProjectResource/AssignLaptop', { laptopId: parameters.resourceId, projectId: parameters.ProjectId });
+    }
+
+    this.AssignVehicleToProject = function (parameters) {
+        return $http.post('/ProjectResource/AssignVehicle', { vehicleId: parameters.resourceId, projectId: parameters.ProjectId });
     }
 });
+
+
 
 app.service('projectService', function ($http) {
     this.getAllProjects = function () {
@@ -48,4 +54,8 @@ app.service('taskService', function($http) {
         console.log(params);
         return $http.post('/ProjectTask/AddTask', { model: params });
     }
+
+    this.getProjectTasks = function(id) {
+        return $http.post('/ProjectTask/GetTasks?projectId='+id+'');
+    };
 });

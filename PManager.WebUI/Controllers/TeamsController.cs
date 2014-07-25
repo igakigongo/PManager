@@ -132,6 +132,14 @@ namespace PManager.WebUI.Controllers
 
                 team.Users = users;
             }
+
+
+            if (teamViewModel.TaskId!=0)
+            {
+                var task = context.ProjectTasks.Find(teamViewModel.TaskId);
+                team.Tasks = new List<ProjectTask> {task};
+            }
+
             context.Teams.Add(team);
 
             try

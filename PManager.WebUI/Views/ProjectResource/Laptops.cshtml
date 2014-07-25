@@ -15,7 +15,7 @@
 
 <link href="~/Content/sb-admin-v2/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
 
-<div id="page-wrapper" data-ng-controller="ResourceController">
+<div id="page-wrapper" data-ng-controller="resourceController">
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">Administrator - Dashboard</h1>
@@ -50,12 +50,14 @@
                                         <td>@l.SerialNumber</td>
                                         <td>@l.LaptopName</td>
                                         <td>@String.Format("{0:C}", l.Cost)</td>
-                                        <td>@if (l.Project != null)
+                                        <td>
+                                            @if (l.Project != null)
                                             {
-                                                <a href="#" data-ng-click="assignToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to new project</a>
+                                                <a href="#" data-ng-click="assignResourceToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to new project</a>
                                             }
-                                            else {<a href="#" data-ng-click="assignToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to project</a> }
-                                            
+                                            else
+                                            {<a href="#" data-ng-click="assignResourceToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to project</a> }
+
                                         </td>
                                     </tr>
                                 }
@@ -78,7 +80,7 @@
             <div class="field-box customer-wrapper padding-top-15">
                 <label class="light">Laptop</label>
                 <input disabled id="laptop-name" class="form-control textbox" type="text" data-ng-model="displayName" />
-               
+
             </div>
 
             <div class="field-box customer-wrapper padding-top-15" ng-class="{ 'has-error' : resourceForm.ProjectId.$invalid && !resourceForm.ProjectId.$pristine }">
@@ -87,7 +89,7 @@
                     <option value="">-- Select project --</option>
                     <option ng-repeat="project in projects" value="{{project.Id}}">{{project.Name}}</option>
                 </select>
-               
+
                 <div class="error" data-ng-show="resourceForm.ProjectId.$invalid && !resourceForm.ProjectId.$pristine">
                     <span class="alert-msg"><i class="fa fa-warning"></i> Please select the project</span>
                 </div>
