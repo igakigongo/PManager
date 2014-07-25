@@ -186,6 +186,15 @@ background-image:none;
     padding-right: 0 !important;
 }
 
+.navbar-custom {
+    background: rgb(13, 35, 58);
+    border-color: #e7e7e7;
+}
+
+.navbar-custom .navbar-brand {
+color: #ffffff;
+}
+
 @media(min-width:768px) {
     #page-wrapper {
         position: inherit;
