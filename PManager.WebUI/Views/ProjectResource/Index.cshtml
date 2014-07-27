@@ -103,11 +103,11 @@
                     var vehicles = 0;
                     var laptops = 0;
                     // using the vehicles object
-                    $.each(item.Vehicles, function (index1, item1) {
+                    $.each(item.Vehicles, function () {
                         vehicles = vehicles + 1;
                     });
                     // using the laptops object
-                    $.each(item.Laptops, function (index2, item2) {
+                    $.each(item.Laptops, function () {
                         laptops = laptops + 1;
                     });
                     series1.push(parseInt(laptops));

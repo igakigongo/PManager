@@ -1,42 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using PManager.Domain.Entities;
 using PManager.Domain.Concrete;
 using System.Data.Entity.Infrastructure;
-using System.Drawing;
 using PManager.Domain.Abstract;
 
 namespace PManager.WebUI.Controllers
 {
     public class ProjectController : Controller
     {
-        private IDataTransferObject dto;
-        private EFDbContext context = new EFDbContext();
+        private readonly IDataTransferObject _dto;
+        private readonly EFDbContext _context = new EFDbContext();
 
         public ProjectController(IDataTransferObject dtoParam)
         {
-            this.dto = dtoParam;
+            _dto = dtoParam;
         }
 
         // GET: /Project/
         [HttpGet]
         public ActionResult Index(string filter)
         {
-
-            if (filter == null)
-            {
-                return View(context.Projects.ToList());
-            }
-            else
-            {
-                return View(context.Projects.Where(p => p.IsClosed == false).OrderBy(p => p.ProjectCode));
-            }
+            return filter == null ? View(_context.Projects.ToList()) : View(_context.Projects.Where(p => p.IsClosed == false).OrderBy(p => p.ProjectCode));
         }
 
         // GET: /Project/Details/5
@@ -47,11 +34,9 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = context.Projects
-                                     .Include(p => p.ProjectTasks)
-                                     .OrderByDescending(p => p.Estimated.StartDate)
-                                     .Where(p => p.Id == id)
-                                     .SingleOrDefault();
+            var project = _context.Projects
+                .Include(p => p.ProjectTasks)
+                .OrderByDescending(p => p.Estimated.StartDate).SingleOrDefault(p => p.Id == id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -67,26 +52,21 @@ namespace PManager.WebUI.Controllers
         }
 
         // POST: /Project/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         public JsonResult Create(Project project)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return Json(_dto, JsonRequestBehavior.AllowGet);
+            try
             {
-                try
-                {
-                    context.Projects.Add(project);
-                    context.SaveChanges();
-                    dto.message = "success";
-                    dto.id = context.Projects.LastOrDefault().Id;
-                }
-                catch (DbUpdateException ex)
-                {
-                    dto.message = "Error: " + ex.Message;
-                }
+                _context.Projects.Add(project);
+                _context.SaveChanges();
+                _dto.message = "success";
             }
-            return Json(dto, JsonRequestBehavior.AllowGet);
+            catch (DbUpdateException ex)
+            {
+                _dto.message = "Error: " + ex.Message;
+            }
+            return Json(_dto, JsonRequestBehavior.AllowGet);
         }
 
         // GET: /Project/Edit/5
@@ -97,7 +77,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = context.Projects.Find(id);
+            var project = _context.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -106,20 +86,14 @@ namespace PManager.WebUI.Controllers
         }
 
         // POST: /Project/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-
         [HttpPost]
         public ActionResult Edit(Project project)
         {
-            if (ModelState.IsValid)
-            {
-                context.Projects.Attach(project);
-                context.Entry(project).State = EntityState.Modified;
-                context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(project);
+            if (!ModelState.IsValid) return View(project);
+            _context.Projects.Attach(project);
+            _context.Entry(project).State = EntityState.Modified;
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         // GET: /Project/Delete/5
@@ -130,7 +104,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var project = context.Projects.Find(id);
+            var project = _context.Projects.Find(id);
             if (project == null)
             {
                 return HttpNotFound();
@@ -142,9 +116,9 @@ namespace PManager.WebUI.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
-            Project project = context.Projects.Find(id);
-            context.Projects.Remove(project);
-            context.SaveChanges();
+            var project = _context.Projects.Find(id);
+            _context.Projects.Remove(project);
+            _context.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -152,7 +126,7 @@ namespace PManager.WebUI.Controllers
         {
             if (disposing)
             {
-                context.Dispose();
+                _context.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -160,7 +134,7 @@ namespace PManager.WebUI.Controllers
 
         public ActionResult GetProjects()
         {
-            return Json(context.Projects.Where(x=>x.IsClosed==false), JsonRequestBehavior.AllowGet);
+            return Json(_context.Projects.Where(x=>x.IsClosed==false), JsonRequestBehavior.AllowGet);
         }
 
         #region HighCharts
@@ -168,18 +142,9 @@ namespace PManager.WebUI.Controllers
         #region 1.0 Recent Top Ten Project Costing
         public JsonResult TopTenProjectsCosting()
         {
-            var projects = context.Projects.Where(p => p.IsClosed == false).OrderByDescending(p => p.Estimated.StartDate).Take(10);
+            var projects = _context.Projects.Where(p => p.IsClosed == false).OrderByDescending(p => p.Estimated.StartDate).Take(10);
             return Json(projects, JsonRequestBehavior.AllowGet);
         }
-        #endregion
-
-        #region Reports
-        //public JsonResult OnGoingProjects()
-        //{
-        //    var projects = _unitOfWork.ProjectRepository.Get(filter: t => t.IsClosed == false);
-        //    projects.ForEach(
-        //    return null;                           
-        //}
         #endregion
 
         #endregion

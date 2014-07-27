@@ -71,12 +71,14 @@
                                         <td>@v.Id</td>
                                         <td>@v.CarType</td>
                                         <td>@v.NumberPlate</td>
-                                        @if (userrole == "Manager")
+                                        @switch (userrole)
                                         {
-                                            
-                                        }else if (userrole == "Admin")
-                                        {
-
+                                            case "Manager":
+                                                <td>Assign to project</td>
+                                                break;
+                                            case "Admin":
+                                                <td>Edit, Delete</td>
+                                                break;
                                         }
                                     </tr>
                                 }

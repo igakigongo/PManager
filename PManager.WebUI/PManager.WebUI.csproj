@@ -358,6 +358,7 @@
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DTOS\Message.cs" />
+    <Compile Include="DTOS\ReportDto.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

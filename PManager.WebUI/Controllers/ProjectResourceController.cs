@@ -30,7 +30,7 @@ namespace PManager.WebUI.Controllers
         // RESULTANT /Get
         public JsonResult GetResourceUsage()
         {
-            List<Project> projects = _db.Projects
+            var projects = _db.Projects
                 .Include(p => p.Laptops)
                 .Include(v => v.Vehicles)
                 .Take(10).ToList();

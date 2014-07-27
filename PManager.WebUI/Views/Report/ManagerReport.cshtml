@@ -1,4 +1,4 @@
-﻿@model PManager.Domain.ViewModels.ReportViewModel
+﻿@model IQueryable<PManager.Domain.Entities.Project>
 
 @{
     ViewBag.Title = "Reports";
@@ -17,25 +17,160 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     BOU Projects Report -   
-                    @if
+                    @switch(filter)
                     {
+                        case "annual":
+                            @String.Format("Annual Report")
+                            break;
+                        case "bi-annual":
+                            @String.Format("Bi-Annual Report")
+                            break;
+                        case "quarterly":
+                            @String.Format("Quarterly Report")
+                            break;
+                        case "monthly":
+                            @String.Format("Monthly Report")
+                            break;
+                        case "weekly":
+                            @String.Format("Weekly Report")
+                            break;
                     }
                 </div>
+                <div class="panel-body" id="container">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                </div>
                 <div class="panel-body">
-                    <div class="col-lg-6">
-                        <div class="panel-heading">
-                            Summary of Expenses
-                        </div>
-                        <div class="panel-body"></div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="panel-heading">
-                            
-                        </div>
-                        <div class="panel-body"></div>
-                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <thead>
+                                <tr>
+                                    <th>Project Code</th>
+                                    <th>Name</th>
+                                    <th>Overall Completion</th>
+                                    <th>Deadline</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var project in Model)
+                                {
+                                    <tr>
+                                        <td>@project.ProjectCode</td>
+                                        <td>@project.Name</td>
+                                        <td>@if (project.IsClosed)
+                                            {
+                                                <text>100%</text>
+                                            }
+                                            else
+                                            {
+                                                @String.Format("{0:F2}%",((float)project.ProjectTasks.Count(t => t.IsCompleted)/project.ProjectTasks.Count)*100)
+                                            }
+                                        </td>
+                                        <td>@if (project.IsClosed)
+                                            {
+                                                @String.Format("{0:yyyy MMMM dd}", project.Actual.EndDate)
+                                            }
+                                            @String.Format("{0:yyyy MMMM dd}", project.Estimated.EndDate)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                     </div>   
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script src="~/Scripts/highcharts.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Preparing the chart but with no data
+            var chart;
+            chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'container',
+                    type: 'column',
+                    inverted: true,
+                    marginRight: 30
+                },
+                title: {
+                    text: 'Projects Tasks',
+                },
+                subtitle: {
+                    text: 'Complete vs Incomplete Tasks',
+                },
+                credits: {
+                    position: {
+                        align: 'right'
+                    },
+                    text: 'BOU-Projects',
+                    http: 'http://bou.gov.ug'
+                },
+                xAxis: {
+                    categories: [],
+                    labels: {
+                        style: {
+                            width: '300px',
+                            'min-width': '400px'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Number of Tasks',
+                    },
+                    labels: {
+                        formatter: function() {
+                            return Highcharts.numberFormat(Math.abs(this.value), 0);
+                        },
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    }
+                },
+                series: [
+
+                    {
+                        name: 'Incompleted Tasks',
+                        data: []
+                    },
+                    {
+                        name: 'Completed Tasks',
+                        data: []
+
+                    }
+                ]
+            });
+            // making the Ajax call to request for chart data
+            $.ajax({
+                url: '@Url.Action("GetReportsData", "Report", new { filter = ViewBag.filter })',
+                dataType: 'json',
+            }).done(function(data) {
+                var projects = [];
+                var series1 = [];
+                var series2 = [];
+                $.each(data, function(index, item) {
+                    $.merge(projects, $.makeArray(item.ReportCode));
+                    series1.push(parseInt(item.CompletedTasks));
+                    series2.push(parseInt(item.IncompleteTasks));
+                });
+                chart.series[1].setData(series1, false);
+                chart.series[0].setData(series2, false);
+                chart.xAxis[0].setCategories(projects, false);
+                chart.redraw();
+            });
+        });
+    </script>
+}
