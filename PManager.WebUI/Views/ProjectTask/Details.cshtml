@@ -1,0 +1,163 @@
+﻿@model PManager.Domain.Entities.ProjectTask
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+<link href="~/Content/sb-admin-v2/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Project Task - @Model.TaskName </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-tasks fa-fw"></i>       <strong><small>Project Code: @Model.Project.ProjectCode </small></strong>
+                    <div class="pull-right">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                Task Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pull-right" role="menu">
+                                <li><a href='@Url.Action("Details", "Project", new { id = Model.ProjectId })'><strong><small>Back To Project Details</small></strong></a></li>
+                                <li><a href='@Url.Action("Edit", "ProjectTask", new { id = Model.Id })'><strong><small>Edit Task Resources</small></strong></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <strong>Project Estimations</strong>
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Task Start Date:
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.StartDate == null)
+                            {
+                                @String.Format("Task will start on: {0:D}", Model.Estimated.StartDate)
+                            }
+                            else if (Model.Actual.StartDate < DateTime.Now)
+                            {
+                                @String.Format("Task was started on: {0:D}.", Model.Actual.StartDate)
+                            }
+                            else if (Model.Actual.StartDate == DateTime.Now)
+                            {
+                                @String.Format("Task starts today")
+                            }
+                        </dd>
+                        <dt>
+                            Task End Date:
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.EndDate == null)
+                            {
+                                @String.Format("Task is estimated to end on: {0:D}", Model.Estimated.EndDate)
+                            }
+                            else if (Model.Actual.EndDate < DateTime.Now)
+                            {
+                                @String.Format("Task was ended on: {0:D}.", Model.Actual.EndDate)
+                            }
+                            else if (Model.Actual.EndDate == DateTime.Now)
+                            {
+                                @String.Format("Task ends today")
+                            }
+                        </dd>
+                        <dt>
+                            Budget:
+                        </dt>
+                        <dd>
+                            @String.Format("Task was estimated to cost {0:C}.", Model.Estimated.Budget)
+                        </dd>
+                    </dl>
+                    <strong>Actual Projections</strong>
+                    <dl class="dl-horizontal">
+                        <dt>
+                            Start Date:
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.StartDate == null)
+                            {
+                                @String.Format("Project Manager has not set the task to be started.")
+                            }
+                            else
+                            {
+                                @String.Format("Task started on {0:D}.", Model.Actual.StartDate)
+                            }
+                        </dd>
+                        <dt>
+                            End Date:
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.EndDate == null)
+                            {
+                                @String.Format("Project Manager has not signed off the task yet.")
+                            }
+                            else
+                            {
+                                @String.Format("Task ended on {0:D}.", Model.Actual.EndDate)
+                            }
+                        </dd>
+                        <dt>
+                            Budget:
+                        </dt>
+                        <dd>
+                            @if (Model.Actual.Budget == 0)
+                            {
+                                @String.Format("The actual task cost has not been posted.")
+                            }
+                            else
+                            {
+                                @String.Format("Task's actual cost at sign off was {0:C}.", Model.Actual.Budget)
+                            }
+                        </dd>
+                    </dl>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover" id="members">
+                            <thead>
+                                <tr>
+                                    <td style="text-align:center">
+                                        <strong>Task Team</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Team Member</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Team != null)
+                                {
+                                    foreach (var member in Model.Team.Users)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @member.Fullname
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Content/sb-admin-v2/js/plugins/dataTables/jquery.dataTables.js"></script>
+    <script src="~/Content/sb-admin-v2/js/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script src="~/Scripts/highcharts.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#members').dataTable();
+        });
+    </script>
+}

@@ -1,0 +1,233 @@
+﻿@model PManager.Domain.Entities.ProjectTask
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+<style>
+    .error {
+        color: #f00;
+    }
+</style>
+<link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">@Model.TaskName </h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-tasks fa-fw"></i>       <strong><small>Edit Project Task</small></strong>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(model => model.Id)
+
+                            <div class="form-group">
+                                @*@Html.LabelFor(model => model.Id, new { @class = "control-label col-md-2" })*@
+                                <div class="col-md-10">
+                                    @Html.HiddenFor(model => model.Id, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.HiddenFor(model => model.ProjectId, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12 ">
+                                    <div class="alert alert-info">
+                                        <span class="control-label">Project: <em>@Model.Project.Name</em></span> 
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.TaskName, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.TaskName, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.TaskName, String.Empty, new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Estimated.StartDate, new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.Estimated.StartDate, new { @class = "form-control", id = "StartDate" })
+                                    @Html.ValidationMessageFor(model => model.Estimated.StartDate, String.Empty, new { @class = "error" })
+                                </div>
+                                @Html.LabelFor(model => model.Estimated.EndDate, new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.Estimated.EndDate, new { @class = "form-control", id = "EndDate" })
+                                    @Html.ValidationMessageFor(model => model.Estimated.EndDate, String.Empty, new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Estimated.Budget, new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.Estimated.Budget, new { @class = "form-control", id = "Budget" })
+                                    @Html.ValidationMessageFor(model => model.Estimated.Budget, String.Empty, new { @class = "error" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">Team</label>
+                                <div class="col-md-6">
+                                    @Html.DropDownList("team", ViewBag.Team as SelectList, "-- Select Team --", new {@class = "form-control" })
+                                </div>
+                                @*<div class="col-md-4">
+                                    <button class="btn btn-default btn-primary" title="Add Member">Add Team</button>
+                                </div>*@
+                            </div>
+                            @*<div class="form-group">
+                                <label class="control-label col-md-2">Team Members</label>
+                                <div class="col-md-6 table-responsive">
+                                    <table class="table table-striped table-bordered table-hover" id="members-table">
+                                        <thead>
+                                            <tr>
+                                                <td>Team Members</td>
+                                                <td>Action</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.Team != null)
+                                            {
+                                                foreach (var member in Model.Team.Users)
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            @member.Fullname
+                                                        </td>
+                                                        <td>
+                                                            <button id="@member.Id" title="Remove Member">Remove</button>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>*@
+                            <div class="form-group">
+                                <div class="col-md-offset-2 col-md-10">
+                                    <input type="submit" value="Save" class="btn btn-primary btn-sm" id="mainsubmit" />
+                                    @Html.ActionLink("Back", "Details", "Project", new { id = Model.ProjectId }, new { @class = "btn btn-success btn-sm" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            $.ajaxSetup({
+                dataType: 'json',
+                contentType: 'application/json, charset=utf-8'
+            });
+
+            $('#StartDate').datepicker();
+            $('#EndDate').datepicker();
+
+            //var team = $('#team').val();
+            $('button[title="Add Member"]').click(function(event) {
+                event.preventDefault();
+                var userid = $('#team').val();
+                var username = $('#team option:selected').text();
+                //var team = $('#team').val();
+                //console.log('Selected Team Id: ' + team + '\tUsername: ' + username);
+                //var rowcount = $('#members-table tbody').children('tr[id="' + userid + '"]').length;
+                ////console.log('Matching Row Count: ' + rowcount);
+                //if (rowcount == 0) {
+                //    if (userid != "") {
+                //        $('#members-table tbody').append(
+                //        '<tr id="' + userid + '">' +
+                //        '<td>' + username + '</td>' +
+                //        '<td><a href="#" title="remove"><i class="fa fa-trash-o"></i></a></td>' +
+                //        '</tr>'
+                //    );
+                //    } else {
+                //        alert("Please select a member to add!");
+                //    }
+
+                //} else {
+                //    alert('User already on team, please choose another one.');
+                //}
+                return false;
+            });
+
+            $('#mainsubmit').click(function(event) {
+                event.preventDefault();
+                //console.log('attempted to submit this form');
+                var users = Array();
+                $('#members-table tbody').children('tr').each(function(event) {
+                    var userid = $(this).attr('id');
+                    //console.log('User Identity: ' + userid);
+                    users.push(userid);
+                });
+
+                var team = $('#team').val();
+
+                var task = {
+                    Id: $('#Id').val(),
+                    ProjectId: $('#ProjectId').val(),
+                    TeamId: team,
+                    TaskName: $('#TaskName').val(),
+                    Estimated: {
+                        StartDate: $('#StartDate').val(),
+                        EndDate: $('#EndDate').val(),
+                        Budget: $('#Budget').val()
+                    }
+                };
+
+                var projecttaskvm = {
+                    Task: {
+                        Id: $('#Id').val(),
+                        ProjectId: $('#ProjectId').val(),
+                        TeamId: team,
+                        TaskName: $('#TaskName').val(),
+                        Estimated: {
+                            StartDate: $('#StartDate').val(),
+                            EndDate: $('#EndDate').val(),
+                            Budget: $('#Budget').val()
+                        }
+                    },
+                    AssociatedTeamId: team
+                };
+                console.log(JSON.stringify(task));
+                if (team != "") {
+                    $.post('@Url.Action("Edit", "ProjectTask")', JSON.stringify(task), function(result) {
+                        console.log('Server Result: ' + JSON.stringify(result));
+                        if (result.message == 'success') {
+                            window.location = "/Project/Details/" + result.id;
+
+                        } else {
+                            alert('Error editing project, please try again later');
+                        }
+
+                        return false;
+                    });
+                } else {
+                    alert('please select team');
+                }
+                @**@
+                return false;
+            });
+        });
+    </script>
+}
+

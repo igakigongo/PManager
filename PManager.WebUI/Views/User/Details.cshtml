@@ -1,0 +1,40 @@
+﻿@model PManager.Domain.Entities.User
+
+@{
+    ViewBag.Title = "Profile";
+    string userrole = Roles.GetRolesForUser(WebSecurity.CurrentUserName)[0];
+    if (userrole == "Manager")
+    {
+        Layout = "~/Views/Shared/_LayoutManager.cshtml";
+    }
+    else if (userrole == "Admin")
+    {
+        Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    }
+}
+
+
+<div id="page-wrapper">
+
+    <div class="row" style="padding-top: 15px;">
+        <h4>User Details</h4>
+        <hr />
+    </div>
+    <div class="row">
+        <div class="col-lg-6 no-padding">
+            <table class="table  table-responsive" id="userTable">
+
+                <tbody>
+                    <tr><td class="control-label"><span>Username</span></td><td><span class="text-info">@Html.DisplayFor(model => model.UserProfile.UserName)</span></td></tr>
+                    <tr><td><span class="control-label">Firstname</span></td><td><span class="text-info">@Html.DisplayFor(model => model.Firstname)</span></td></tr>
+                    <tr><td><span>Middlename</span></td><td><span class="text-info">@Html.DisplayFor(model => model.Middlename)</span></td></tr>
+                    <tr><td><span>Lastname</span></td><td><span class="text-info">@Html.DisplayFor(model => model.Lastname)</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id },new{@class="btn btn-primary"}) 
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+    </div>
+</div>

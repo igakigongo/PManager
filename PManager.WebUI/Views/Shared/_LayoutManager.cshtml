@@ -1,0 +1,278 @@
+﻿<!DOCTYPE html>
+<html data-ng-app="MainApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Erbium v1.0 - @ViewBag.Title</title>
+
+    <!-- Favicon -->
+    <link href="~/project.ico" rel="icon" type="image/x-icon" />
+
+    
+    <!-- Core CSS - Include with every page -->
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Content/sb-admin-v2/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/Content/select2.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-datepicker3.css" rel="stylesheet" />
+    <!-- Page-Level Plugin CSS - Dashboard -->
+    <!-- SB Admin CSS - Include with every page -->
+    <link href="~/Content/sb-admin-v2/css/sb-admin.css" rel="stylesheet">
+    <link href="~/Content/toaster.css" rel="stylesheet" />
+    <link href="~/Content/Styles.css" rel="stylesheet" />
+    
+</head>
+<body ng-cloak>
+    <div id="wrapper">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Erbium v3.0</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>John Smith</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Yesterday</em>
+                                    </span>
+                                </div>
+                                <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-messages -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-comment fa-fw"></i> New Comment
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-twitter fa-fw"></i> 3 New Followers
+                                    <span class="pull-right text-muted small">12 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-envelope fa-fw"></i> Message Sent
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-tasks fa-fw"></i> New Task
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <i class="fa fa-upload fa-fw"></i> Server Rebooted
+                                    <span class="pull-right text-muted small">4 minutes ago</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Alerts</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>@{
+                                <text>
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {id = "logoutForm"}))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <a href="javascript:document.getElementById('logoutForm').submit()" style="color: #000000" ><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                                    }
+                                </text>
+                            }
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div>
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <li>
+                            <a href='@Url.Action("Index", "Home")'><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href='@Url.Action("Index", "Project")'><i class="fa fa-bar-chart-o fa-fw"></i> Projects</a>
+                        </li>
+                        
+                        <li>
+                            <a href='@Url.Action("Index", "ProjectTask")'><i class="fa fa-bar-chart-o fa-fw"></i> Tasks</a>
+                        </li>
+                        
+                        <li>
+                            <a href='@Url.Action("Index", "User")'><i class="fa fa-users fa-fw"></i> Users</a>
+                        </li>
+
+                        <li>
+                            <a href='@Url.Action("Index", "Teams")'><i class="fa fa-dashboard fa-fw"></i> Teams</a>
+                        </li>
+
+                        <li>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i>  Resource Pool<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">Equipment<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href='@Url.Action("Laptops","ProjectResource")'>Machinery - Laptops</a>
+                                        </li>
+                                        <li>
+                                            <a href='@Url.Action("Vehicles","ProjectResource")'>Machinery - Vehicles</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">Office Space</a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Index", "ProjectResource")'>Resource Usage</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Reports<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">Auto Generated</a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href='@Url.Action("ManagerReport", "Report", new { filter = "weekly" })'>    Weekly Report</a></li>
+                                        <li><a href='@Url.Action("ManagerReport", "Report", new { filter = "monthly" })'>    Monthly Report</a></li>
+                                        <li><a href='@Url.Action("ManagerReport", "Report", new { filter = "bi-annual" })'>    Bi-Annual Report</a></li>
+                                        <li><a href='@Url.Action("ManagerReport", "Report", new { filter = "annual" })'>    Annual Report</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">User Manipulated (Custom)</a>
+                                    <ul class="nav nav-third-level">
+                                        <li>Custom Report</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        @RenderBody()
+    </div>
+    <!-- /#wrapper -->
+    <!-- Core Scripts - Include with every page -->
+    <script src="~/Scripts/jquery-2.0.3.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Content/sb-admin-v2/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <!-- SB Admin Scripts - Include with every page -->
+    <script src="~/Content/sb-admin-v2/js/sb-admin.js"></script>
+    <script src="~/Scripts/Angularjs/angular.js"></script>
+    <script src="~/Scripts/Angularjs/ui-bootstrap-0.10.0.js"></script>
+    <script src="~/Scripts/Angularjs/ui-bootstrap-tpls-0.10.0.js"></script>
+    <script src="~/Scripts/AngularMain/select2.js"></script>
+    <script src="~/Scripts/select2.min.js"></script>
+    <script src="~/Scripts/AngularMain/MainApp.js"></script>
+    <script src="~/Scripts/AngularMain/services.js"></script>
+    <script src="~/Scripts/AngularMain/controllers.js"></script>
+    <script src="~/Scripts/AngularMain/toastr.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

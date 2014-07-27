@@ -1,0 +1,127 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutManager.cshtml";
+}
+
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">Resources</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+        </div>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Resources Usage
+                </div>
+                <div class="panel-body" id="container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <!-- Page-Level Plugin Scripts - Dashboard -->
+    <script src="~/Scripts/highcharts.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Preparing the chart but with no data
+            var chart;
+            chart = new Highcharts.Chart({
+                chart: {                
+                    renderTo: 'container',                
+                    type: 'column',
+                    marginRight: 30
+                },
+                title: {                
+                    text: 'Projects Resources Distribution',            
+                },
+                credits: {
+                    position: {
+                        align: 'right'
+                    },
+                    text: 'BOU-Projects',
+                    http: 'http://bou.gov.ug'
+                },
+                xAxis: {
+                    categories: [],
+                    labels: {
+                        style: {
+                            width: '300px',
+                            'min-width': '400px'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'logarithmic',
+                    title: {                    
+                        text: 'Resource Usage',                
+                    },
+                    labels: {
+                        formatter: function () {
+                            return Highcharts.numberFormat(Math.abs(this.value), 0);
+                        },
+                    }
+                },            
+                plotOptions: { 
+                },            
+                series: [
+                    {
+                        name: 'Laptops',
+                        data: []
+
+                    },
+                    {
+                        name: 'Vehicles',
+                        data: []
+                    },
+                    {
+                        name: 'Cost',
+                        data: []
+                    }
+                ]
+            });
+            // making the Ajax call to request for chart data
+            $.ajax({
+                url: '@Url.Action("GetResourceUsage", "ProjectResource")',
+                dataType: 'json'
+            }).done(function (data)
+            {
+                console.log('Data: ' + JSON.stringify(data));
+                var projects = []; // laptops data
+                var series1 = []; // laptops
+                var series2 = []; // vehicles
+                var series3 = []; // cost
+                $.each(data, function (index, item) {
+                    $.merge(projects, $.makeArray(item.Code));
+                    var vehicles = 0;
+                    var laptops = 0;
+                    // using the vehicles object
+                    $.each(item.Vehicles, function (index1, item1) {
+                        vehicles = vehicles + 1;
+                    });
+                    // using the laptops object
+                    $.each(item.Laptops, function (index2, item2) {
+                        laptops = laptops + 1;
+                    });
+                    series1.push(parseInt(laptops));
+                    series2.push(parseInt(vehicles));
+                    series3.push(parseFloat(item.Cost));
+                });
+                chart.series[0].setData(series1, false);
+                chart.series[1].setData(series2, false);
+                chart.series[2].setData(series3, false);
+                chart.xAxis[0].setCategories(projects, false);
+                chart.redraw();
+            });
+        });
+    </script>
+}
+
+
