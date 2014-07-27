@@ -3,10 +3,7 @@ using PManager.Domain.Entities;
 
 namespace PManager.Domain.Migrations
 {
-    using System;
-    using System.Data.Entity;
     using System.Data.Entity.Migrations;
-    using System.Linq;
 
     internal sealed class Configuration : DbMigrationsConfiguration<PManager.Domain.Concrete.EFDbContext>
     {

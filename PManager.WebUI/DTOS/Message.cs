@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace PManager.WebUI.DTOS
+﻿namespace PManager.WebUI.DTOS
 {
     public class Message
     {

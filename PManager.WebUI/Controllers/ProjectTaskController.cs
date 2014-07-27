@@ -3,7 +3,6 @@ using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using PManager.Domain.Entities;
 using PManager.Domain.Concrete;

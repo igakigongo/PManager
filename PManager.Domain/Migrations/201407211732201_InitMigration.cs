@@ -1,6 +1,5 @@
 namespace PManager.Domain.Migrations
 {
-    using System;
     using System.Data.Entity.Migrations;
     
     public partial class InitMigration : DbMigration
