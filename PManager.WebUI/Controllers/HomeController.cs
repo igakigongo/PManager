@@ -13,11 +13,11 @@ namespace PManager.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private IDataTransferObject dto;
+        private IDataTransferObject _dto;
 
         public HomeController(IDataTransferObject dtoParam)
         {
-            this.dto = dtoParam;
+            _dto = dtoParam;
         }
 
         [InitializeSimpleMembership]
@@ -32,20 +32,18 @@ namespace PManager.WebUI.Controllers
         [InitializeSimpleMembership]
         public ActionResult Login(LoginViewModel model, string returnUrl)
         {
-            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, model.RememberMe))
+            if (!ModelState.IsValid || !WebSecurity.Login(model.UserName, model.Password, model.RememberMe)) return View(model);
+            var userrole = Roles.GetRolesForUser()[0];
+            switch (userrole)
             {
-                string userrole = Roles.GetRolesForUser()[0];
-                switch (userrole)
-                {
-                    case "Admin":
-                        return RedirectToAction("AdminIndex");
+                case "Admin":
+                    return RedirectToAction("AdminIndex");
                         
-                    case "Manager":
-                        return RedirectToAction("Index");
+                case "Manager":
+                    return RedirectToAction("Index");
 
-                    case "Normal":
-                        return RedirectToAction("NormalIndex");
-                }
+                case "Normal":
+                    return RedirectToAction("NormalIndex");
             }
             return View(model);
         }

@@ -20,17 +20,17 @@ namespace PManager.WebUI.Controllers
     {
         
         private readonly UnitOfWork _unitOfWork = new UnitOfWork();
-        private EFDbContext db;
+        private readonly EFDbContext _db;
 
         public UserController()
         {
-            db = new EFDbContext();
+            _db = new EFDbContext();
         }
-        
+
         // GET: /User/
         public ActionResult Index()
         {
-            List<User> users = _unitOfWork.UserRepository.Get().ToList();
+            var users = _unitOfWork.UserRepository.Get().ToList();
             users.ForEach(user => user.UserProfile = _unitOfWork.UserProfileRepository.Find(user.Id));
             return View(users);
         }
@@ -47,7 +47,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Include(u => u.UserProfile).Where(u => u.Id == id).SingleOrDefault();
+            var user = _db.Users.Include(u => u.UserProfile).SingleOrDefault(u => u.Id == id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -69,17 +69,17 @@ namespace PManager.WebUI.Controllers
         [InitializeSimpleMembership]
         public ActionResult Create(RegisterModel model)
         {
-            String message = String.Empty;
+            var message = String.Empty;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    MembershipUser _user = Membership.GetUser(model.UserName);
-                    if (_user == null)
+                    var user = Membership.GetUser(model.UserName);
+                    if (user == null)
                     {
-                        WebSecurity.CreateUserAndAccount(userName: model.UserName, password: model.Password, propertyValues: null, requireConfirmationToken: false);
-                        Roles.AddUserToRole(username: model.UserName, roleName: model.Role);
-                        Domain.Entities.User _systemUser = new Domain.Entities.User
+                        WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
+                        Roles.AddUserToRole(model.UserName, model.Role);
+                        var systemUser = new User
                         {
                             EmailAddress = model.EmailAddress,
                             Firstname = model.Firstname,
@@ -88,15 +88,12 @@ namespace PManager.WebUI.Controllers
                             Middlename = model.Middlename,
                             PhoneContact = model.PhoneContact
                         };
-                        _unitOfWork.UserRepository.Add(_systemUser);
+                        _unitOfWork.UserRepository.Add(systemUser);
                         _unitOfWork.Save();
-                        ViewBag.message = "success";
+                        ViewBag.message = "success"; 
                         return RedirectToAction("Index");
                     }
-                    else
-                    {
-                        message = String.Format("The username {0} is already taken, please choose a different one.");
-                    }
+                    message = String.Format("The username {0} is already taken, please choose a different one.", model.UserName);
                 }
                 catch (DbUpdateException)
                 {
@@ -114,12 +111,11 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = _unitOfWork.UserRepository.Find(id);
+            var user = _unitOfWork.UserRepository.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
             }
-            //ViewBag.Id = new SelectList(_unitOfWork.UserProfiles, "UserId", "UserName", user.Id);
             return View(user);
         }
 
@@ -146,7 +142,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = _unitOfWork.UserRepository.Find(id);
+            var user = _unitOfWork.UserRepository.Find(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -158,7 +154,7 @@ namespace PManager.WebUI.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
-            User user = _unitOfWork.UserRepository.Find(id);
+            var user = _unitOfWork.UserRepository.Find(id);
             _unitOfWork.UserRepository.Delete(user);
             _unitOfWork.Save();
             return RedirectToAction("Index");

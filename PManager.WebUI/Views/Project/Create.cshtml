@@ -155,229 +155,212 @@
     <script src="~/Scripts/jquery.steps.js"></script>
     <script src="~/Scripts/bootstrap-datepicker.js"></script>
     <script>
-        $(document).ready(function (event) {
-            //Ajax Global Setup
-            $.ajaxSetup({
-                dataType: 'json',
-                contentType: 'application/json, charset=utf-8'
-            });
+        $(document).ready(function() {
+                //Ajax Global Setup
+                $.ajaxSetup({
+                    dataType: 'json',
+                    contentType: 'application/json, charset=utf-8'
+                });
 
-            // Global Variables
-            var projectcode;
-            var projectname;
-            var estimatedbudget;
-            var estimatedstartdate;
-            var estimatedenddate;
-            var projectdesc;
+                // Global Variables
+                var projectcode;
+                var projectname;
+                var estimatedbudget;
+                var estimatedstartdate;
+                var estimatedenddate;
+                var projectdesc;
 
-            // The Magic
-            $('#wizard').steps({
-                onStepChanging: function (event, currentIndex, newIndex) {
+                // The Magic
+                $('#wizard').steps({
+                    onStepChanging: function(event, currentIndex, newIndex) {
 
-                    // allow going back even if the current step contains errors
-                    if (currentIndex > newIndex) {
+                        // allow going back even if the current step contains errors
+                        if (currentIndex > newIndex) {
+                            return true;
+                        }
+
+                        // set the validation rules for the first form -> currentIndex = 0
+                        if (currentIndex === 0) {
+                            var isvalid = true;
+                            projectcode = $('#ProjectCode').val();
+                            projectname = $('#Name').val();
+                            estimatedbudget = $('#EstimatedBudget').val();
+                            estimatedstartdate = $('#EstimatedStartDate').val();
+                            estimatedenddate = $('#EstimatedEndDate').val();
+                            projectdesc = $('#Description').val();
+
+                            //project code field
+                            if (!projectcode) {
+                                $('#ProjectCodeLabel').removeClass('invisible').addClass('visible');
+                                isvalid = false;
+                            } else {
+                                $('#ProjectCodeLabel').removeClass('visible').addClass('invisible');
+                            }
+
+                            // name field validation
+                            if (!projectname) {
+                                $('#NameLabel').removeClass('invisible').addClass('visible');
+                                isvalid = false;
+                            } else {
+                                $('#NameLabel').removeClass('visible').addClass('invisible');
+                            }
+
+                            // estimated budget field validation
+                            if (!estimatedbudget) {
+                                $('#EstimatedBudgetLabel').removeClass('invisible').addClass('visible');
+                                isvalid = false;
+                            } else {
+                                $('#EstimatedBudgetLabel').removeClass('visible').addClass('invisible');
+                            }
+
+                            // estimated start date field validation
+                            if (!estimatedstartdate) {
+                                $('#EstimatedStartDateLabel').removeClass('invisible').addClass('visible');
+                                isvalid = false;
+                            } else {
+                                $('#EstimatedStartDateLabel').removeClass('visible').addClass('invisible');
+                            }
+
+                            // estimated end date field validation
+                            if (!estimatedenddate) {
+                                $('#EstimatedEndDateLabel').removeClass('invisible').addClass('visible');
+                                isvalid = false;
+                            } else {
+                                $('#EstimatedEndDateLabel').removeClass('visible').addClass('invisible');
+                            }
+                            return isvalid;
+                        }
+                        // when the person is creating tasks
+                        if (currentIndex === 1)
+                        {
+                            var rowcount = $('#tasklist').find('tbody').children('tr').length;
+                            isvalid = rowcount > 0 ? true : false;
+                            if (!isvalid) {
+                                alert('Please add at least one task to continue');
+                            }
+                            return isvalid;
+                        }
+                        return true;
+                    },
+                    onStepChanged:function() {
+                    },
+                    onFinishing: function() {
+                        var project = {
+                            ProjectCode: projectcode,
+                            Name: projectname,
+                            IsClosed: false,
+                            Estimated: {
+                                StartDate: estimatedstartdate,
+                                EndDate: estimatedenddate,
+                                Budget: estimatedbudget
+                            },
+                            Description: projectdesc
+                        };
+                        $.post('@Url.Action("Create", "Project")', JSON.stringify(project), function(result) {
+                            if (result.message == 'success') {
+                                window.location = '@Url.Action("Index", "Project")';
+                            } else {
+                                alert('Error recording entry, please try again later');
+                            }
+                        });
+                        return true;
+                    },
+                    onFinished: function() {
                         return true;
                     }
+                });
+        /*
+        * Global Initialization For   DatePickers
+        */
+        $('#EstimatedStartDate').datepicker();
+        $('#EstimatedEndDate').datepicker();
 
-                    // set the validation rules for the first form -> currentIndex = 0
-                    if (currentIndex === 0) {
-                        var isvalid = true;
-                        projectcode = $('#ProjectCode').val();
-                        projectname = $('#Name').val();
-                        estimatedbudget = $('#EstimatedBudget').val();
-                        estimatedstartdate = $('#EstimatedStartDate').val();
-                        estimatedenddate = $('#EstimatedEndDate').val();
-                        projectdesc = $('#Description').val();
+        /*
+        * The function to add a task onto the list
+        */
+        $('#addtask').click(function() {
+            var isvalid = true;
+            var taskname = $('#TaskName').val();
+            var taskeb = $('#TaskEB').val();
+            var taskesd = $('#TaskESD').val();
+            var taskeed = $('#TaskEED').val();
 
-                        //project code field
-                        if (!projectcode) {
-                            $('#ProjectCodeLabel').removeClass('invisible').addClass('visible');
-                            isvalid = false;
-                        } else {
-                            $('#ProjectCodeLabel').removeClass('visible').addClass('invisible');
-                        }
+            // checking the task-name
+            if (!taskname) {
+                $('#TaskNameLabel').removeClass('invisible').addClass('visible');
+                isvalid = false;
+            } else {
+                $('#TaskNameLabel').removeClass('visible').addClass('invisible');
+            }
 
-                        // name field validation
-                        if (!projectname) {
-                            $('#NameLabel').removeClass('invisible').addClass('visible');
-                            isvalid = false;
-                        } else {
-                            $('#NameLabel').removeClass('visible').addClass('invisible');
-                        }
+            // checking the estimated cost
+            if (!taskeb) {
+                $('#TaskEBLabel').removeClass('invisible').addClass('visible');
+                isvalid = false;
+            } else {
+                $('#TaskEBLabel').removeClass('visible').addClass('invisible');
+            }
 
-                        // estimated budget field validation
-                        if (!estimatedbudget) {
-                            $('#EstimatedBudgetLabel').removeClass('invisible').addClass('visible');
-                            isvalid = false;
-                        } else {
-                            $('#EstimatedBudgetLabel').removeClass('visible').addClass('invisible');
-                        }
+            // checking the estimated start date
+            if (!taskesd) {
+                $('#TaskESDLabel').removeClass('invisible').addClass('visible');
+                isvalid = false;
+            } else {
+                $('#TaskESDLabel').removeClass('visible').addClass('invisible');
+            }
 
-                        // estimated start date field validation
-                        if (!estimatedstartdate) {
-                            $('#EstimatedStartDateLabel').removeClass('invisible').addClass('visible');
-                            isvalid = false;
-                        } else {
-                            $('#EstimatedStartDateLabel').removeClass('visible').addClass('invisible');
-                        }
+            // checking the estimated end date
+            if (!taskeed) {
+                $('#TaskEEDLabel').removeClass('invisible').addClass('visible');
+                isvalid = false;
+            } else {
+                $('#TaskEEDLabel').removeClass('visible').addClass('invisible');
+            }
 
-                        // estimated end date field validation
-                        if (!estimatedenddate) {
-                            $('#EstimatedEndDateLabel').removeClass('invisible').addClass('visible');
-                            isvalid = false;
-                        } else {
-                            $('#EstimatedEndDateLabel').removeClass('visible').addClass('invisible');
-                        }
-                        return isvalid;
+            if (isvalid) {
+                var task = {
+                    TaskName: taskname,
+                    Estimated: {
+                        Budget: taskeb,
+                        StartDate: taskesd,
+                        EndDate: taskeed
                     }
+                };
 
-                    // when the person is creating tasks
-                    if (currentIndex === 1) {
-                        var isvalid;
-                        var rowcount = $('#tasklist').find('tbody').children('tr').length;
-                        isvalid = rowcount > 0 ? true : false;
-                        if (!isvalid) {
-                            alert('Please add at least one task to continue');
-                        }
-                        return isvalid;
-                    }
-                },
-                onStepChanged: function (event, currentIndex, priorIndex) {
-                },
-                onFinishing: function (event, currentIndex) {
-                    // create an array of task and push it into the project object
-                    var tasks = Array();
-                    $('#tasklist tbody').children('tr').each(function (event) {
-                        var task = {
-                            TaskName: $(this).find('td:nth-child(1)').text(),
-                            Estimated: {
-                                StartDate: $(this).find('td:nth-child(2)').text(),
-                                EndDate: $(this).find('td:nth-child(3)').text(),
-                                Budget: $(this).find('td:nth-child(4)').text()
-                            }
-                        };
-                        tasks.push(task);
-                    });
+                $('#tasklist tbody').append(
+                    '<tr>' +
+                    '<td>' + task.TaskName + '</td>' +
+                    '<td>' + task.Estimated.StartDate + '</td>' +
+                    '<td>' + task.Estimated.EndDate + '</td>' +
+                    '<td>' + task.Estimated.Budget + '</td>' +
+                    '<td>' + '<input type="checkbox">' + '</td>' +
+                    '</tr>'
+                );
 
-                    var project = {
-                        ProjectCode: projectcode,
-                        Name: projectname,
-                        IsClosed: false,
-                        Estimated: {
-                            StartDate: estimatedstartdate,
-                            EndDate: estimatedenddate,
-                            Budget: estimatedbudget 
-                        },
-                        Description: projectdesc,
-                        ProjectTasks: tasks
-                    };
-                    $.post('@Url.Action("Create", "Project")', JSON.stringify(project), function (result) {
-                        if (result.message == 'success') {
-                            window.location = "/Project/Details/" + result.id;
-
-                        } else {
-                            alert('Error recording entry, please try again later');
-                        }
-                    });
-                    return true;
-                },
-                onFinished: function (event, currentIndex) {
-                    return true;
-                }
-            });
-            /*
-            * Global Initialization For   DatePickers
-            */
-            $('#EstimatedStartDate').datepicker();
-            $('#EstimatedEndDate').datepicker();
-
-            /*
-            * The function to add a task onto the list
-            */
-            $('#addtask').click(function () {
-                var isvalid = true;
-                var taskname = $('#TaskName').val();
-                var taskeb = $('#TaskEB').val();
-                var taskesd = $('#TaskESD').val();
-                var taskeed = $('#TaskEED').val();
-
-                // checking the task-name
-                if (!taskname) {
-                    $('#TaskNameLabel').removeClass('invisible').addClass('visible');
-                    isvalid = false;
-                }
-                else {
-                    $('#TaskNameLabel').removeClass('visible').addClass('invisible');
-                }
-          
-                // checking the estimated cost
-                if (!taskeb) {
-                    $('#TaskEBLabel').removeClass('invisible').addClass('visible');
-                    isvalid = false;
-                } else {
-                    $('#TaskEBLabel').removeClass('visible').addClass('invisible');
-                }
-
-                // checking the estimated start date
-                if (!taskesd) {
-                    $('#TaskESDLabel').removeClass('invisible').addClass('visible');
-                    isvalid = false;
-                } else {
-                    $('#TaskESDLabel').removeClass('visible').addClass('invisible');
-                }
-
-                // checking the estimated end date
-                if (!taskeed) {
-                    $('#TaskEEDLabel').removeClass('invisible').addClass('visible');
-                    isvalid = false;
-                } else {
-                    $('#TaskEEDLabel').removeClass('visible').addClass('invisible');
-                }
-
-                if (isvalid) {
-                    var Task = {
-                        TaskName: taskname,
-                        Estimated: {
-                            Budget: taskeb,
-                            StartDate: taskesd,
-                            EndDate: taskeed
-                        }
-                    };
-
-                    $('#tasklist tbody').append(
-                        '<tr>' +
-                        '<td>' + Task.TaskName + '</td>' +
-                        '<td>' + Task.Estimated.StartDate + '</td>' +
-                        '<td>' + Task.Estimated.EndDate + '</td>' +
-                        '<td>' + Task.Estimated.Budget + '</td>' +
-                        '<td>' + '<input type="checkbox">' + '</td>' +
-                        '</tr>'
-                    );
-
-                    // clear the fields after adding everything to the table
-                    var taskname = $('#TaskName').val('');
-                    var taskeb = $('#TaskEB').val('');
-                    var taskesd = $('#TaskESD').val('');
-                    var taskeed = $('#TaskEED').val('');
-                    alert('successfully added one task to the task list.');
-                }
-                // control whatever anomalies may happen - return gracefully 
-                return false;
-            });
-
-            /*
-            * The function to delete multiple tasks from the task list
-            */
-            $('button#deletebtn').click(function (event) {
-                event.preventDefault();
-                alert("An attempt was made to delete task(s)...");
-                return false;
-            });
-
-            $('#showModal').click(function (event) {
-                event.preventDefault();
-                $('#myModal').modal('show');
-            });
+                // clear the fields after adding everything to the table
+                $('#TaskName').val('');
+                $('#TaskEB').val('');
+                $('#TaskESD').val('');
+                $('#TaskEED').val('');
+                alert('successfully added one task to the task list.');
+            }
+            // control whatever anomalies may happen - return gracefully 
+            return false;
         });
+
+        /*
+        * The function to delete multiple tasks from the task list
+        */
+        $('button#deletebtn').click(function(event) {
+            event.preventDefault();
+            alert("An attempt was made to delete task(s)...");
+            return false;
+        });
+
+        $('#showModal').click(function(event) {
+            event.preventDefault();
+            $('#myModal').modal('show');
+        });
+    });
     </script>
 }

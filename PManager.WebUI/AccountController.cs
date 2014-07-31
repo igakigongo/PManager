@@ -35,7 +35,7 @@ namespace PManager.WebUI.Controllers
                 if(Membership.ValidateUser(model.UserName, model.Password))
                 {
                     //WebSecurity - check user state and redirect to the necessary role
-                    WebSecurity.Login(userName: model.UserName, password: model.Password, persistCookie: model.RememberMe);
+                    WebSecurity.Login(model.UserName, model.Password, model.RememberMe);
                     FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
 
                     String[] userRoles = Roles.GetRolesForUser(model.UserName);

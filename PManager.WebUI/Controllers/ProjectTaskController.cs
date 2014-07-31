@@ -23,16 +23,14 @@ namespace PManager.WebUI.Controllers
         private UnitOfWork unitOfWork;
         public ProjectTaskController(IDataTransferObject _dtoParam)
         {
-            projectTaskRepository = new GenericRepository<ProjectTask>(_context);
-            unitOfWork = new UnitOfWork();
-            _dto = _dtoParam;
+            _dto = dtoParam;
         }
 
         // GET: /ProjectTask/
         public ActionResult Index()
         {
-            IQueryable<ProjectTask> _projecttasks = _context.ProjectTasks.Include(t => t.Team).Include(t => t.Project);
-            return View(_projecttasks);
+            var projecttasks = _context.ProjectTasks.Include(t => t.Team).Include(t => t.Project);
+            return View(projecttasks);
         }
 
         // GET: /ProjectTask/Details/5
@@ -42,12 +40,12 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask _projecttask = _context.ProjectTasks.Include(t => t.Project).Include(t => t.Team).Where(t => t.Id == id).SingleOrDefault();
-            if (_projecttask == null)
+            var projecttask = _context.ProjectTasks.Include(t => t.Project).Include(t => t.Team).SingleOrDefault(t => t.Id == id);
+            if (projecttask == null)
             {
                 return HttpNotFound();
             }
-            return View(_projecttask);
+            return View(projecttask);
         }
 
         public ActionResult Create()
@@ -56,23 +54,19 @@ namespace PManager.WebUI.Controllers
         }
 
         // POST: /ProjectTask/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         public JsonResult Create(ProjectTask projecttask)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return Json(_dto, JsonRequestBehavior.AllowGet);
+            try
             {
-                try
-                {
-                    _context.ProjectTasks.Add(projecttask);
-                    _context.SaveChanges();
-                    _dto.message = "success";
-                }
-                catch (DbUpdateException)
-                {
-                    _dto.message = "Error, Please try again and if the problem persists contact your system vendor.";
-                }
+                _context.ProjectTasks.Add(projecttask);
+                _context.SaveChanges();
+                _dto.message = "success";
+            }
+            catch (DbUpdateException)
+            {
+                _dto.message = "Error, Please try again and if the problem persists contact your system vendor.";
             }
             return Json(_dto, JsonRequestBehavior.AllowGet);
         }
@@ -84,7 +78,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask projecttask = _context.ProjectTasks.Include(t => t.Project).Include(t => t.Team).SingleOrDefault(t => t.Id == id);
+            var projecttask = _context.ProjectTasks.Include(t => t.Project).Include(t => t.Team).SingleOrDefault(t => t.Id == id);
             if (projecttask == null)
             {
                 return HttpNotFound();
@@ -96,28 +90,17 @@ namespace PManager.WebUI.Controllers
         }
 
         // POST: /ProjectTask/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit(ProjectTask projecttaskvm)
+        public ActionResult Edit(ProjectTask model)
         {
-            if (ModelState.IsValid)
-            {
-
-                _context.ProjectTasks.AddOrUpdate(projecttaskvm);
-                _context.SaveChanges();
-                _dto.message = "success";
-                if (Request.IsAjaxRequest())
-                {
-                    _dto.id = projecttaskvm.ProjectId;
-                    return Json(_dto, JsonRequestBehavior.AllowGet);
-                }
-                else
-                {
-                    return RedirectToAction("Details", "Project", new { id = projecttaskvm.ProjectId });
-                }
-            }
-            return View(projecttaskvm);
+            if (!ModelState.IsValid) return View(model);
+            _context.ProjectTasks.AddOrUpdate(model);
+            _context.SaveChanges();
+            _dto.message = "success";
+            if (!Request.IsAjaxRequest())
+                return RedirectToAction("Details", "Project", new {id = model.ProjectId});
+            _dto.id = model.ProjectId;
+            return Json(_dto, JsonRequestBehavior.AllowGet);
         }
 
         // GET: /ProjectTask/Delete/5
@@ -127,7 +110,7 @@ namespace PManager.WebUI.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ProjectTask projecttask = _context.ProjectTasks.Find(id);
+            var projecttask = _context.ProjectTasks.Find(id);
             if (projecttask == null)
             {
                 return HttpNotFound();
@@ -139,8 +122,8 @@ namespace PManager.WebUI.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
-            ProjectTask projecttask = _context.ProjectTasks.Find(id);
-            _context.ProjectTasks.Remove(entity: projecttask);
+            var projecttask = _context.ProjectTasks.Find(id);
+            _context.ProjectTasks.Remove(projecttask);
             _context.SaveChanges();
             return RedirectToAction("Index");
         }
@@ -158,7 +141,7 @@ namespace PManager.WebUI.Controllers
         public ActionResult AddTask(ProjectTaskViewModel model)
         {
             var project = _context.Projects.Include(x => x.ProjectTasks).FirstOrDefault(d => d.Id == model.ProjectId);
-            bool successful = false;
+            bool successful;
             if (project != null)
             {
                 project.ProjectTasks.Add(new ProjectTask
@@ -202,15 +185,21 @@ namespace PManager.WebUI.Controllers
 
         #region HighCharts
 
-        #region 1.0 Requesting All Tasks For A Given Project
-        public JsonResult GetAllTasks(int projectId)
-        {
-            var _tasks = _context
-                .ProjectTasks
-                .Where(t => t.ProjectId == projectId);
-            return Json(_tasks, JsonRequestBehavior.AllowGet);
-        }
-        #endregion
+            #region 1.0 Requesting All Tasks For A Given Project
+            public JsonResult GetAllTasks(int projectId)
+            {
+                var tasks = _context.ProjectTasks.Where(t => t.ProjectId == projectId);
+                var tasksToReturn = from task in tasks
+                    select new
+                    {
+                        task.Id,
+                        task.TaskName,
+                        ActualBudget = task.Actual.Budget, 
+                        EstimatedBudget = task.Estimated.Budget
+                    };
+                return Json(tasksToReturn, JsonRequestBehavior.AllowGet);
+            }
+            #endregion
 
         #endregion
     }

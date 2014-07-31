@@ -3,34 +3,34 @@ using PManager.Domain.Abstract;
 using PManager.Domain.Concrete;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using PManager.Domain.ViewModels;
 
 namespace PManager.WebUI.Infrastructure
 {
     public class NinjectDependencyResolver: IDependencyResolver
     {
-        private IKernel kernel;
+        private readonly IKernel _kernel;
         public NinjectDependencyResolver(IKernel kernelParam)
         {
-            this.kernel = kernelParam;
+            _kernel = kernelParam;
             AddBindings();
         }
 
         public object GetService(Type serviceType)
         {
-            return kernel.Get(serviceType);
+            return _kernel.Get(serviceType);
         }
 
         public IEnumerable<object> GetServices(Type serviceType)
         {
-            return kernel.GetAll(serviceType);
+            return _kernel.GetAll(serviceType);
         }
 
         private void AddBindings()
         {
-            kernel.Bind<IDataTransferObject>().To<JsonDTO>();
+            _kernel.Bind<IDataTransferObject>().To<JsonDTO>();
+            _kernel.Bind<IReportViewModel>().To<ReportViewModel>();
         }
     }
 }

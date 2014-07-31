@@ -32,7 +32,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Erbium v1.0</a>
+                <a class="navbar-brand" href="index.html">Erbium v3.0</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -163,100 +163,98 @@
                         <li>
                             @{
                                 <text>
-                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                                    @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {id = "logoutForm"}))
                                     {
                                         @Html.AntiForgeryToken()
-                                        <a href="javascript:document.getElementById('logoutForm').submit()" style="color: #000000"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                                        <a href="javascript:document.getElementById('logoutForm').submit()" style="color: #000000" ><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                                     }
                                 </text>
-                        }
-                    </li>
-                </ul>
-            </li>
-        </ul>
+                            }
+                        </li>
+                    </ul>
+                </li>
+            </ul>
 
-        <div class="navbar-default navbar-static-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="side-menu">
-                    <li class="sidebar-search">
-                        <div class="input-group custom-search-form">
-                            <input type="text" class="form-control" placeholder="Search...">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">
-                                    <i class="fa fa-search"></i>
-                                </button>
-                            </span>
-                        </div>
-                        <!-- /input-group -->
-                    </li>
-                    <li>
-                        <a href='@Url.Action("Index", "Home")'><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href='@Url.Action("Index", "Project")'><i class="fa fa-bar-chart-o fa-fw"></i> Projects</a>
-                    </li>
+            <div class="navbar-default navbar-static-side" role="navigation">
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div>
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /input-group -->
+                        </li>
+                        <li>
+                            <a href='@Url.Action("Index", "Home")'><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href='@Url.Action("Index", "Project")'><i class="fa fa-bar-chart-o fa-fw"></i> Projects</a>
+                        </li>
+                        
+                        <li>
+                            <a href='@Url.Action("Index", "ProjectTask")'><i class="fa fa-bar-chart-o fa-fw"></i> Tasks</a>
+                        </li>
+                        
+                        <li>
+                            <a href='@Url.Action("Index", "User")'><i class="fa fa-users fa-fw"></i> Users</a>
+                        </li>
 
-                    <li>
-                        <a href='@Url.Action("Index", "ProjectTask")'><i class="fa fa-bar-chart-o fa-fw"></i> Tasks</a>
-                    </li>
+                        <li>
+                            <a href='@Url.Action("Index", "Teams")'><i class="fa fa-dashboard fa-fw"></i> Teams</a>
+                        </li>
 
-                    <li>
-                        <a href='@Url.Action("Index", "User")'><i class="fa fa-users fa-fw"></i> Users</a>
-                    </li>
-
-                    <li>
-                        <a href='@Url.Action("Index", "Teams")'><i class="fa fa-dashboard fa-fw"></i> Teams</a>
-                    </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-wrench fa-fw"></i>  Resource Pool<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="#">Equipment<span class="fa arrow"></span></a>
-                                <ul class="nav nav-third-level">
-                                    <li>
-                                        <a href='@Url.Action("Laptops","ProjectResource")'>Machinery - Laptops</a>
-                                    </li>
-                                    <li>
-                                        <a href='@Url.Action("Vehicles","ProjectResource")'>Machinery - Vehicles</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Office Space</a>
-                            </li>
-                            <li>
-                                <a href='@Url.Action("Index", "ProjectResource")'>Resource Usage</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Reports<span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level">
-                            <li>
-                                <a href="#">Auto Generated</a>
-                                <ul class="nav nav-third-level">
-                                    <li>Weekly Report</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">User Manipulated (Custom)</a>
-                                <ul class="nav nav-third-level">
-                                    <li>Create Report</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <!-- /#side-menu -->
+                        <li>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i>  Resource Pool<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">Equipment<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href='@Url.Action("Laptops","ProjectResource")'>Machinery - Laptops</a>
+                                        </li>
+                                        <li>
+                                            <a href='@Url.Action("Vehicles","ProjectResource")'>Machinery - Vehicles</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">Office Space</a>
+                                </li>
+                                <li>
+                                    <a href='@Url.Action("Index", "ProjectResource")'>Resource Usage</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Reports<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="#">Auto Generated</a>
+                                    <ul class="nav nav-third-level">
+                                        <li><a href='@Url.Action("ManagerReport", "Report", new { filter = "weekly" })'>    Weekly Report</a></li>
+                                        <li><a href='@Url.Action("ManagerReport", "Report", new { filter = "monthly" })'>    Monthly Report</a></li>
+                                        <li><a href='@Url.Action("ManagerReport", "Report", new { filter = "bi-annual" })'>    Bi-Annual Report</a></li>
+                                        <li><a href='@Url.Action("ManagerReport", "Report", new { filter = "annual" })'>    Annual Report</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#">User Manipulated (Custom)</a>
+                                    <ul class="nav nav-third-level">
+                                        <li>Custom Report</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <!-- /.sidebar-collapse -->
-        </div>
-        <!-- /.navbar-static-side -->
-    </nav>
+        </nav>
         @RenderBody()
-        <!-- /#page-wrapper -->
-
     </div>
     <!-- /#wrapper -->
     <!-- Core Scripts - Include with every page -->
@@ -276,19 +274,6 @@
     <script src="~/Scripts/AngularMain/services.js"></script>
     <script src="~/Scripts/AngularMain/controllers.js"></script>
     <script src="~/Scripts/AngularMain/toastr.js"></script>
-    <script>
-        $('a[id="signout"]').click(function (e) {
-            e.preventDefault();
-            $.post('@Url.Action("LogOff", "Home")', null, function (data) {
-                console.log(JSON.stringify(data));
-                var msg = data.message;
-                console.log('Message: ' + msg);
-                if (message == 'success') {
-                    window.Location = '@Url.Action("Login","Home")';
-                }
-            });
-        });
-    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

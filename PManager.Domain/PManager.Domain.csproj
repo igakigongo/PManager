@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IDataTransferObject.cs" />
+    <Compile Include="Abstract\IReportViewModel.cs" />
     <Compile Include="Concrete\EFDbContext.cs" />
     <Compile Include="Concrete\GenericRepository.cs" />
     <Compile Include="Concrete\UnitOfWork.cs" />
@@ -87,17 +88,19 @@
     <Compile Include="Entities\ProjectTask.cs" />
     <Compile Include="Entities\ProjectTaskViewModel.cs" />
     <Compile Include="Entities\RegisterModel.cs" />
+    <Compile Include="Entities\ReportType.cs" />
     <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\Team.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Entities\UserProfile.cs" />
-    <Compile Include="Migrations\201407131802167_ResourcesMigration.cs" />
-    <Compile Include="Migrations\201407131802167_ResourcesMigration.Designer.cs">
-      <DependentUpon>201407131802167_ResourcesMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201407211732201_InitMigration.cs" />
+    <Compile Include="Migrations\201407211732201_InitMigration.Designer.cs">
+      <DependentUpon>201407211732201_InitMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\ProjectTaskViewModel.cs" />
+    <Compile Include="ViewModels\ReportViewModel.cs" />
     <Compile Include="ViewModels\TeamEditViewModel.cs" />
     <Compile Include="ViewModels\TeamViewModel.cs" />
   </ItemGroup>
@@ -106,8 +109,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201407131802167_ResourcesMigration.resx">
-      <DependentUpon>201407131802167_ResourcesMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201407211732201_InitMigration.resx">
+      <DependentUpon>201407211732201_InitMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

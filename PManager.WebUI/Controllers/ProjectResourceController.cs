@@ -12,11 +12,11 @@ namespace PManager.WebUI.Controllers
 {
     public class ProjectResourceController : Controller
     {
-        private readonly EFDbContext db;
+        private readonly EFDbContext _db;
 
         public ProjectResourceController()
         {
-            db = new EFDbContext();
+            _db = new EFDbContext();
         }
 
         // GET: /ProjectResource/
@@ -25,10 +25,10 @@ namespace PManager.WebUI.Controllers
             return View();
         }
 
-        // JSONRESULT /Get
+        // RESULTANT /Get
         public JsonResult GetResourceUsage()
         {
-            List<Project> projects = db.Projects
+            var projects = _db.Projects
                 .Include(p => p.Laptops)
                 .Include(v => v.Vehicles)
                 .Take(10).ToList();
@@ -56,11 +56,9 @@ namespace PManager.WebUI.Controllers
 
         public JsonResult GetResourcesCount()
         {
-            var dict = new Dictionary<string, object>();
-            dict.Add("vehicles", 5);
-            dict.Add("laptops", 8);
-            var jobj = new DynamicJsonObject(dict);
-            return Json(jobj, JsonRequestBehavior.AllowGet);
+            var dict = new Dictionary<string, object> {{"vehicles", 5}, {"laptops", 8}};
+            var obj = new DynamicJsonObject(dict);
+            return Json(obj, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Resources()
@@ -68,17 +66,59 @@ namespace PManager.WebUI.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin, Manager")]
-        public ActionResult Laptops()
+        [Authorize(Roles = "Admin, Manager, Normal")]
+        [InitializeSimpleMembership]
+        public ActionResult Laptops(string filter = null)
         {
-            IQueryable<Laptop> laptops = db.Laptops.Include(l => l.Project).AsQueryable();
+            IQueryable<Laptop> laptops = null;
+            if (filter != null && filter == "normal-user")
+            {
+                var userid = WebSecurity.CurrentUserId;
+                var user = _db.Users.Include(u => u.Teams).SingleOrDefault(u => u.Id == userid);
+                var tasks = new List<ProjectTask>();
+                if (user != null)
+                    foreach (var team in user.Teams)
+                    {
+                        tasks = _db.ProjectTasks.Where(t => t.TeamId == team.Id).ToList();
+                    }
+                if (tasks.Count > 0)
+                {
+                    foreach (var task in tasks)
+                    {
+                        laptops = _db.Laptops.Where(l => l.Project.Id == task.ProjectId).AsQueryable();
+                    }
+                }
+                else laptops = new List<Laptop>().AsQueryable();
+            }
+            else laptops = _db.Laptops.Include(l => l.Project).AsQueryable();
             return View(laptops);
         }
 
-        [Authorize(Roles = "Admin, Manager")]
-        public ActionResult Vehicles()
+        [Authorize(Roles = "Admin, Manager, Normal")]
+        [InitializeSimpleMembership]
+        public ActionResult Vehicles(string filter =null)
         {
-            IQueryable<Vehicle> vehicles = db.Vehicles.Include(l => l.Project).AsQueryable();
+            IQueryable<Vehicle> vehicles = null;
+            if (filter != null && filter == "normal-user")
+            {
+                var userid = WebSecurity.CurrentUserId;
+                var user = _db.Users.Include(u => u.Teams).SingleOrDefault(u => u.Id == userid);
+                var tasks = new List<ProjectTask>();
+                if (user != null)
+                    foreach (var team in user.Teams)
+                    {
+                        tasks = _db.ProjectTasks.Where(t => t.TeamId == team.Id).ToList();
+                    }
+                if (tasks.Count > 0)
+                {
+                    foreach (var  task in tasks)
+                    {
+                        vehicles = _db.Vehicles.Where(v => v.Project.Id == task.ProjectId).AsQueryable();
+                    }
+                }
+                else vehicles = new List<Vehicle>().AsQueryable();
+            }
+            else vehicles = _db.Vehicles.AsQueryable();
             return View(vehicles);
         }
 
@@ -92,7 +132,7 @@ namespace PManager.WebUI.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _db.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -112,8 +152,8 @@ namespace PManager.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Laptops.Add(laptop);
-                db.SaveChanges();
+                _db.Laptops.Add(laptop);
+                _db.SaveChanges();
                 return RedirectToAction("Laptops");
             }
             return View(laptop);
@@ -122,7 +162,7 @@ namespace PManager.WebUI.Controllers
         [Authorize(Roles = "Manager")]
         public PartialViewResult LaptopsPartial()
         {
-            List<Laptop> laptops = db.Laptops.Include(l => l.Project).ToList();
+            List<Laptop> laptops = _db.Laptops.Include(l => l.Project).ToList();
             return PartialView(laptops);
         }
 
@@ -138,8 +178,8 @@ namespace PManager.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Vehicles.Add(vehicle);
-                db.SaveChanges();
+                _db.Vehicles.Add(vehicle);
+                _db.SaveChanges();
                 return RedirectToAction("Vehicles");
             }
             return View(vehicle);
@@ -148,7 +188,7 @@ namespace PManager.WebUI.Controllers
         [Authorize(Roles = "Manager")]
         public PartialViewResult VehiclesPartial()
         {
-            List<Vehicle> vehicles = db.Vehicles.Include(v => v.Project).ToList();
+            List<Vehicle> vehicles = _db.Vehicles.Include(v => v.Project).ToList();
             return PartialView(vehicles);
         }
 
@@ -160,8 +200,8 @@ namespace PManager.WebUI.Controllers
                 Text = "The resource or project your are trying to update does not exist, please contact systems administrator for help"
             };
 
-            var laptopToAssign = db.Laptops.Include(x => x.Project).FirstOrDefault(l => l.Id == laptopId);
-            var projectToBeAssigned = db.Projects.Include(x => x.Laptops).FirstOrDefault(p => p.Id == projectId);
+            var laptopToAssign = _db.Laptops.Include(x => x.Project).FirstOrDefault(l => l.Id == laptopId);
+            var projectToBeAssigned = _db.Projects.Include(x => x.Laptops).FirstOrDefault(p => p.Id == projectId);
 
             if (laptopToAssign != null && projectToBeAssigned != null)
             {

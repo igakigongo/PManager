@@ -184,7 +184,7 @@
                 $('#myModal').modal('show');
             });
 
-            $('#addtask').click(function (event) {
+            $('#addtask').click(function () {
                 var isvalid = true;
                 var taskname = $('#TaskName').val();
                 var startdate = $('#TaskESD').val();
@@ -201,7 +201,7 @@
 
                 // checking the estimated cost
                 if (!budget) {
-                    budget = 0
+                    budget = 0;
                 } else {
                     if (isNaN(budget)) {
                         alert('Invalid Estimated Cost');
@@ -308,8 +308,8 @@
                 var estimatedseries = [];
                 $.each(data, function (key, value) {
                     $.merge(tasks, $.makeArray(value.TaskName));
-                    estimatedseries.push(parseFloat(value.Estimated.Budget));
-                    actualseries.push(parseFloat(value.Actual.Budget));
+                    estimatedseries.push(parseFloat(value.EstimatedBudget));
+                    actualseries.push(parseFloat(value.ActualBudget));
                 });
 
                 // Set the series data

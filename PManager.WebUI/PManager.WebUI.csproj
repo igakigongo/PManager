@@ -341,7 +341,9 @@
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-CN.js" />
     <Content Include="Scripts\locales\bootstrap-datepicker.zh-TW.js" />
     <Content Include="Scripts\select2.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BootstrapBundleConfig.cs" />
@@ -352,9 +354,11 @@
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\ProjectResourceController.cs" />
     <Compile Include="Controllers\ProjectTaskController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DTOS\Message.cs" />
+    <Compile Include="DTOS\ReportDto.cs" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -407,6 +411,7 @@
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\ProjectResource\Vehicles.cshtml" />
     <Content Include="Views\ProjectResource\Laptops.cshtml" />
+    <Content Include="Views\Report\ManagerReport.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
