@@ -23,7 +23,7 @@ namespace PManager.WebUI.Controllers
         private UnitOfWork unitOfWork;
         public ProjectTaskController(IDataTransferObject _dtoParam)
         {
-            _dto = dtoParam;
+            _dto = _dtoParam;
         }
 
         // GET: /ProjectTask/

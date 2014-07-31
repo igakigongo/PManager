@@ -10,7 +10,8 @@
     else if (userrole == "Admin")
     {
         Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
-    }else if(userrole == "Normal")
+    }
+    else if (userrole == "Normal")
     {
         Layout = "~/Views/Shared/_LayoutNormal.cshtml";
     }
@@ -18,14 +19,19 @@
 
 <link href="~/Content/sb-admin-v2/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
 
-<div id="page-wrapper" data-ng-controller="ResourceController">
+<div id="page-wrapper" data-ng-controller="resourceController">
     <div class="row">
         <div class="col-lg-12">
-            @if (userrole == "Admin"){
+            @if (userrole == "Admin")
+            {
                 <h1 class="page-header">Administrator - Dashboard</h1>
-            }else if(userrole == "Manager"){
+            }
+            else if (userrole == "Manager")
+            {
                 <h1 class="page-header">Manager - Dashboard</h1>
-            }else if(userrole == "Normal"){
+            }
+            else if (userrole == "Normal")
+            {
                 <h1 class="page-header">Normal User - Dashboard</h1>
             }
         </div>
@@ -54,9 +60,12 @@
                                     <th>Serial Number</th>
                                     <th>Laptop Name</th>
                                     <th>Cost</th>
-                                    @if(userrole == "Manager" || userrole == "Admin"){
+                                    @if (userrole == "Manager" || userrole == "Admin")
+                                    {
                                         <th></th>
-                                    }else{
+                                    }
+                                    else
+                                    {
                                         <th></th>
                                     }
                                 </tr>
@@ -69,19 +78,26 @@
                                         <td>@l.SerialNumber</td>
                                         <td>@l.LaptopName</td>
                                         <td>@String.Format("{0:C}", l.Cost)</td>
-                                        @if(userrole == "Manager"){
-                                            <td>@if (l.Project != null)
+                                        @if (userrole == "Manager")
+                                        {
+                                            <td>
+                                                @if (l.Project != null)
                                                 {
-                                                    <a href="#" data-ng-click="assignToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to new project</a>
+                                                    <a href="#" data-ng-click="assignResourceToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to new project</a>
                                                 }
-                                                else {<a href="#" data-ng-click="assignToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to project</a> }
-                                            
-                                            </td>
-                                        }else if(userrole == "Admin"){
+                                                else
+                                                {<a href="#" data-ng-click="assignResourceToProject('@l.Id,@l.LaptopName,@l.SerialNumber')">Assign to project</a> }
+
+                                        </td>
+                                        }
+                                        else if (userrole == "Admin")
+                                        {
                                             <td><a href="#">Edit</a></td>
-                                        }else{
+                                        }
+                                        else
+                                        {
                                             <td></td>
-                                        }                          
+                                        }
                                     </tr>
                                 }
                             </tbody>
@@ -103,7 +119,7 @@
             <div class="field-box customer-wrapper padding-top-15">
                 <label class="light">Laptop</label>
                 <input disabled id="laptop-name" class="form-control textbox" type="text" data-ng-model="displayName" />
-               
+
             </div>
 
             <div class="field-box customer-wrapper padding-top-15" ng-class="{ 'has-error' : resourceForm.ProjectId.$invalid && !resourceForm.ProjectId.$pristine }">

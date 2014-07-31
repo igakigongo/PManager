@@ -26,7 +26,7 @@
                 @if (userrole == "Admin")
                 {
                     @String.Format("Administrator ")
-                } 
+                }
                 else if (userrole == "Manager")
                 {
                     @String.Format("Manager ")
@@ -57,7 +57,10 @@
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                             <thead>
-                                <tr><th>Car Id</th><th>Car Type</th><th>Plate Number</th>
+                                <tr>
+                                    <th>Car Id</th>
+                                    <th>Car Type</th>
+                                    <th>Plate Number</th>
                                     @if (userrole == "Admin" || userrole == "Manager")
                                     {
                                         <th></th>
@@ -71,19 +74,26 @@
                                         <td>@v.Id</td>
                                         <td>@v.CarType</td>
                                         <td>@v.NumberPlate</td>
+
+
+
                                         @switch (userrole)
                                         {
                                             case "Manager":
-                                                <td>Assign to project</td>
-                                                break;
+                                                <td>
+                                                    @if (v.Project != null)
+                                                    {
+                                                        <a href="#" data-ng-click="assignResourceToProject('@v.Id,@v.NumberPlate,@v.CarType')">Assign to new project</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="#" data-ng-click="assignResourceToProject('@v.Id,@v.NumberPlate,@v.CarType')">Assign to project</a> }
+                                                </td>
+                                                    break;
                                             case "Admin":
-                                                <td>Edit, Delete</td>
-                                                break;
+                                            <td>Edit, Delete</td>
+                                                    break;
                                         }
-                                            else
-                                            {<a href="#" data-ng-click="assignResourceToProject('@v.Id,@v.NumberPlate,@v.CarType')">Assign to project</a> }
-
-                                        </td>
                                     </tr>
                                 }
                             </tbody>

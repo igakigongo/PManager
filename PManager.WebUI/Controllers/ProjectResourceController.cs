@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using PManager.Domain.Concrete;
 using PManager.Domain.Entities;
 using PManager.WebUI.DTOS;
+using PManager.WebUI.Filters;
+using WebMatrix.WebData;
 
 namespace PManager.WebUI.Controllers
 {
@@ -113,12 +115,12 @@ namespace PManager.WebUI.Controllers
                 {
                     foreach (var  task in tasks)
                     {
-                        vehicles = _db.Vehicles.Where(v => v.Project.Id == task.ProjectId).AsQueryable();
+                        vehicles = _db.Vehicles.Include(p => p.Project).Where(v => v.Project.Id == task.ProjectId).AsQueryable();
                     }
                 }
                 else vehicles = new List<Vehicle>().AsQueryable();
             }
-            else vehicles = _db.Vehicles.AsQueryable();
+            else vehicles = _db.Vehicles.Include(p => p.Project).AsQueryable();
             return View(vehicles);
         }
 
@@ -216,11 +218,11 @@ namespace PManager.WebUI.Controllers
                 else
                 {
                     projectToBeAssigned.Laptops.Add(laptopToAssign);
-                    db.Entry(laptopToAssign).State = EntityState.Modified;
+                    _db.Entry(laptopToAssign).State = EntityState.Modified;
 
                     try
                     {
-                        db.SaveChanges();
+                        _db.SaveChanges();
                         message = new Message
                         {
                             Status = true,
@@ -254,8 +256,8 @@ namespace PManager.WebUI.Controllers
                 Text = "The resource or project your are trying to update does not exist, please contact systems administrator for help"
             };
 
-            var vehiclToAssign = db.Vehicles.Include(x => x.Project).FirstOrDefault(l => l.Id == vehicleId);
-            var projectToBeAssigned = db.Projects.Include(x => x.Laptops).FirstOrDefault(p => p.Id == projectId);
+            var vehiclToAssign = _db.Vehicles.Include(x => x.Project).FirstOrDefault(l => l.Id == vehicleId);
+            var projectToBeAssigned = _db.Projects.Include(x => x.Laptops).FirstOrDefault(p => p.Id == projectId);
 
             if (vehiclToAssign != null && projectToBeAssigned != null)
             {
@@ -270,11 +272,11 @@ namespace PManager.WebUI.Controllers
                 else
                 {
                     projectToBeAssigned.Vehicles.Add(vehiclToAssign);
-                    db.Entry(vehiclToAssign).State = EntityState.Modified;
+                    _db.Entry(vehiclToAssign).State = EntityState.Modified;
 
                     try
                     {
-                        db.SaveChanges();
+                        _db.SaveChanges();
                         message = new Message
                         {
                             Status = true,
